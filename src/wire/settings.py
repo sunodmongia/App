@@ -96,10 +96,11 @@ WSGI_APPLICATION = "wire.wsgi.application"
 
 
 DATABASE_URL = config("DATABASE_URL", cast=str)
-CONN_MAX_AGE = config("CONN_MAX_AGE", cast=int, default=30) 
+CONN_MAX_AGE = config("CONN_MAX_AGE", cast=int, default=30)
 
 if DATABASE_URL is not None:
     import dj_database_url
+
     DATABASES = {
         "default": dj_database_url.config(
             default=DATABASE_URL,
@@ -145,14 +146,16 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-STATICFILES_BASE_DIR = BASE_DIR / "static"
+
+STATICFILES_BASE_DIR = BASE_DIR / 'static'
+STATICFILES_BASE_DIR.mkdir(exist_ok=True, parents=True)
 STATICFILES_VENDORS_DIR = STATICFILES_BASE_DIR / "vendors"
 
 # Sources for python manage.py collectstatic
 STATICFILES_DIRS = [
-    STATICFILES_BASE_DIR
+    STATICFILES_BASE_DIR,
+    STATICFILES_VENDORS_DIR,
 ]
-
 
 
 # Output for python manage.py collectstatic
