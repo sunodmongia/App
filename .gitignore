@@ -1,3 +1,7 @@
+# Excluding staticfiles vendor files
+src\staticfiles\vendors
+
+
 env/
 # Byte-compiled / optimized / DLL files
 __pycache__/
