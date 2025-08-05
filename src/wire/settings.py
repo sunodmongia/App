@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Custom Apps
     "saas",
+    "commando",
     # "crispy_forms",
     # "crispy_bootstrap5",
     # "tailwind",
