@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2> 
+    this is a home page
+</h2>
+<br>
+<p>
+    {{ page_title }}
+</p>
+    <p>
+        Page Visit: {{ page_visit_count }} <br>
+        Total Visit: {{ total_page_visit }} <br>
+        Percentage : {{ percentage }}
+    </p>
+
+
+{% endblock %}
