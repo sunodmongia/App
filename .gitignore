@@ -4,8 +4,12 @@ __pycache__/
 *$py.class
 
 #Staticfile
-src/staticfiles/vendors/
+src/staticfiles/
+src/static/
 local-cdn/
+
+# VS Workspace
+App.code-workspace
 
 # C extensions
 *.so
