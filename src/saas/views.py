@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from pathlib import Path
-
+from saas.forms import *
 from saas.models import *
 
 
@@ -28,4 +30,21 @@ def about_view(request):
     # print(path, "path")
     PageVisit.objects.create(path=request.path)
     return render(request, html_template, my_context)
- 
+
+
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get("username") or None
+        password = request.POST.get("password") or None
+
+        if all([username, password]):
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("/")
+    return render(request, "auth/login.html")
+
+
+# class UserLoginView(LoginView):
+#     template_name = "auth/login.html"
+#     authentication_form = CustomLoginForm

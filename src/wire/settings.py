@@ -49,17 +49,18 @@ INSTALLED_APPS = [
     "saas",
     "commando",
     "storages",
-    # "crispy_forms",
+    # third party apps
+    "crispy_forms",
     # "crispy_bootstrap5",
-    # "tailwind",
-    # "allauth_ui",
-    # "allauth",
-    # "allauth.account",
-    # "allauth.socialaccount",
+    "tailwind",
+    "allauth_ui",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     # "allauth.socialaccount.providers.google",
-    # "allauth.socialaccount.providers.github",
-    # "widget_tweaks",
-    # "slippers",
+    "allauth.socialaccount.providers.github",
+    "widget_tweaks",
+    "slippers",
 ]
 
 MIDDLEWARE = [
@@ -70,6 +71,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -130,6 +132,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by email
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+
+SOCIALACCOUNT_PROVIDERS = {}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

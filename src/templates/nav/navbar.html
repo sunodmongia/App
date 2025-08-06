@@ -45,7 +45,7 @@
             <!-- Links (desktop) -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="#" class="nav-link font-medium py-2">Products</a>
-                <a href="/pricing" class="nav-link font-medium py-2">Pricing</a>
+                <a href="#" class="nav-link font-medium py-2">Pricing</a>
                 <a href="/docs" class="nav-link font-medium py-2">Docs</a>
                 <a href="/blog" class="nav-link font-medium py-2">Blog</a>
                 <a href="/company" class="nav-link font-medium py-2">Company</a>
@@ -53,7 +53,7 @@
 
             <!-- CTA Buttons (desktop) -->
             <div class="hidden md:flex items-center space-x-4">
-                <a href="/login"
+                <a href="{% url 'login' %}"
                     class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white transition-colors">Sign
                     In</a>
                 <a href="/signup"
@@ -78,7 +78,7 @@
                 <a href="/blog" class="font-medium py-2">Blog</a>
                 <a href="/company" class="font-medium py-2">Company</a>
                 <div class="pt-4 border-t border-gray-300 flex flex-col space-y-2">
-                    <a href="/login"
+                    <a href="{% url 'login' %}"
                         class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Sign
                         In</a>
                     <a href="/signup"
