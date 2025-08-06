@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # Custom Apps
     "saas",
     "commando",
+    "storages",
     # "crispy_forms",
     # "crispy_bootstrap5",
     # "tailwind",
@@ -168,11 +169,12 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        # "BACKEND": "storages.backends.s3.S3Storage",
     },
 }
 
 
-# AWs S3:
+# AWS S3:
 # AWS_S3_SESSION_PROFILE = ''
 # AWS_S3_ACCESS_KEY_ID = ''
 # AWS_S3_SECRET_ACCESS_KEY = ''
@@ -184,7 +186,6 @@ STORAGES = {
 # AWS_S3_URL_PROTOCOL = ''
 
 
-
 # Django < 4.2
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
@@ -192,3 +193,21 @@ STORAGES = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Email Config
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = config("EMAIL_HOST", cast=str, default="smtp.gmail.com")
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = config(
+    "EMAIL_HOST_USER",
+    cast=str,
+    default=os.environ.get("wire_email_user"),
+)
+EMAIL_HOST_PASSWORD = config(
+    "EMAIL_HOST_PASSWORD",
+    cast=str,
+    default=os.environ.get("wire_user"),
+)
