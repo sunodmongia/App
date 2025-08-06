@@ -143,6 +143,14 @@ USE_I18N = True
 USE_TZ = True
 
 
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/accounts/login/"
+
+CRISPY_TEMPLATE_PACK = "tailwind"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
@@ -198,16 +206,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Email Config
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = config("EMAIL_HOST", cast=str, default="smtp.gmail.com")
-EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = config(
-    "EMAIL_HOST_USER",
-    cast=str,
-    default=os.environ.get("wire_email_user"),
-)
-EMAIL_HOST_PASSWORD = config(
-    "EMAIL_HOST_PASSWORD",
-    cast=str,
-    default=os.environ.get("wire_user"),
-)
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
