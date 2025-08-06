@@ -171,6 +171,20 @@ STORAGES = {
     },
 }
 
+
+# AWs S3:
+# AWS_S3_SESSION_PROFILE = ''
+# AWS_S3_ACCESS_KEY_ID = ''
+# AWS_S3_SECRET_ACCESS_KEY = ''
+# AWS_SESSION_TOKEN  = ''
+# AWS_S3_BUCKET_NAME = ''
+# AWS_S3_REGION_NAME = ''
+# AWS_DEFAULT_ACL = ''
+# AWS_S3_FILE_OVERWRITE = ''
+# AWS_S3_URL_PROTOCOL = ''
+
+
+
 # Django < 4.2
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
