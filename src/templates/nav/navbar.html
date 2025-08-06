@@ -53,12 +53,16 @@
 
             <!-- CTA Buttons (desktop) -->
             <div class="hidden md:flex items-center space-x-4">
-                <a href="{% url 'login' %}"
-                    class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white transition-colors">Sign
-                    In</a>
-                <a href="/signup"
-                    class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white transition-colors">Sign
+                {% if not request.user.is_authenticated %}
+                <a href="accounts/login/"
+                    class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Login</a>
+                <a href="accounts/signup/"
+                    class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Sign
                     Up</a>
+                {% else %}
+                <a href="accounts/logout/"
+                    class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Logout</a>
+                {% endif %}
             </div>
 
             <!-- Mobile Toggle -->
@@ -78,12 +82,16 @@
                 <a href="/blog" class="font-medium py-2">Blog</a>
                 <a href="/company" class="font-medium py-2">Company</a>
                 <div class="pt-4 border-t border-gray-300 flex flex-col space-y-2">
-                    <a href="{% url 'login' %}"
-                        class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Sign
-                        In</a>
-                    <a href="/signup"
+                    {% if not request.user.is_authenticated %}
+                    <a href="accounts/login/"
+                        class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Login</a>
+                    <a href="accounts/signup/"
                         class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Sign
                         Up</a>
+                    {% else %}
+                    <a href="accounts/logout/"
+                        class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Logout</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

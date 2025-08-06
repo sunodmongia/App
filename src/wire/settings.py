@@ -139,6 +139,18 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
+ACCOUNT_LOGIN_METHODS = {"email"}  # New: Only email login
+
+ACCOUNT_SIGNUP_FIELDS = [
+    "email*",  
+    "username*",  
+    "password1*",  
+    "password2*", 
+]
+
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "[wire]"
+ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
 SOCIALACCOUNT_PROVIDERS = {}
 
