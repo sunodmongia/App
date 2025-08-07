@@ -1,0 +1,32 @@
+{% load static %}
+{% load allauth_ui %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        {% block head_title %}SaaS{% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'allauth_ui/output.css' %}">
+    {% include 'base/css.html' %}
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="bg-white text-gray-900 min-h-screen flex flex-col">
+
+    {% include 'nav/navbar.html' %}
+
+    <main class="flex-1 container mx-auto px-4 py-8">
+        {% block content %}
+        <!-- Allauth UI will insert content here -->
+        {% endblock %}
+    </main>
+
+    {% include 'base/js.html' %}
+</body>
+
+</html>

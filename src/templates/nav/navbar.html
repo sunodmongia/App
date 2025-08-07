@@ -54,14 +54,14 @@
             <!-- CTA Buttons (desktop) -->
             <div class="hidden md:flex items-center space-x-4">
                 {% if not request.user.is_authenticated %}
-                <a href="accounts/login/"
+                <a href="{% url 'account_login' %}"
                     class="px-4 py-1 text-sm font-bold rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
                     In</a>
-                <a href="accounts/signup/"
+                <a href="{% url 'account_signup' %}"
                     class="px-4 py-1 text-sm font-bold rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
                     Up</a>
                 {% else %}
-                <a href="accounts/logout/"
+                <a href="{% url 'account_logout' %}"
                     class="px-4 py-1 text-sm font-bold rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
                     Out</a>
                 {% endif %}
@@ -85,14 +85,14 @@
                 <a href="/company" class="font-medium py-2">Company</a>
                 <div class="pt-4 border-t border-gray-300 flex flex-col space-y-2">
                     {% if not request.user.is_authenticated %}
-                    <a href="accounts/login/"
+                    <a href="{% url 'account_login' %}"
                         class="px-4 py-1 text-sm font-bold border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Sign
                         Up</a>
-                    <a href="accounts/signup/"
+                    <a href="{% url 'account_signup' %}"
                         class="px-4 py-1 text-sm font-bold border border-black rounded bg-black text-center transition-colors">Sign
                         Up</a>
                     {% else %}
-                    <a href="accounts/logout/"
+                    <a href="{% url 'account_logout' %}"
                         class="px-4 py-1 text-sm font-bold  rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
                         Out</a>
                     {% endif %}
