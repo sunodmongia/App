@@ -29,7 +29,7 @@
 
 </head>
 
-<body class="bg-white text-black">
+<div class="pt-16 bg-white text-black">
 
     <!-- Navbar -->
     <nav class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-300 z-50">
@@ -48,7 +48,7 @@
                         <a href="#pricing" class="nav-link font-medium py-2 text-gray-800 hover:text-black">Somemore</a>
                         <a href="#testimonials"
                             class="nav-link font-medium py-2 text-gray-800 hover:text-black">Customers</a>
-                        <a href="#resources"
+                        <a href="{% url 'about' %}""
                             class="nav-link font-medium py-2 text-gray-800 hover:text-black">About</a>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                     class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Somemore</a>
                 <a href="#testimonials"
                     class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Customers</a>
-                <a href="#resources"
+                <a href="{% url 'about' %}"
                     class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">About</a>
                 <div class="mt-4 px-3 space-y-2">
                     {% if not request.user.is_authenticated %}
