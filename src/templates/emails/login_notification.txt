@@ -1,0 +1,8 @@
+Hello {{ user.get_full_name|default:user.username }},
+
+Your account was just logged in from IP: {{ ip }}.
+
+If this was you, you can safely ignore this email. If not, please reset your password and contact support.
+
+Best regards,
+The Support Team

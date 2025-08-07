@@ -1,0 +1,10 @@
+<p>Hello {{ user.get_full_name|default:user.username }},</p>
+
+<p>There was a login attempt to your account using <strong>{{ provider|title }}</strong> (Social Login).</p>
+
+<p>If this was you, you can safely ignore this email.<br>
+    If it wasn't, please <a href="https://yourdomain.com/password/reset/">reset your password</a> immediately and
+    contact support.</p>
+
+<p>Best regards,<br>
+    The Support Team</p>

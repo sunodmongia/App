@@ -55,13 +55,15 @@
             <div class="hidden md:flex items-center space-x-4">
                 {% if not request.user.is_authenticated %}
                 <a href="accounts/login/"
-                    class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Login</a>
+                    class="px-4 py-1 text-sm font-bold rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
+                    In</a>
                 <a href="accounts/signup/"
-                    class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Sign
+                    class="px-4 py-1 text-sm font-bold rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
                     Up</a>
                 {% else %}
                 <a href="accounts/logout/"
-                    class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Logout</a>
+                    class="px-4 py-1 text-sm font-bold rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
+                    Out</a>
                 {% endif %}
             </div>
 
@@ -84,13 +86,15 @@
                 <div class="pt-4 border-t border-gray-300 flex flex-col space-y-2">
                     {% if not request.user.is_authenticated %}
                     <a href="accounts/login/"
-                        class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Login</a>
+                        class="px-4 py-1 text-sm font-bold border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Sign
+                        Up</a>
                     <a href="accounts/signup/"
-                        class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Sign
+                        class="px-4 py-1 text-sm font-bold border border-black rounded bg-black text-center transition-colors">Sign
                         Up</a>
                     {% else %}
                     <a href="accounts/logout/"
-                        class="px-4 py-1 font-medium border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Logout</a>
+                        class="px-4 py-1 text-sm font-bold  rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
+                        Out</a>
                     {% endif %}
                 </div>
             </div>

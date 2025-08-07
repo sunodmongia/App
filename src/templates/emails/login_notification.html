@@ -1,0 +1,7 @@
+<p>Hello {{ user.get_full_name|default:user.username }},</p>
+<p>Your account was just logged in from IP: {{ ip }}.</p>
+<p>If this was you, you can safely ignore this email.<br>
+    If not, please <a href="http://127.0.0.1:8000/accounts/password/reset/">reset your password</a> immediately and
+    contact support.</p>
+<p>Best regards,<br>
+    The Support Team</p>

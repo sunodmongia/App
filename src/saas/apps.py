@@ -4,3 +4,6 @@ from django.apps import AppConfig
 class SaasConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "saas"
+
+    def ready(self):
+        import saas.signals

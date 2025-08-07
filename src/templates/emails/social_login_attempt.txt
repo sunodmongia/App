@@ -1,0 +1,8 @@
+Hello {{ user.get_full_name|default:user.username }},
+
+There was a login attempt to your account using {{ provider|title }} (Social Login).
+
+If this was you, you can safely ignore this email. If it wasn't, please secure your account by resetting your password and contacting support.
+
+Best regards,
+The Support Team
