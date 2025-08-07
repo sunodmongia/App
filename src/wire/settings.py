@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     "commando",
     # third party apps
     "crispy_forms",
+    "crispy_tailwind",
+    "widget_tweaks",
     "storages",
     # "crispy_bootstrap5",
     "tailwind",
@@ -59,7 +61,6 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     # "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
-    "widget_tweaks",
     "slippers",
 ]
 
@@ -173,8 +174,8 @@ LOGOUT_REDIRECT_URL = "/"
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/accounts/login/"
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = ["tailwind"]
 CRISPY_TEMPLATE_PACK = "tailwind"
-CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 
 
 # Static files (CSS, JavaScript, Images)

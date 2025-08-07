@@ -1,32 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
-    
-    <style>
-        .feature-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+<style>
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .floating-animation {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0px);
         }
 
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        50% {
+            transform: translateY(-20px);
         }
-
-        .floating-animation {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 
 <body class="bg-white text-gray-900">
@@ -390,10 +390,12 @@
                         </li>
                     </ul>
 
-                    <button
-                        class="w-full py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors">
-                        Start Free Trial
-                    </button>
+                    <a href="{% url 'account_signup' %}">
+                        <button
+                            class="w-full py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors">
+                            Start Free Trial
+                        </button>
+                    </a>
                 </div>
 
                 <!-- Enterprise Plan -->
@@ -475,7 +477,7 @@
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/signup"
+                <a href="{% url 'account_signup' %}"
                     class="px-8 py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-gray-200 transition-colors">
                     Start Free Trial
                 </a>
