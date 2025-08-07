@@ -12,29 +12,11 @@ from saas.models import *
 
 
 class HomeView(TemplateView):
-    template_name = 'home.html'
+    template_name = "home.html"
 
 
-
-# def about_view(request):
-#     qs = PageVisit.objects.all()
-#     queryset = PageVisit.objects.filter(path=request.path)
-#     my_title = "This is a Page"
-#     try:
-#         percent = (queryset.count() * 100.0) / qs.count()
-#     except:
-#         percent = 0
-#     my_context = {
-#         "page_title": my_title,
-#         "page_visit_count": queryset.count(),
-#         "percentage": percent,
-#         "total_page_visit": qs.count(),
-#     }
-#     html_template = "home.html"
-#     path = request.path
-#     # print(path, "path")
-#     PageVisit.objects.create(path=request.path)
-#     return render(request, html_template, my_context)
+class AboutView(TemplateView):
+    template_name = "about.html"
 
 
 def login_view(request):
@@ -56,32 +38,34 @@ class UserDemoView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Demo'
+        context["title"] = "Demo"
         return context
 
+
 class StartTrialView(LoginRequiredMixin, FormView):
-    template_name = 'signup_trial.html'
+    template_name = "signup_trial.html"
     form_class = TrialSignupForm
-    success_url = reverse_lazy('signup-trial')
+    success_url = reverse_lazy("signup-trial")
 
     def form_valid(self, form):
         # Hash and save password
         instance = form.save(commit=False)
-        raw_password = form.cleaned_data['password']
+        raw_password = form.cleaned_data["password"]
         instance.password_hash = make_password(raw_password)
         instance.save()
         messages.success(self.request, "Your free trial signup has been saved.")
         return super().form_valid(form)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Start Trial"
+        context["title"] = "Start Trial"
         return context
 
+
 class ScheduleDemoView(FormView):
-    template_name = 'schedule_demo.html'
+    template_name = "schedule_demo.html"
     form_class = DemoScheduleCallForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy("home")
 
     def form_valid(self, form):
         form.save()
@@ -90,16 +74,20 @@ class ScheduleDemoView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Schedule a Demo'
+        context["title"] = "Schedule a Demo"
         return context
 
 
 class ContactUsView(FormView):
-    template_name = 'contact_us.html'
+    template_name = "contact_us.html"
     form_class = ContactForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy("home")
 
     def form_valid(self, form):
         form.save()
-        messages.success(f'{self.request}, Thanks for Contacting Us')
+        messages.success(self.request, "Thanks for Contacting Us")
         return super().form_valid(form)
+
+
+class PricingView(TemplateView):
+    template_name = "pricing.html"
