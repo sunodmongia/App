@@ -48,9 +48,9 @@ INSTALLED_APPS = [
     # Custom Apps
     "saas",
     "commando",
-    "storages",
     # third party apps
     "crispy_forms",
+    "storages",
     # "crispy_bootstrap5",
     "tailwind",
     "allauth_ui",
@@ -142,15 +142,18 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_LOGIN_METHODS = {"email"}  # New: Only email login
 
 ACCOUNT_SIGNUP_FIELDS = [
-    "email*",  
-    "username*",  
-    "password1*",  
-    "password2*", 
+    "email*",
+    "username*",
+    "password1*",
+    "password2*",
 ]
 
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "[wire]"
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+# ACCOUNT_SIGNUP_FORM_CLASS = 'saas.forms.CustomSignupForm'
+
+# ACCOUNT_PASSWORD_RESET_BY_CODE_ENABLED = True
 
 SOCIALACCOUNT_PROVIDERS = {}
 
