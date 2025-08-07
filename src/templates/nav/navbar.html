@@ -7,10 +7,6 @@
     <title>Black & White Navbar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        a {
-            text-decoration: none;
-        }
-
         .nav-link {
             position: relative;
         }
@@ -30,70 +26,84 @@
             width: 100%;
         }
     </style>
+
 </head>
 
 <body class="bg-white text-black">
 
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 bg-white border-b border-gray-300 z-50 h-16">
-        <div class="flex items-center justify-center h-full w-full px-4 lg:px-8 space-x-12">
+    <nav class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-300 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="/" class="text-2xl font-bold text-black">SaaSApp</a>
+                </div>
 
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#features"
+                            class="nav-link font-medium py-2 text-gray-800 hover:text-black">Features</a>
+                        <a href="#pricing" class="nav-link font-medium py-2 text-gray-800 hover:text-black">Pricing</a>
+                        <a href="#testimonials"
+                            class="nav-link font-medium py-2 text-gray-800 hover:text-black">Customers</a>
+                        <a href="#resources"
+                            class="nav-link font-medium py-2 text-gray-800 hover:text-black">Resources</a>
+                    </div>
+                </div>
 
-            <!-- Logo -->
-            <a href="/" class="text-2xl font-bold">SaaSApp</a>
+                <!-- CTA Buttons -->
+                <div class="hidden md:flex items-center space-x-4">
+                    {% if not request.user.is_authenticated %}
+                    <a href="{% url 'account_login' %}"
+                        class="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-black">Sign In</a>
+                    <a href="{% url 'account_signup' %}"
+                        class="px-6 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                        Start Free Trial
+                    </a>
+                    {% else %}
+                    <a href="{% url 'account_logout' %}"
+                        class="px-6 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                        Sign Out
+                    </a>
+                    {% endif %}
+                </div>
 
-            <!-- Links (desktop) -->
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#" class="nav-link font-medium py-2">Products</a>
-                <a href="#" class="nav-link font-medium py-2">Pricing</a>
-                <a href="/docs" class="nav-link font-medium py-2">Docs</a>
-                <a href="/blog" class="nav-link font-medium py-2">Blog</a>
-                <a href="/company" class="nav-link font-medium py-2">Company</a>
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="p-2 rounded-md text-gray-700 hover:bg-gray-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
-
-            <!-- CTA Buttons (desktop) -->
-            <div class="hidden md:flex items-center space-x-4">
-                {% if not request.user.is_authenticated %}
-                <a href="{% url 'account_login' %}"
-                    class="px-4 py-1 text-sm font-bold rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
-                    In</a>
-                <a href="{% url 'account_signup' %}"
-                    class="px-4 py-1 text-sm font-bold rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
-                    Up</a>
-                {% else %}
-                <a href="{% url 'account_logout' %}"
-                    class="px-4 py-1 text-sm font-bold rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
-                    Out</a>
-                {% endif %}
-            </div>
-
-            <!-- Mobile Toggle -->
-            <button id="mobileToggle" class="md:hidden p-2 focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-300">
-            <div class="flex flex-col px-4 py-4 space-y-2">
-                <a href="#" class="font-medium py-2">Products</a>
-                <a href="/pricing" class="font-medium py-2">Pricing</a>
-                <a href="/docs" class="font-medium py-2">Docs</a>
-                <a href="/blog" class="font-medium py-2">Blog</a>
-                <a href="/company" class="font-medium py-2">Company</a>
-                <div class="pt-4 border-t border-gray-300 flex flex-col space-y-2">
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-300">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#features"
+                    class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Features</a>
+                <a href="#pricing"
+                    class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Pricing</a>
+                <a href="#testimonials"
+                    class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Customers</a>
+                <a href="#resources"
+                    class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Resources</a>
+                <div class="mt-4 px-3 space-y-2">
                     {% if not request.user.is_authenticated %}
                     <a href="{% url 'account_login' %}"
-                        class="px-4 py-1 text-sm font-bold border border-black rounded hover:bg-black hover:text-white text-center transition-colors">Sign
-                        Up</a>
+                        class="block w-full text-center px-4 py-2 text-sm font-semibold border border-gray-300 rounded-lg hover:bg-gray-50">Sign
+                        In</a>
                     <a href="{% url 'account_signup' %}"
-                        class="px-4 py-1 text-sm font-bold border border-black rounded bg-black text-center transition-colors">Sign
-                        Up</a>
+                        class="block w-full text-center px-4 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800">Start
+                        Free Trial</a>
                     {% else %}
                     <a href="{% url 'account_logout' %}"
-                        class="px-4 py-1 text-sm font-bold  rounded bg-black text-white border border-black hover:bg-gray-800 transition-colors text-center">Sign
+                        class="block w-full text-center px-4 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800">Sign
                         Out</a>
                     {% endif %}
                 </div>
@@ -101,15 +111,16 @@
         </div>
     </nav>
 
-    <!-- Page Content Placeholder -->
-    <div class="pt-16">
-    </div>
-
     <script>
-        const toggle = document.getElementById('mobileToggle');
-        const menu = document.getElementById('mobileMenu');
-        toggle.addEventListener('click', () => menu.classList.toggle('hidden'));
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
     </script>
-</body>
 
 </html>
