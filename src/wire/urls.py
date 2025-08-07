@@ -21,6 +21,7 @@ from saas.views import *
 
 urlpatterns = [
     path("", include("saas.urls")),
-    path('accounts/', include('allauth.urls')),
+    path("demo/", UserDemoView.as_view(), name="demo"),
+    path("accounts/", include("allauth.urls")),
     path("admin/", admin.site.urls),
 ]

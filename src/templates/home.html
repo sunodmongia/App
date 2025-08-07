@@ -1,13 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaaSApp - Streamline Your Business Operations</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
         .feature-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -56,7 +49,7 @@
                         class="px-8 py-4 bg-black text-white font-bold text-lg rounded-lg hover:bg-gray-800 transition-colors">
                         Start Free Trial
                     </a>
-                    <a href="#demo"
+                    <a href="{% url 'demo' %}"
                         class="px-8 py-4 border-2 border-black text-black font-bold text-lg rounded-lg hover:bg-black hover:text-white transition-colors">
                         Watch Demo
                     </a>

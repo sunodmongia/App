@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView
+from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from pathlib import Path
 from saas.forms import *
@@ -44,6 +46,9 @@ def login_view(request):
                 return redirect("/")
     return render(request, "auth/login.html")
 
+class UserDemoView(LoginRequiredMixin, TemplateView):
+    template_name = 'demo.html'
+    login_url = 'account_login'
 
 # class UserLoginView(LoginView):
 #     template_name = "auth/login.html"
