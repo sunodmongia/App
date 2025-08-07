@@ -62,7 +62,7 @@ class UserDemoView(LoginRequiredMixin, TemplateView):
 class StartTrialView(LoginRequiredMixin, FormView):
     template_name = 'signup_trial.html'
     form_class = TrialSignupForm
-    success_url = reverse_lazy('start_trial')
+    success_url = reverse_lazy('signup-trial')
 
     def form_valid(self, form):
         # Hash and save password
@@ -92,3 +92,14 @@ class ScheduleDemoView(FormView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Schedule a Demo'
         return context
+
+
+class ContactUsView(FormView):
+    template_name = 'contact_us.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(f'{self.request}, Thanks for Contacting Us')
+        return super().form_valid(form)

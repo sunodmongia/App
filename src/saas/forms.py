@@ -1,7 +1,5 @@
-# forms.py
-
 from django import forms
-from .models import TrialSignup, DemoSchedule
+from .models import TrialSignup, DemoSchedule, ContactMessage
 
 
 class TrialSignupForm(forms.ModelForm):
@@ -60,14 +58,18 @@ class TrialSignupForm(forms.ModelForm):
             ),
             "terms_accepted": forms.CheckboxInput(
                 attrs={
-                    "class": "mt-1 mr-3 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                    "class": "h-4 w-4 text-black border border-black focus:ring-purple-500 rounded"
                 }
             ),
             "newsletter_opt_in": forms.CheckboxInput(
                 attrs={
-                    "class": "mt-1 mr-3 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                    "class": "h-4 w-4 text-black border border-black focus:ring-purple-500 rounded"
                 }
             ),
+        }
+        labels = {
+            "terms_accepted": "I accept the terms and conditions",
+            "newsletter_opt_in": "Subscribe to our newsletter",
         }
 
 
@@ -132,6 +134,40 @@ class DemoScheduleCallForm(forms.ModelForm):
                 attrs={
                     "rows": 4,
                     "placeholder": "Tell us about your specific use case…",
+                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none resize-none",
+                }
+            ),
+        }
+
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = ContactMessage
+        fields = "__all__"
+        exclude = ["created_at"]
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "placeholder": "Your name",
+                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "placeholder": "you@example.com",
+                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
+                }
+            ),
+            "subject": forms.TextInput(
+                attrs={
+                    "placeholder": "Subject",
+                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
+                }
+            ),
+            "message": forms.Textarea(
+                attrs={
+                    "rows": 6,
+                    "placeholder": "Your message...",
                     "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none resize-none",
                 }
             ),
