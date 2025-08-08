@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load tailwind_field %}
+{% load widget_tweaks %}
+{% block content %}
+
+<!-- Hero Section -->
+<section class="relative text-white text-center">
+  <!-- Hero Content -->
+  <div class="relative max-w-4xl mx-auto px-4 py-24">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg text-black">
+      TechCorp Success Story
+    </h1>
+    <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-black opacity-90">
+      How TechCorp increased productivity by 40% using SaaSApp's workflow automation.
+    </p>
+    <a href="/" 
+       class="inline-block bg-yellow-900 hover:bg-yellow-700 text-white font-semibold rounded-full px-6 py-3 transition">
+      ← Back to Home
+    </a>
+  </div>
+</section>
+
+<!-- Case Study Content -->
+<section class="max-w-5xl mx-auto px-4 py-20 space-y-20">
+
+  <!-- Featured Image -->
+  <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1170&q=80"
+    alt="TechCorp Office Scene" class="rounded-xl shadow-xl w-full object-cover max-h-96" />
+
+  <!-- About TechCorp -->
+  <div>
+    <h2 class="text-3xl font-bold mb-6 text-gray-900 border-l-4 border-yellow-400 pl-4">About TechCorp</h2>
+    <p class="text-gray-700 leading-relaxed">
+      TechCorp is a leading software company specializing in cloud-based enterprise solutions. With over 500 employees
+      globally, they focus on delivering innovation and agility to their clients.
+    </p>
+  </div>
+
+  <!-- Challenges -->
+  <div>
+    <h2 class="text-3xl font-bold mb-6 text-gray-900 border-l-4 border-yellow-400 pl-4">Challenges</h2>
+    <p class="text-gray-700 leading-relaxed mb-4">
+      TechCorp struggled with inefficient project tracking and siloed communication across teams, which led to missed
+      deadlines and inconsistent reporting.
+    </p>
+    <p class="text-gray-700 leading-relaxed">
+      Their legacy tools did not support the integrated workflows needed for their expanding product portfolio and
+      global team collaboration.
+    </p>
+  </div>
+
+  <!-- Solution -->
+  <div>
+    <h2 class="text-3xl font-bold mb-6 text-gray-900 border-l-4 border-yellow-400 pl-4">Solution</h2>
+    <p class="text-gray-700 leading-relaxed mb-4">
+      Implementing SaaSApp's unified platform allowed TechCorp to centralize project management with real-time
+      dashboards, automate task assignments, and facilitate seamless communication.
+    </p>
+    <p class="text-gray-700 leading-relaxed">
+      Training sessions and integration with existing tools ensured rapid adoption across all departments.
+    </p>
+  </div>
+
+  <!-- Results -->
+  <div>
+    <h2 class="text-3xl font-bold mb-6 text-gray-900 border-l-4 border-yellow-400 pl-4">Results</h2>
+    <ul class="space-y-3 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-yellow-500 text-xl mr-2">✔</span>
+        40% increase in overall team productivity within 6 months
+      </li>
+      <li class="flex items-start">
+        <span class="text-yellow-500 text-xl mr-2">✔</span>
+        75% reduction in missed deadlines across projects
+      </li>
+      <li class="flex items-start">
+        <span class="text-yellow-500 text-xl mr-2">✔</span>
+        Real-time visibility improved decision-making and stakeholder satisfaction
+      </li>
+      <li class="flex items-start">
+        <span class="text-yellow-500 text-xl mr-2">✔</span>
+        Enhanced inter-team collaboration led to innovative solutions being delivered faster
+      </li>
+    </ul>
+  </div>
+
+  <!-- Testimonial -->
+  <blockquote class="bg-yellow-50 rounded-xl p-8 shadow-md border border-yellow-200 text-center">
+    <p class="text-lg italic text-yellow-900 mb-4">
+      “SaaSApp revolutionized how we manage projects and collaborate. The platform’s flexibility and real-time insights
+      helped us deliver projects on time and improve our customer satisfaction dramatically.”
+    </p>
+    <footer class="font-semibold text-yellow-900">
+      — Sarah Johnson, COO, TechCorp
+    </footer>
+  </blockquote>
+
+</section>
+
+<!-- Call to Action -->
+<section class="bg-yellow-400 text-yellow-900 py-12 text-center">
+  <h2 class="text-2xl md:text-3xl font-bold mb-4">Ready to Transform Your Workflow?</h2>
+  <p class="mb-6 text-lg">Discover how SaaSApp can drive productivity and efficiency for your business.</p>
+  <a href="#"
+    class="inline-block bg-yellow-900 text-white px-8 py-4 rounded-lg font-bold hover:bg-yellow-800 transition">
+    Contact Sales to Learn More
+  </a>
+</section>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Hero Section -->
+<section class="pt-20 pb-12 text-center bg-gradient-to-r from-green-400 via-teal-500 to-blue-500 text-white">
+    <div class="max-w-3xl mx-auto px-4">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">
+            Our Blog
+        </h1>
+        <p class="text-lg mb-8 opacity-90">
+            Insights, tips, and stories from the SaaSApp team.
+        </p>
+    </div>
+</section>
+
+<!-- Blog Posts Grid -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+
+            {# Fake 12 posts for demo #}
+            {% for i in "123456789abc"|make_list %}
+            <article
+                class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+
+                <!-- Image -->
+                <a href="#" class="block relative overflow-hidden">
+                    <img src="https://picsum.photos/seed/{{ forloop.counter }}/800/600"
+                        alt="Blog Post {{ forloop.counter }}"
+                        class="object-cover w-full h-52 transition-transform duration-500 hover:scale-110" />
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500">
+                    </div>
+                </a>
+
+                <!-- Content -->
+                <div class="p-6 flex flex-col flex-grow">
+                    <h2 class="text-lg font-semibold mb-3 leading-snug flex-grow">
+                        <a href="#" class="hover:text-green-600 transition-colors">
+                            Sample Blog Post Title #{{ forloop.counter }}
+                        </a>
+                    </h2>
+                    <p class="text-gray-600 mb-5 text-sm flex-grow">
+                        This is a short summary of blog post number {{ forloop.counter }}.
+                        It provides an engaging preview to encourage reading more.
+                    </p>
+                    <div class="flex items-center justify-between mt-auto">
+                        <time datetime="2025-08-{{ forloop.counter }}" class="text-gray-500 text-xs">
+                            August {{ forloop.counter }}, 2025
+                        </time>
+                        <a href="#" class="text-green-600 font-medium hover:underline text-xs">
+                            Read More →
+                        </a>
+                    </div>
+                </div>
+
+            </article>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}

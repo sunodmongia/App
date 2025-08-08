@@ -9,10 +9,10 @@ from django.db import models
 
 # Optional: use choices for cleaner data and better UI
 COMPANY_SIZE_CHOICES = [
-    ("1-10", "1–10"),
-    ("11-50", "11–50"),
-    ("51-200", "51–200"),
-    ("201-500", "201–500"),
+    ("1-10", "1-10"),
+    ("11-50", "11-50"),
+    ("51-200", "51-200"),
+    ("201-500", "201-500"),
     ("500+", "500+"),
 ]
 
@@ -36,7 +36,6 @@ class TrialSignup(models.Model):
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
     company = models.CharField(max_length=150)
-    # ⚠️ Avoid password_hash unless you’re handling auth manually
     password_hash = models.CharField(max_length=128)
     company_size = models.CharField(
         max_length=20, choices=COMPANY_SIZE_CHOICES, blank=True

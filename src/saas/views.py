@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 from saas.forms import *
 from saas.models import *
 
@@ -17,19 +18,6 @@ class HomeView(TemplateView):
 
 class AboutView(TemplateView):
     template_name = "about.html"
-
-
-def login_view(request):
-    if request.method == "POST":
-        username = request.POST.get("username") or None
-        password = request.POST.get("password") or None
-
-        if all([username, password]):
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect("/")
-    return render(request, "auth/login.html")
 
 
 class UserDemoView(LoginRequiredMixin, TemplateView):
@@ -91,3 +79,35 @@ class ContactUsView(FormView):
 
 class PricingView(TemplateView):
     template_name = "pricing.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Pricing"
+        return context
+
+
+class HelpCenterView(TemplateView):
+    template_name = "help_center.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Help Center"
+        return context
+
+
+class BlogView(TemplateView):
+    template_name = "blog.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Blogs"
+        return context
+
+
+class CaseStudyView(TemplateView):
+    template_name = "case_study.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Case Study"
+        return context
