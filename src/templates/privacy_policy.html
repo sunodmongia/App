@@ -2,15 +2,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="relative bg-gradient-to-r from-blue-200 to-white pt-12 pb-20 overflow-hidden">
+
+<style>
+    .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+</style>
+<section class="relative gradient-bg pt-12 pb-20 overflow-hidden">
     <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-12">
         <div class="lg:w-1/2 text-center lg:text-left space-y-4">
             <div
                 class="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs uppercase font-semibold">
                 Legal Policies</div>
-            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900">SaaS Privacy Policy: Complete Guide to
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white">SaaS Privacy Policy: Complete Guide to
                 Compliance and Trust</h1>
-            <div class="flex items-center justify-center lg:justify-start space-x-4 text-gray-600 text-sm">
+            <div class="flex items-center justify-center lg:justify-start space-x-4 text-white text-sm">
                 <span>By Wire Team</span>
                 <span>•</span>
                 <time datetime="2025-08-08">August 8, 2025</time>

@@ -207,7 +207,7 @@
                 Don't want to wait for a demo? Start your free trial now and explore SaaSApp on your own.
             </p>
 
-            <a href="/signup"
+            <a href="{% url 'pricing' %}"
                 class="inline-flex items-center px-8 py-4 bg-black text-white font-bold text-lg rounded-lg hover:bg-gray-800 transition-colors">
                 🚀 Start Free Trial Instead
             </a>
@@ -219,9 +219,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p class="text-gray-400 mb-4">&copy; 2025 SaaSApp. All rights reserved.</p>
             <div class="flex justify-center space-x-6 text-sm">
-                <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
-                <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
-                <a href="#" class="text-gray-400 hover:text-white">Contact Support</a>
+                <a href="{% url 'terms-and-condtion' %}" class="text-gray-400 hover:text-white">Terms & Conditions</a>
+                <a href="{% url 'privacy-policy' %}" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                <a href="{% url 'contact-us' %}" class="text-gray-400 hover:text-white">Contact Support</a>
             </div>
         </div>
     </footer>
