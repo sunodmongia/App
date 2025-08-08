@@ -1,0 +1,165 @@
+<!-- templates/features.html -->
+{% extends "base.html" %}
+
+{% block title %}Features – SaaSApp{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-purple-700 to-indigo-600 text-black py-20">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-4">
+            Powerful Features to Boost Your Productivity
+        </h1>
+        <p class="max-w-3xl mx-auto text-lg md:text-xl">
+            Everything you need to plan, collaborate, and execute projects—packed into one seamless platform.
+        </p>
+    </div>
+</section>
+
+<!-- Features Grid -->
+<section class="max-w-7xl mx-auto px-6 lg:px-8 py-15 bg-white">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+
+        <!-- Real-Time Collaboration -->
+        <div
+            class="flex flex-col items-start p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-indigo-100 text-indigo-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                    <circle cx="12" cy="12" r="10" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Real-Time Collaboration</h3>
+            <p class="text-gray-600">
+                Chat, comment, mention teammates, and co-edit documents simultaneously to stay perfectly aligned.
+            </p>
+        </div>
+
+        <!-- Task & Workflow Automation -->
+        <div
+            class="flex flex-col items-start p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-green-100 text-green-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Task & Workflow Automation</h3>
+            <p class="text-gray-600">
+                Automate repetitive tasks with triggers, rules, and custom workflows to save hours every week.
+            </p>
+        </div>
+
+        <!-- Advanced Analytics & Reporting -->
+        <div
+            class="flex flex-col items-start p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-yellow-100 text-yellow-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 6v6a2 2 0 11-4 0V6" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Advanced Analytics & Reporting</h3>
+            <p class="text-gray-600">
+                Build custom dashboards, generate detailed reports, and forecast outcomes with predictive analytics.
+            </p>
+        </div>
+
+        <!-- Multi-View Interface -->
+        <div
+            class="flex flex-col items-start p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-pink-100 text-pink-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Multi-View Interface</h3>
+            <p class="text-gray-600">
+                Switch between List, Kanban, Calendar, Gantt, and Table views for flexible project visualization.
+            </p>
+        </div>
+
+        <!-- Robust API & Integrations -->
+        <div
+            class="flex flex-col items-start p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-blue-100 text-blue-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8M8 12h8M8 17h8" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Robust API & Integrations</h3>
+            <p class="text-gray-600">
+                Connect with over 200 tools, from Slack to Google Drive, or extend functionality via our REST API.
+            </p>
+        </div>
+
+        <!-- Secure & Compliant -->
+        <div
+            class="flex flex-col items-start p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-teal-100 text-teal-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Secure & Compliant</h3>
+            <p class="text-gray-600">
+                Enterprise-grade encryption, SSO, and compliance with GDPR, HIPAA, and SOC 2 standards.
+            </p>
+        </div>
+
+        <!-- New Feature: Offline Mode -->
+        <div
+            class="flex flex-col items-start p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-orange-100 text-orange-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Offline Mode</h3>
+            <p class="text-gray-600">
+                Keep working without an internet connection—your changes sync automatically once you're back online.
+            </p>
+        </div>
+
+        <!-- New Feature: AI-Powered Suggestions -->
+        <div
+            class="flex flex-col items-start p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-red-100 text-red-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" />
+                    <circle cx="12" cy="12" r="10" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">AI-Powered Suggestions</h3>
+            <p class="text-gray-600">
+                Let our AI recommend next steps, deadlines, and task priorities based on project history.
+            </p>
+        </div>
+
+        <!-- New Feature: Custom Branding -->
+        <div
+            class="flex flex-col items-start p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-purple-100 text-purple-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Custom Branding</h3>
+            <p class="text-gray-600">
+                Add your company’s logo, colors, and domain for a fully white-labeled experience.
+            </p>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

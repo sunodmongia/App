@@ -111,3 +111,30 @@ class CaseStudyView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Case Study"
         return context
+
+
+class APIView(TemplateView):
+    template_name = "api.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "API"
+        return context
+
+
+class FeaturesView(TemplateView):
+    template_name = "features.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Features"
+        return context
+
+
+class PrivacyPolicyView(TemplateView):
+    template_name = "privacy_policy.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Privacy Policy"
+        return context

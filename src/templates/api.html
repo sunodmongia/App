@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="pt-20 pb-12 bg-gradient-to-r from-blue-700 to-indigo-800 text-black text-center">
+    <div class="max-w-4xl mx-auto px-4">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-4">API Reference</h1>
+        <p class="text-lg mb-8">Everything you need to integrate SaaSApp into your workflow.</p>
+    </div>
+</section>
+
+<!-- API Docs -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-5xl mx-auto px-4 space-y-20 text-gray-900">
+
+        <!-- Authentication -->
+        <div>
+            <h2 class="text-3xl font-bold mb-6">Authentication</h2>
+            <p class="mb-4">All requests require authentication using a Bearer token.</p>
+
+            <!-- Login Request -->
+            <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
+                <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b">
+                    <span class="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">POST</span>
+                    <code class="text-sm text-gray-800">/api/v1/auth/login</code>
+                </div>
+                <pre class="bg-gray-900 text-green-300 text-sm p-6 overflow-x-auto"><code>{
+  "email": "user@example.com",
+  "password": "yourpassword"
+}</code></pre>
+            </div>
+
+            <!-- Login Response -->
+            <div class="bg-white rounded-xl shadow overflow-hidden">
+                <div class="bg-gray-100 px-4 py-2 border-b text-sm font-semibold">Sample Response</div>
+                <pre class="bg-gray-900 text-blue-300 text-sm p-6 overflow-x-auto"><code>{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI..."
+}</code></pre>
+            </div>
+        </div>
+
+        <!-- Projects -->
+        <div>
+            <h2 class="text-3xl font-bold mb-6">Projects</h2>
+
+            <!-- List Projects -->
+            <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
+                <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b">
+                    <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">GET</span>
+                    <code class="text-sm text-gray-800">/api/v1/projects</code>
+                </div>
+                <pre
+                    class="bg-gray-900 text-green-300 text-sm p-6 overflow-x-auto"><code>Authorization: Bearer &lt;your_token&gt;</code></pre>
+            </div>
+
+            <!-- Create Project -->
+            <div class="bg-white rounded-xl shadow overflow-hidden">
+                <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b">
+                    <span class="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">POST</span>
+                    <code class="text-sm text-gray-800">/api/v1/projects</code>
+                </div>
+                <pre class="bg-gray-900 text-green-300 text-sm p-6 overflow-x-auto"><code>{
+  "name": "New Project",
+  "description": "Project description here"
+}</code></pre>
+            </div>
+        </div>
+
+        <!-- Tasks -->
+        <div>
+            <h2 class="text-3xl font-bold mb-6">Tasks</h2>
+
+            <!-- List Tasks -->
+            <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
+                <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b">
+                    <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">GET</span>
+                    <code class="text-sm text-gray-800">/api/v1/projects/{project_id}/tasks</code>
+                </div>
+                <pre
+                    class="bg-gray-900 text-green-300 text-sm p-6 overflow-x-auto"><code>Authorization: Bearer &lt;your_token&gt;</code></pre>
+            </div>
+
+            <!-- Create Task -->
+            <div class="bg-white rounded-xl shadow overflow-hidden">
+                <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b">
+                    <span class="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">POST</span>
+                    <code class="text-sm text-gray-800">/api/v1/projects/{project_id}/tasks</code>
+                </div>
+                <pre class="bg-gray-900 text-green-300 text-sm p-6 overflow-x-auto"><code>{
+  "title": "Task title",
+  "due_date": "2025-08-15",
+  "priority": "high"
+}</code></pre>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
