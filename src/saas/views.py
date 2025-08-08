@@ -138,3 +138,12 @@ class PrivacyPolicyView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Privacy Policy"
         return context
+
+
+class TermsAndConditionsView(TemplateView):
+    template_name = "terms_and_condition.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Terms and Conditions"
+        return context

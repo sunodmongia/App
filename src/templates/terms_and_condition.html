@@ -1,0 +1,110 @@
+<!-- templates/terms_of_service.html -->
+{% extends "base.html" %}
+{% block title %}Terms of Service – SaaSApp{% endblock %}
+
+{% block content %}
+<section class="relative bg-gradient-to-r from-blue-200 to-white pt-12 pb-20 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-12">
+        <div class="lg:w-1/2 text-center lg:text-left space-y-4">
+            <div
+                class="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs uppercase font-semibold">
+                Legal Terms</div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900">Terms & Conditions</h1>
+            <div class="flex items-center justify-center lg:justify-start space-x-4 text-gray-600 text-sm">
+                <span>By Wire Team</span>
+                <span>•</span>
+                <time datetime="2025-08-08">August 8, 2025</time>
+                <span>•</span>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Content + TOC -->
+<section class="bg-gray-50 py-18">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row gap-10">
+
+        <!-- Sticky TOC -->
+        <aside class="hidden lg:block lg:w-1/4 sticky top-16 self-start">
+            <nav class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">On This Page</h2>
+                <ul class="space-y-2 text-gray-700 text-sm">
+                    <li><a href="#introduction" class="hover:text-teal-600">Introduction</a></li>
+                    <li><a href="#license" class="hover:text-teal-600">License Grant</a></li>
+                    <li><a href="#restrictions" class="hover:text-teal-600">Restrictions</a></li>
+                    <li><a href="#subscriptions" class="hover:text-teal-600">Subscriptions</a></li>
+                    <li><a href="#payments" class="hover:text-teal-600">Payments & Refunds</a></li>
+                    <li><a href="#liability" class="hover:text-teal-600">Limitation of Liability</a></li>
+                    <li><a href="#termination" class="hover:text-teal-600">Termination</a></li>
+                    <li><a href="#governing-law" class="hover:text-teal-600">Governing Law</a></li>
+                    <li><a href="#changes" class="hover:text-teal-600">Changes to Terms</a></li>
+                    <li><a href="#contact" class="hover:text-teal-600">Contact Us</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Terms Content -->
+        <article
+            class="prose prose-lg prose-teal lg:prose-xl max-w-none bg-white rounded-3xl shadow-xl p-10 md:p-16 lg:w-3/4"
+            id="terms-content">
+            <h2 id="introduction">1. Introduction</h2>
+            <p>Welcome to SaaSApp. These Terms of Service (“Terms”) govern your access to and use of our platform. By
+                using SaaSApp, you agree to these Terms.</p>
+
+            <h2 id="license">2. License Grant</h2>
+            <p>SaaSApp grants you a limited, non-exclusive, non-transferable, revocable license to use the services
+                solely for your internal business purposes.</p>
+
+            <h2 id="restrictions">3. Restrictions</h2>
+            <ul>
+                <li>You may not reverse engineer, decompile, or disassemble the services.</li>
+                <li>You may not use the services for unlawful activities.</li>
+                <li>You may not circumvent any use restrictions.</li>
+            </ul>
+
+            <h2 id="subscriptions">4. Subscriptions</h2>
+            <p>Access to certain features requires a paid subscription. You agree to pay all fees in accordance with the
+                billing terms.</p>
+
+            <h2 id="payments">5. Payments & Refunds</h2>
+            <p>Subscriptions are billed in advance on a recurring basis. All fees are non-refundable except as required
+                by law.</p>
+
+            <h2 id="liability">6. Limitation of Liability</h2>
+            <p>To the fullest extent permitted by law, SaaSApp’s liability is limited to the amount paid by you in the
+                prior 12 months. We are not liable for indirect or consequential damages.</p>
+
+            <h2 id="termination">7. Termination</h2>
+            <p>We may suspend or terminate your access if you breach these Terms. Upon termination, your license ends
+                and you must cease using the services.</p>
+
+            <h2 id="governing-law">8. Governing Law</h2>
+            <p>These Terms are governed by the laws of [Your State/Country], without regard to conflict of law
+                principles.</p>
+
+            <h2 id="changes">9. Changes to Terms</h2>
+            <p>We may update these Terms. We will notify you of material changes via email or in-app. Continued use
+                indicates acceptance.</p>
+
+            <h2 id="contact">10. Contact Us</h2>
+            <p>If you have questions about these Terms, please contact:</p>
+            <address>
+                <strong>SaaSApp Legal Team</strong><br />
+                Email: <a href="mailto:legal@saasapp.com" class="text-teal-600 underline">legal@saasapp.com</a><br />
+                Phone: +1 (555) 123-4567<br />
+                Address: 123 SaaSApp Blvd, Cloud City
+            </address>
+        </article>
+    </div>
+</section>
+
+<!-- Smooth scroll script -->
+<script>
+    document.querySelectorAll('aside a').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const id = link.getAttribute('href');
+            document.querySelector(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+</script>
+{% endblock %}

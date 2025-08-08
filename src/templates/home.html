@@ -298,21 +298,20 @@
             <div class="grid md:grid-cols-4 gap-8">
                 <!-- Company Info -->
                 <div>
-                    <h3 class="text-2xl font-bold mb-4">SaaSApp</h3>
-                    <p class="text-gray-400 mb-6">The all-in-one platform for modern businesses to streamline operations
+                    <h3 class="text-2xl font-bold mb-2">SaaSApp</h3>
+                    <p class="text-gray-400 mb-2">The all-in-one platform for modern businesses to streamline operations
                         and scale efficiently.</p>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">Twitter</a>
-                        <a href="#" class="text-gray-400 hover:text-white">LinkedIn</a>
-                        <a href="#" class="text-gray-400 hover:text-white">GitHub</a>
+                        <a href="https://www.linkedin.com/in/sunod-kumar"
+                            class="text-gray-400 hover:text-white">LinkedIn</a>
+                        <a href="https://www.github.com/sunodmongia" class="text-gray-400 hover:text-white">GitHub</a>
                     </div>
                 </div>
 
                 <!-- Product -->
                 <div>
-                    <h4 class="font-semibold mb-3">Product</h4>
+                    <h4 class="font-semibold mb-2">Product</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="{% url 'features' %}" class="hover:text-white">Features</a></li>
                         <li><a href="{% url 'pricing' %}" class="hover:text-white">Pricing</a></li>
                         <li><a href="{% url 'api-view' %}" class="hover:text-white">API</a></li>
                     </ul>
@@ -320,20 +319,19 @@
 
                 <!-- Resources -->
                 <div>
-                    <h4 class="font-semibold mb-3">Resources</h4>
+                    <h4 class="font-semibold mb-2">Resources</h4>
                     <ul class="space-y-2 text-gray-400">
                         <li><a href="{% url 'help-center' %}" class="hover:text-white">Help Center</a></li>
-                        <li><a href="{% url 'blog' %}" class="hover:text-white">Blog</a></li>
+
                         <li><a href="{% url 'case-studies' %}" class="hover:text-white">Case Studies</a></li>
                     </ul>
                 </div>
 
                 <!-- Company -->
                 <div>
-                    <h4 class="font-semibold mb-3">Company</h4>
+                    <h4 class="font-semibold mb-2">Company</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="{% url 'about' %}" class="hover:text-white">About</a></li>
-                        <li><a href="#" class="hover:text-white">Careers</a></li>
+                        <li><a href="{% url 'blog' %}" class="hover:text-white">Blog</a></li>
                         <li><a href="{% url 'contact-us' %}" class="hover:text-white">Contact</a></li>
                     </ul>
                 </div>
@@ -346,9 +344,8 @@
                     © 2025 SaaSApp. All rights reserved.
                 </p>
                 <div class="flex space-x-6 text-sm text-gray-400 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-white">Terms of Condition</a>
+                    <a href="{% url 'terms-and-condtion' %}" class="hover:text-white">Terms & Condition</a>
                     <a href="{% url 'privacy-policy' %}" class="hover:text-white">Privacy Policy</a>
-                    <a href="" class="hover:text-white">Cookie Policy</a>
                 </div>
             </div>
         </div>
