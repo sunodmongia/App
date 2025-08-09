@@ -43,7 +43,7 @@ class StartTrialView(LoginRequiredMixin, FormView):
         send_mail(
             subject="Your Free Trial Has Started",
             message=(
-                f"Hello {instance.name},\n\n"
+                f"Hello {instance.first_name} {instance.last_name},\n\n"
                 "Thank you for signing up for our free trial. "
                 "You can now enjoy all premium features for the trial period.\n\n"
                 "Best Regards,\nThe Team"
@@ -72,7 +72,7 @@ class ScheduleDemoView(LoginRequiredMixin, FormView):
         send_mail(
             subject="Your Demo Has Been Scheduled",
             message=(
-                f"Hello {instance.name},\n\n"
+                f"Hello {instance.first_name} {instance.last_name},\n\n"
                 "Thank you for scheduling a demo with us. "
                 "We will contact you soon to confirm the details.\n\n"
                 "Best Regards,\nThe Team"
