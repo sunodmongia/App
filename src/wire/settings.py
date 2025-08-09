@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     # "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
+    'allauth.socialaccount.providers.google',
     "slippers",
 ]
 
@@ -163,6 +164,19 @@ SOCIALACCOUNT_PROVIDERS = {
             "repo",
             "read:org",
         ],
+    },
+    "openid_connect": {
+        "APPS": [
+            {
+                "provider_id": "linkedin",
+                "name": "LinkedIn",
+                "client_id": "<insert-id>",
+                "secret": "<insert-secret>",
+                "settings": {
+                    "server_url": "https://www.linkedin.com/oauth",
+                },
+            }
+        ]
     }
 }
 
@@ -246,4 +260,3 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
