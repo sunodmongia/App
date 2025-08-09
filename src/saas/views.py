@@ -60,7 +60,7 @@ class StartTrialView(LoginRequiredMixin, FormView):
         return context
 
 
-class ScheduleDemoView(FormView):
+class ScheduleDemoView(LoginRequiredMixin, FormView):
     template_name = "schedule_demo.html"
     form_class = DemoScheduleCallForm
     success_url = reverse_lazy("home")
@@ -94,7 +94,7 @@ class ScheduleDemoView(FormView):
         return context
 
 
-class ContactUsView(FormView):
+class ContactUsView(LoginRequiredMixin, FormView):
     template_name = "contact_us.html"
     form_class = ContactForm
     success_url = reverse_lazy("home")
