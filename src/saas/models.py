@@ -36,7 +36,7 @@ class TrialSignup(models.Model):
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
     company = models.CharField(max_length=150)
-    password_hash = models.CharField(max_length=128)
+    phone = models.CharField(max_length=20) 
     company_size = models.CharField(
         max_length=20, choices=COMPANY_SIZE_CHOICES, blank=True
     )
@@ -53,7 +53,7 @@ class DemoSchedule(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
-    phone = models.CharField(max_length=30)
+    phone = models.CharField(max_length=20) 
     company = models.CharField(max_length=150)
     job_title = models.CharField(max_length=100, blank=True)
     company_size = models.CharField(max_length=20, choices=COMPANY_SIZE_CHOICES)

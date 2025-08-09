@@ -10,17 +10,7 @@ class TrialSignupForm(forms.ModelForm):
 
     class Meta:
         model = TrialSignup
-        fields = [
-            "first_name",
-            "last_name",
-            "email",
-            "company",
-            "password",
-            "company_size",
-            "industry",
-            "terms_accepted",
-            "newsletter_opt_in",
-        ]
+        fields = "__all__"
         widgets = {
             "first_name": forms.TextInput(
                 attrs={
@@ -43,6 +33,12 @@ class TrialSignupForm(forms.ModelForm):
             "company": forms.TextInput(
                 attrs={
                     "placeholder": "Enter your company name",
+                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
+                }
+            ),
+            "phone": forms.TextInput(
+                attrs={
+                    "placeholder": "+1 (555) 123-4567",
                     "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
                 }
             ),

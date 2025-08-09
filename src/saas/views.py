@@ -1,13 +1,11 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.views import LoginView
-from django.views.generic import TemplateView, FormView
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView, FormView
+from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth.hashers import make_password
-from django.utils import timezone
+from django.conf import settings
 from saas.forms import *
 from saas.models import *
 
@@ -33,7 +31,7 @@ class UserDemoView(LoginRequiredMixin, TemplateView):
 class StartTrialView(LoginRequiredMixin, FormView):
     template_name = "signup_trial.html"
     form_class = TrialSignupForm
-    success_url = reverse_lazy("signup-trial")
+    success_url = reverse_lazy("pricing")
 
     def form_valid(self, form):
         # Hash and save password
@@ -42,6 +40,18 @@ class StartTrialView(LoginRequiredMixin, FormView):
         instance.password_hash = make_password(raw_password)
         instance.save()
         messages.success(self.request, "Your free trial signup has been saved.")
+        send_mail(
+            subject="Your Free Trial Has Started",
+            message=(
+                f"Hello {instance.name},\n\n"
+                "Thank you for signing up for our free trial. "
+                "You can now enjoy all premium features for the trial period.\n\n"
+                "Best Regards,\nThe Team"
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[instance.email],
+            fail_silently=False,
+        )
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -56,8 +66,26 @@ class ScheduleDemoView(FormView):
     success_url = reverse_lazy("home")
 
     def form_valid(self, form):
-        form.save()
-        messages.success(self.request, "Your demo scheduling request has been saved.")
+        instance = form.save()
+
+        # Send email to user
+        send_mail(
+            subject="Your Demo Has Been Scheduled",
+            message=(
+                f"Hello {instance.name},\n\n"
+                "Thank you for scheduling a demo with us. "
+                "We will contact you soon to confirm the details.\n\n"
+                "Best Regards,\nThe Team"
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[instance.email],
+            fail_silently=False,
+        )
+
+        messages.success(
+            self.request,
+            "Your demo scheduling request has been saved and a confirmation email has been sent.",
+        )
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

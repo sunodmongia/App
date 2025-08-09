@@ -78,13 +78,13 @@
                         <div class="mt-6">
                             <button type="submit"
                                 class="w-full text-black py-4 bg-gradient-to-r from-purple-600 to-blue-600 font-bold text-lg rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300">
-                                🚀 Start My Free Trial
+                                🚀 Book My Free Trial
                             </button>
                         </div>
                     </form>
                     <p class="text-center text-sm text-gray-500 mt-6">
                         Already have an account? <a href="{% url 'account_login' %}"
-                            class="text-purple-600 hover:underline font-semibold">Sign in here</a>
+                            class="text-purple-600 hover:underline font-semibold">Sign In here</a>
                     </p>
                 </div>
 
@@ -221,8 +221,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p class="text-gray-400 mb-4">&copy; 2025 SaaSApp. All rights reserved.</p>
             <div class="flex justify-center space-x-6 text-sm">
-                <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
-                <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                <a href="{% url 'terms-and-condtion' %}" class="text-gray-400 hover:text-white">Terms & Conditions</a>
+                <a href="{% url 'privacy-policy' %}" class="text-gray-400 hover:text-white">Privacy Policy</a>
                 <a href="{% url 'contact-us' %}" class="text-gray-400 hover:text-white">Contact Support</a>
             </div>
         </div>

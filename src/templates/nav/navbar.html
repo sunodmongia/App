@@ -59,7 +59,7 @@
                     {% if not request.user.is_authenticated %}
                     <a href="{% url 'account_login' %}"
                         class="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-black">Sign In</a>
-                    <a href="{% url 'account_signup' %}"
+                    <a href="{% url 'signup-trial' %}"
                         class="px-6 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
                         Start Free Trial
                     </a>
