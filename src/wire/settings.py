@@ -156,7 +156,15 @@ ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
 # ACCOUNT_PASSWORD_RESET_BY_CODE_ENABLED = True
 
-SOCIALACCOUNT_PROVIDERS = {}
+SOCIALACCOUNT_PROVIDERS = {
+    "github": {
+        "SCOPE": [
+            "user",
+            "repo",
+            "read:org",
+        ],
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
