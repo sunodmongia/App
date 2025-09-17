@@ -1,5 +1,7 @@
 from django import forms
 from .models import TrialSignup, DemoSchedule, ContactMessage
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Field, Submit, Div
 
 
 class TrialSignupForm(forms.ModelForm):
@@ -168,3 +170,22 @@ class ContactForm(forms.ModelForm):
                 }
             ),
         }
+
+
+class ContactMessageAdminForm(forms.ModelForm):
+    custom_email_subject = forms.CharField(
+        required=False,
+        label="Custom Email Subject",
+        widget=forms.TextInput(attrs={"class": "vTextField", "size": "80"}),
+    )
+    custom_email_message = forms.CharField(
+        required=False,
+        label="Custom Email Message",
+        widget=forms.Textarea(
+            attrs={"class": "vLargeTextField", "rows": 8, "cols": 80}
+        ),
+    )
+
+    class Meta:
+        model = ContactMessage
+        fields = "__all__"
