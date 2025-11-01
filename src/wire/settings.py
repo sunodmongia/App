@@ -33,8 +33,13 @@ DEBUG = config("DEBUG", cast=bool)
 ALLOWED_HOSTS = [""]
 
 if DEBUG:
-    ALLOWED_HOSTS += ["127.0.0.1", "localhost"]
+    ALLOWED_HOSTS += [
+        "127.0.0.1",
+        "localhost",
+        "raymon-postcerebellar-percy.ngrok-free.dev",
+    ]
 
+# CSRF_TRUSTED_ORIGINS = ["raymon-postcerebellar-percy.ngrok-free.dev"]
 
 # Application definition
 
@@ -159,9 +164,9 @@ ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
 SOCIALACCOUNT_PROVIDERS = {
     "github": {
-        'APP':{
-            "client_id": config('OAUTH_GITHUB_CLIENT_ID'),
-            "secret": config('OAUTH_GITHUB_SECRET'),
+        "APP": {
+            "client_id": config("OAUTH_GITHUB_CLIENT_ID"),
+            "secret": config("OAUTH_GITHUB_SECRET"),
         },
         "SCOPE": [
             "user",
@@ -184,8 +189,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
     "google": {
         "APP": {
-            "client_id": config('OAUTH_GOOGLE_CLIENT_ID'),
-            "secret": config('OAUTH_GOOGLE_SECRET'),
+            "client_id": config("OAUTH_GOOGLE_CLIENT_ID"),
+            "secret": config("OAUTH_GOOGLE_SECRET"),
         },
     },
 }
@@ -270,3 +275,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+
+
+# CSRF_TRUSTED_ORIGINS = ['*']
+# CSRF_COOKIE_SECURE = False
+# CSRF_USE_SESSIONS = False
