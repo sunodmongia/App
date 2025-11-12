@@ -1,100 +1,97 @@
 {% extends "base.html" %}
-{% load static %}
-
 {% block title %}My Profile{% endblock %}
-
+{% load static %}
 {% block content %}
-<div class="container py-4">
+
+<style>
+  .gradient-card {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  }
+
+  .info-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+  }
+
+  .avatar-fallback {
+    background: linear-gradient(135deg, #818cf8, #a78bfa);
+    color: white;
+    font-size: 2rem;
+  }
+
+  .hover-scale {
+    transition: all 0.25s ease;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+</style>
+
+<section class="pt-28 pb-20 bg-gradient-to-br from-indigo-50 via-white to-purple-50 min-h-screen">
+  <div class="max-w-5xl mx-auto px-4">
+
     <!-- Profile Header -->
-    <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-body p-4">
-            <div class="row align-items-center">
-                <!-- Profile Picture -->
-                <div class="col-md-3 text-center mb-3 mb-md-0">
-                    {% if user.userprofile.profile_image %}
-                        <img src="{{ user.userprofile.profile_image.url }}" 
-                             alt="{{ user.get_full_name }}" 
-                             class="rounded-circle img-fluid shadow-sm" 
-                             style="width: 150px; height: 150px; object-fit: cover;">
-                    {% else %}
-                        <img src="{% static 'images/default-avatar.png' %}" 
-                             alt="Default Avatar"
-                             class="rounded-circle img-fluid shadow-sm" 
-                             style="width: 150px; height: 150px; object-fit: cover;">
-                    {% endif %}
-                </div>
-
-                <!-- Profile Details -->
-                <div class="col-md-9">
-                    <h3 class="fw-bold mb-1">{{ user.get_full_name|default:user.username|title }}</h3>
-                    <p class="text-muted mb-3">{{ user.email }}</p>
-
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <strong>Phone:</strong> 
-                            <span class="text-secondary">{{ user.userprofile.phone|default:"Not provided" }}</span>
-                        </div>
-                        <div class="col-md-6">
-                            <strong>Joined:</strong> 
-                            <span class="text-secondary">{{ user.date_joined|date:"M d, Y" }}</span>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <strong>Status:</strong>
-                            {% if user.is_active %}
-                                <span class="badge bg-success">Active</span>
-                            {% else %}
-                                <span class="badge bg-danger">Inactive</span>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-6">
-                            <strong>Last Login:</strong> 
-                            <span class="text-secondary">{{ user.last_login|date:"M d, Y, H:i" }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="mt-4">
-                        <a href="{% url 'profile-edit' request.user.pk %}" class="btn btn-outline-primary me-2">
-                            <i class="bi bi-pencil-square me-1"></i> Edit Profile
-                        </a>
-                        <a href="{% url 'account_change_password' %}" class="btn btn-outline-secondary">
-                            <i class="bi bi-shield-lock me-1"></i> Change Password
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <div class="gradient-card rounded-3xl text-white shadow-xl p-10 flex flex-col md:flex-row items-center justify-between gap-6 hover-scale">
+      <div class="flex items-center gap-6">
+        {% if request.user.userprofile.profile_image %}
+          <img src="{{ request.user.userprofile.profile_image.url }}" alt="Profile Image"
+               class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg">
+        {% else %}
+          <div class="w-32 h-32 rounded-full avatar-fallback flex items-center justify-center font-extrabold shadow-lg">
+            {{ request.user.username|slice:":1"|upper }}
+          </div>
+        {% endif %}
+        <div>
+          <h1 class="text-3xl font-extrabold">{{ request.user.username }}</h1>
+          <p class="opacity-90">{{ request.user.email }}</p>
+          {% if request.user.userprofile.phone %}
+            <p class="opacity-90 mt-1">📞 {{ request.user.userprofile.phone }}</p>
+          {% endif %}
         </div>
+      </div>
+      <div class="flex flex-col md:flex-row items-center gap-3">
+        <a href="{% url 'profile-edit' request.user.id %}"
+           class="px-5 py-2.5 bg-white text-indigo-700 font-semibold rounded-lg shadow hover:bg-indigo-100 transition">
+          ✏️ Edit Profile
+        </a>
+        <a href="{% url 'account_change_password' %}"
+           class="px-5 py-2.5 bg-indigo-800 text-white font-semibold rounded-lg shadow hover:bg-indigo-700 transition">
+          🔒 Change Password
+        </a>
+      </div>
     </div>
 
-    <!-- Additional Information -->
-    <div class="card mt-4 shadow-sm border-0 rounded-3">
-        <div class="card-body">
-            <h5 class="fw-bold mb-3"><i class="bi bi-person-lines-fill me-2"></i>About Me</h5>
-            <p class="text-muted">
-                {{ user.userprofile.bio|default:"No bio available." }}
-            </p>
-        </div>
+    <!-- Profile Info Section -->
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Bio Section -->
+      <div class="info-card rounded-3xl p-8 shadow-md border border-gray-100 hover-scale">
+        <h2 class="text-2xl font-bold text-indigo-700 mb-3">🧠 Bio</h2>
+        {% if request.user.userprofile.bio %}
+          <p class="text-gray-800 leading-relaxed">{{ request.user.userprofile.bio }}</p>
+        {% else %}
+          <p class="text-gray-400 italic">You haven’t added a bio yet. Click <strong>Edit Profile</strong> to add one.</p>
+        {% endif %}
+      </div>
+
+      <!-- Account Overview -->
+      <div class="info-card rounded-3xl p-8 shadow-md border border-gray-100 hover-scale">
+        <h2 class="text-2xl font-bold text-indigo-700 mb-3">📋 Account Overview</h2>
+        <ul class="text-gray-800 space-y-2">
+          <li><strong>Username:</strong> {{ request.user.username }}</li>
+          <li><strong>Email:</strong> {{ request.user.email }}</li>
+          <li><strong>Joined:</strong> {{ request.user.date_joined|date:"F j, Y" }}</li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Optional Recent Activity Section -->
-    <div class="card mt-4 shadow-sm border-0 rounded-3">
-        <div class="card-body">
-            <h5 class="fw-bold mb-3"><i class="bi bi-clock-history me-2"></i>Recent Activity</h5>
-            {% if recent_activities %}
-                <ul class="list-group list-group-flush">
-                    {% for activity in recent_activities %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>{{ activity.description }}</span>
-                            <span class="text-muted small">{{ activity.timestamp|date:"M d, Y H:i" }}</span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p class="text-muted mb-0">No recent activity recorded.</p>
-            {% endif %}
-        </div>
+    <!-- Activity Section -->
+    <div class="mt-12 info-card rounded-3xl p-8 shadow-md border border-gray-100 hover-scale">
+      <h2 class="text-2xl font-bold text-indigo-700 mb-3">📈 Recent Activity</h2>
+      <p class="text-gray-500 italic">No recent activity recorded. (Integrate later if you plan to track actions or usage stats.)</p>
     </div>
-</div>
+
+  </div>
+</section>
+
 {% endblock %}
