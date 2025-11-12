@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Profile Header -->
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <!-- Profile Picture -->
+                <div class="col-md-3 text-center mb-3 mb-md-0">
+                    {% if user.userprofile.profile_image %}
+                        <img src="{{ user.userprofile.profile_image.url }}" 
+                             alt="{{ user.get_full_name }}" 
+                             class="rounded-circle img-fluid shadow-sm" 
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'images/default-avatar.png' %}" 
+                             alt="Default Avatar"
+                             class="rounded-circle img-fluid shadow-sm" 
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    {% endif %}
+                </div>
+
+                <!-- Profile Details -->
+                <div class="col-md-9">
+                    <h3 class="fw-bold mb-1">{{ user.get_full_name|default:user.username|title }}</h3>
+                    <p class="text-muted mb-3">{{ user.email }}</p>
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <strong>Phone:</strong> 
+                            <span class="text-secondary">{{ user.userprofile.phone|default:"Not provided" }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Joined:</strong> 
+                            <span class="text-secondary">{{ user.date_joined|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <strong>Status:</strong>
+                            {% if user.is_active %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger">Inactive</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Last Login:</strong> 
+                            <span class="text-secondary">{{ user.last_login|date:"M d, Y, H:i" }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="mt-4">
+                        <a href="{% url 'profile-edit' request.user.pk %}" class="btn btn-outline-primary me-2">
+                            <i class="bi bi-pencil-square me-1"></i> Edit Profile
+                        </a>
+                        <a href="{% url 'account_change_password' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-shield-lock me-1"></i> Change Password
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Information -->
+    <div class="card mt-4 shadow-sm border-0 rounded-3">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3"><i class="bi bi-person-lines-fill me-2"></i>About Me</h5>
+            <p class="text-muted">
+                {{ user.userprofile.bio|default:"No bio available." }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Optional Recent Activity Section -->
+    <div class="card mt-4 shadow-sm border-0 rounded-3">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3"><i class="bi bi-clock-history me-2"></i>Recent Activity</h5>
+            {% if recent_activities %}
+                <ul class="list-group list-group-flush">
+                    {% for activity in recent_activities %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ activity.description }}</span>
+                            <span class="text-muted small">{{ activity.timestamp|date:"M d, Y H:i" }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">No recent activity recorded.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

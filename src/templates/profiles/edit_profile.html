@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<style>
+  .card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 9999px;
+    border: 4px solid #e5e7eb;
+    object-fit: cover;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .avatar-placeholder {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    font-weight: 700;
+    font-size: 2rem;
+  }
+
+  label {
+    font-weight: 600;
+  }
+
+  input[type="file"]::-webkit-file-upload-button {
+    background-color: #111827;
+    color: white;
+    border: none;
+    padding: 0.45rem 1.1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #1f2937;
+  }
+</style>
+
+<section class="pt-28 pb-20 bg-gray-50 min-h-screen text-gray-900">
+  <div class="max-w-3xl mx-auto px-6">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-10 border-b border-gray-200 pb-4">
+      <div>
+        <h1 class="text-4xl font-extrabold text-gray-900">Edit Profile</h1>
+        <p class="text-gray-600 mt-1 text-sm font-medium">
+          Manage your personal information and preferences.
+        </p>
+      </div>
+      <a href="{% url 'profile-home' %}"
+         class="text-sm font-semibold text-gray-700 hover:text-indigo-700 transition">
+         ← Back
+      </a>
+    </div>
+
+    <!-- Card -->
+    <div class="card p-10">
+      <form method="POST" enctype="multipart/form-data" class="space-y-10">
+        {% csrf_token %}
+
+        <!-- Profile Image -->
+        <div class="flex items-center gap-8">
+          {% if user_obj.userprofile.profile_image %}
+            <img src="{{ user_obj.userprofile.profile_image.url }}" alt="Profile Picture" class="avatar">
+          {% else %}
+            <div class="avatar avatar-placeholder flex items-center justify-center">
+              {{ user_obj.username|slice:":1"|upper }}
+            </div>
+          {% endif %}
+
+          <div>
+            <label for="profile_image" class="text-gray-800 text-sm uppercase tracking-wide mb-2 block">
+              Profile Photo
+            </label>
+            <input type="file" name="profile_image" id="profile_image"
+                   class="block w-full text-sm text-gray-800 border border-gray-300 rounded-lg bg-white cursor-pointer focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" />
+            <p class="text-xs text-gray-500 mt-1">JPG, PNG • Max 2MB</p>
+          </div>
+        </div>
+
+        <hr class="border-gray-200">
+
+        <!-- Crispy Form -->
+        <div class="space-y-6">
+          {{ form|crispy }}
+        </div>
+
+        <div class="flex justify-end items-center gap-3 pt-6">
+          <a href="{% url 'profile-home' %}"
+             class="px-6 py-2.5 text-sm font-semibold border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+            Cancel
+          </a>
+          <button type="submit"
+                  class="px-6 py-2.5 text-sm font-bold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 shadow-md hover:shadow-lg transition">
+            💾 Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
