@@ -1,20 +1,25 @@
+# profiles/forms.py
 from django import forms
+from django.contrib.auth.models import User
 from .models import UserProfile
 
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["username", "first_name", "last_name", "email"]
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-control"}),
+            "first_name": forms.TextInput(attrs={"class": "form-control"}),
+            "last_name": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+        }
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ["profile_image", "phone", "bio"]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Add consistent placeholders and Tailwind classes
-        self.fields["phone"].widget.attrs.update(
-            {
-                "placeholder": "Enter your phone number",
-            }
-        )
-        self.fields["bio"].widget.attrs.update(
-            {"placeholder": "Write something about yourself...", "rows": 4}
-        )
+        fields = ["phone", "bio", "profile_image"]
+        widgets = {
+            "phone": forms.TextInput(attrs={"class": "form-control"}),
+            "bio": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+            "profile_image": forms.ClearableFileInput(attrs={"class": "form-control"}),
+        }

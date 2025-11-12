@@ -1,13 +1,22 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import TemplateView, UpdateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, DeleteView
 from django.shortcuts import get_object_or_404, redirect
-from django.core.exceptions import ObjectDoesNotExist
-from .models import UserProfile
-from .forms import UserProfileForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+import os
+from .models import *
+from .forms import *
 
 User = get_user_model()
 
+
+class UserProfileDetailView(DetailView):
+    model = UserProfile
+    template_name = "profiles/profile_detail.html"
+    context_object_name = "profile"
 
 # ---------------------------------------------------------------------
 # ADMIN — Profile List (Paginated, Searchable)
@@ -64,19 +73,52 @@ class MyProfileView(LoginRequiredMixin, TemplateView):
 # ---------------------------------------------------------------------
 # USER — Edit Profile
 # ---------------------------------------------------------------------
-class ProfileEditView(LoginRequiredMixin, UpdateView):
-    model = UserProfile
-    form_class = UserProfileForm
-    template_name = "profiles/edit_profile.html"
+class ProfileEditView(LoginRequiredMixin, View):
+    template_name = "profiles/profile_edit.html"
 
-    def get_object(self, queryset=None):
-        # Ensure a profile exists even if user never edited before
-        profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
-        return profile
+    def get(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        profile = user.userprofile
+        user_form = UserForm(instance=user)
+        profile_form = UserProfileForm(instance=profile)
+        return render(
+            request,
+            self.template_name,
+            {
+                "user_form": user_form,
+                "profile_form": profile_form,
+                "user_obj": user,
+            },
+        )
 
-    def form_valid(self, form):
-        form.save()
-        return redirect("profile-home")
+    def post(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        profile = user.userprofile
+
+        if "remove_image" in request.POST:
+            if profile.profile_image and os.path.isfile(profile.profile_image.path):
+                os.remove(profile.profile_image.path)
+                profile.profile_image = None
+                profile.save()
+            return redirect("profile-edit", pk=pk)
+
+        user_form = UserForm(request.POST, instance=user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect("profile-list")
+
+        return render(
+            request,
+            self.template_name,
+            {
+                "user_form": user_form,
+                "profile_form": profile_form,
+                "user_obj": user,
+            },
+        )
 
 
 # ---------------------------------------------------------------------
@@ -84,7 +126,7 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 # ---------------------------------------------------------------------
 class UserProfileView(DetailView):
     model = User
-    template_name = "profiles/user_profile.html"  
+    template_name = "profiles/user_profile.html"
     context_object_name = "profile_user"
 
     def get_object(self):
@@ -105,3 +147,18 @@ class UserProfileView(DetailView):
             }
         )
         return context
+
+# ---------------------------------------------------------------------
+# PUBLIC — Delete Profile 
+# ---------------------------------------------------------------------
+
+class ProfileDeleteView(LoginRequiredMixin, DeleteView):
+    model = UserProfile
+    template_name = "profiles/profile_confirm_delete.html"
+    success_url = reverse_lazy("profile-list")
+
+    def get_object(self, queryset=None):
+        profile = super().get_object(queryset)
+        if profile.profile_image and os.path.isfile(profile.profile_image.path):
+            os.remove(profile.profile_image.path)
+        return profile
