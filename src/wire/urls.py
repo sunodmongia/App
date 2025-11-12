@@ -22,5 +22,6 @@ from saas.views import *
 urlpatterns = [
     path("", include("saas.urls")),
     path("accounts/", include("allauth.urls")),
+    path("profiles/", include('profiles.urls')),
     path("admin/", admin.site.urls),
 ]
