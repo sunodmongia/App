@@ -4,7 +4,7 @@ from .views import MyProfileView, ProfileEditView, UserProfileView, ProfileListV
 urlpatterns = [
     path("", MyProfileView.as_view(), name="profile-home"),
     path("all/", ProfileListView.as_view(), name="profile-list"),
-    path("<int:pk>", UserProfileView.as_view(), name="profile-user"),
+    path("", UserProfileView.as_view(), name="profile-user"),
     path("<int:pk>/edit/", ProfileEditView.as_view(), name="profile-edit"),
     path("<int:pk>/delete/", ProfileDeleteView.as_view(), name="profile-delete"),
 ]

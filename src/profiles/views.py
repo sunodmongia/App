@@ -18,6 +18,7 @@ class UserProfileDetailView(DetailView):
     template_name = "profiles/profile_detail.html"
     context_object_name = "profile"
 
+
 # ---------------------------------------------------------------------
 # ADMIN — Profile List (Paginated, Searchable)
 # ---------------------------------------------------------------------
@@ -148,31 +149,37 @@ class UserProfileView(DetailView):
         )
         return context
 
+
 # ---------------------------------------------------------------------
-# PUBLIC — Delete Profile 
+# PUBLIC — Delete Profile
 # ---------------------------------------------------------------------
+
 
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     model = UserProfile
     template_name = "profiles/profile_confirm_delete.html"
     success_url = reverse_lazy("profile-list")
 
-    def get_object(self, queryset=None):
-        """Retrieve the profile and ensure its related user exists."""
-        profile = super().get_object(queryset)
-        return profile
-
     def delete(self, request, *args, **kwargs):
-        """Custom delete logic: delete profile image, then user + profile."""
         profile = self.get_object()
-
-        # Remove profile image if it exists
-        if profile.profile_image and os.path.isfile(profile.profile_image.path):
-            os.remove(profile.profile_image.path)
-
-        # Also delete the associated User object
         user = profile.user
-        response = super().delete(request, *args, **kwargs)
-        user.delete()
 
-        return response
+        # Delete image safely without blocking I/O
+        profile_image_path = (
+            profile.profile_image.path if profile.profile_image else None
+        )
+
+        # Delete both in a transaction to minimize queries
+        from django.db import transaction
+
+        with transaction.atomic():
+            if profile_image_path and os.path.exists(profile_image_path):
+                try:
+                    os.remove(profile_image_path)
+                except OSError:
+                    pass  # Don't block delete if file is locked
+
+            # Delete user, which automatically deletes the profile (OneToOneField CASCADE)
+            user.delete()
+
+        return redirect(self.success_url)
