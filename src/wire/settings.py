@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # Custom Apps
     "saas",
     "commando",
+    "customers",
     # third party apps
     "crispy_forms",
     "crispy_tailwind",
