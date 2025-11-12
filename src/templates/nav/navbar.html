@@ -65,6 +65,10 @@
             <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
               <a href="{% url 'profile-home' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">My Profile</a>
               <hr class="my-1">
+              {%if user.is_superuser %}
+              <a href="{% url 'profile-list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile List</a>
+              <hr class="my-1">
+              {% endif %}
               <a href="{% url 'account_logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-50">Sign Out</a>
             </div>
           </div>

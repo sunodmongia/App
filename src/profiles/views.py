@@ -158,7 +158,21 @@ class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("profile-list")
 
     def get_object(self, queryset=None):
+        """Retrieve the profile and ensure its related user exists."""
         profile = super().get_object(queryset)
+        return profile
+
+    def delete(self, request, *args, **kwargs):
+        """Custom delete logic: delete profile image, then user + profile."""
+        profile = self.get_object()
+
+        # Remove profile image if it exists
         if profile.profile_image and os.path.isfile(profile.profile_image.path):
             os.remove(profile.profile_image.path)
-        return profile
+
+        # Also delete the associated User object
+        user = profile.user
+        response = super().delete(request, *args, **kwargs)
+        user.delete()
+
+        return response
