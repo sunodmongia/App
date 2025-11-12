@@ -14,7 +14,7 @@ class Subscription(models.Model):
     permission = models.ManyToManyField(
         Permission,
         limit_choices_to={
-            "content_type__app_label": "subscription",
+            "content_type__app_label": "subscriptions",
             "codename__in": [x[0] for x in SUBSCRIPTION_PERMISSIONS],
         },
     )
