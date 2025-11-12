@@ -28,7 +28,7 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
                 <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">S.No.</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
@@ -43,10 +43,10 @@
                     <td>{{ forloop.counter }}</td>
                     <td>
                         <a href="#" class="text-decoration-none fw-semibold">
-                            {{ profile.name|title }}
+                            {{ request.user.first_name }} {{ request.user.last_name }}
                         </a>
                     </td>
-                    <td>{{ profile.email }}</td>
+                    <td>{{ user.email }}</td>
                     <td>{{ profile.phone }}</td>
                     <td>{{ profile.created_at|date:"M d, Y" }}</td>
                     <td>

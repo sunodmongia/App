@@ -17,7 +17,7 @@ class ProfileListView(UserPassesTestMixin, ListView):
     template_name = "profiles/list.html"
     context_object_name = "profiles"
     paginate_by = 10
-    ordering = ["-created_at"]
+    ordering = ["user__username"]
 
     def test_func(self):
         """Only staff/admin users can access this view."""
