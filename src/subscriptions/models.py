@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import Group, Permission
 
+
 SUBSCRIPTION_PERMISSIONS = [
     ("starter", "starter perm"),
     ("professional", "professional perm"),
@@ -9,9 +10,11 @@ SUBSCRIPTION_PERMISSIONS = [
 
 
 class Subscription(models.Model):
+
     name = models.CharField(max_length=120)
     groups = models.ManyToManyField(Group)
-    permission = models.ManyToManyField(
+    active = models.BooleanField(default=True)
+    permissions = models.ManyToManyField(
         Permission,
         limit_choices_to={
             "content_type__app_label": "subscriptions",
