@@ -9,12 +9,9 @@ if "sk_test" in STRIPE_SECRET_KEY and not DEBUG:
 
 stripe.api_key = STRIPE_SECRET_KEY
 
-def Create_Customer(name="", email="", raw=False):
-    response = stripe.Customer.create(
-        name=name,
-        email=email,
-    )
 
+def Create_Customer(name="", email="", metadata={}, raw=False):
+    response = stripe.Customer.create(name=name, email=email, metadata=metadata)
     if raw:
         return response
     return response.id
