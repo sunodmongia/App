@@ -74,7 +74,7 @@ class MyProfileView(LoginRequiredMixin, TemplateView):
 # USER — Edit Profile
 # ---------------------------------------------------------------------
 class ProfileEditView(LoginRequiredMixin, View):
-    template_name = "profiles/profile_edit.html"
+    template_name = "profiles/edit_profile.html"
 
     def get(self, request, pk):
         user = get_object_or_404(User, pk=pk)
