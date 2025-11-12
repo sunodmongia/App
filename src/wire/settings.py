@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "commando",
     "customers",
     "profiles",
+    "subscriptions",
     # Third-party
     "crispy_forms",
     "crispy_tailwind",
