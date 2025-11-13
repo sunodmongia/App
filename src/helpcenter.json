@@ -1,0 +1,224 @@
+[
+    {
+        "model": "helpcenter.quickstartstep",
+        "pk": 1,
+        "fields": {
+            "number": 1,
+            "title": "Create Your First Project",
+            "description": "Begin by creating a new project from your dashboard. Add a clear name, description, and define the main objectives so your team understands the purpose from day one.",
+            "color": "green-500",
+            "order": 1
+        }
+    },
+    {
+        "model": "helpcenter.quickstartstep",
+        "pk": 2,
+        "fields": {
+            "number": 2,
+            "title": "Add Tasks and Subtasks",
+            "description": "Break down your work into actionable steps. Add tasks, subtasks, and define due dates and priority to keep everything organized.",
+            "color": "blue-500",
+            "order": 2
+        }
+    },
+    {
+        "model": "helpcenter.quickstartstep",
+        "pk": 3,
+        "fields": {
+            "number": 3,
+            "title": "Invite Team Members",
+            "description": "Invite teammates to your project and assign roles such as Admin, Editor, Commenter, or Viewer. Set precise permissions based on responsibility.",
+            "color": "purple-500",
+            "order": 3
+        }
+    },
+    {
+        "model": "helpcenter.quickstartstep",
+        "pk": 4,
+        "fields": {
+            "number": 4,
+            "title": "Organize Your Workflow",
+            "description": "Use List view, Kanban boards, Calendar view, or Gantt charts depending on what suits your project methodology best.",
+            "color": "yellow-500",
+            "order": 4
+        }
+    },
+    {
+        "model": "helpcenter.quickstartstep",
+        "pk": 5,
+        "fields": {
+            "number": 5,
+            "title": "Set Up Automation Rules",
+            "description": "Reduce repetitive work by creating automation that assigns tasks, updates status, sends reminders, or triggers custom workflows.",
+            "color": "pink-500",
+            "order": 5
+        }
+    },
+    {
+        "model": "helpcenter.quickstartstep",
+        "pk": 6,
+        "fields": {
+            "number": 6,
+            "title": "Track Project Progress",
+            "description": "Use dashboards, completion percentages, burndown charts, and milestone tracking to understand real-time progress.",
+            "color": "indigo-500",
+            "order": 6
+        }
+    },
+    {
+        "model": "helpcenter.quickstartstep",
+        "pk": 7,
+        "fields": {
+            "number": 7,
+            "title": "Collaborate and Communicate",
+            "description": "Use comments, mentions, file attachments, chat, and activity history to keep everyone in sync.",
+            "color": "orange-500",
+            "order": 7
+        }
+    },
+    {
+        "model": "helpcenter.quickstartstep",
+        "pk": 8,
+        "fields": {
+            "number": 8,
+            "title": "Generate Reports",
+            "description": "Export detailed analytics, workload reports, time logs, and milestone summaries to share insights with your team.",
+            "color": "teal-500",
+            "order": 8
+        }
+    },
+    {
+        "model": "helpcenter.faqsection",
+        "pk": 1,
+        "fields": {
+            "title": "Project Basics",
+            "icon": "💼",
+            "order": 1
+        }
+    },
+    {
+        "model": "helpcenter.faqsection",
+        "pk": 2,
+        "fields": {
+            "title": "Task Management",
+            "icon": "📝",
+            "order": 2
+        }
+    },
+    {
+        "model": "helpcenter.faqsection",
+        "pk": 3,
+        "fields": {
+            "title": "Team Collaboration",
+            "icon": "👥",
+            "order": 3
+        }
+    },
+    {
+        "model": "helpcenter.faqsection",
+        "pk": 4,
+        "fields": {
+            "title": "Automation",
+            "icon": "⚡",
+            "order": 4
+        }
+    },
+    {
+        "model": "helpcenter.faqsection",
+        "pk": 5,
+        "fields": {
+            "title": "Analytics & Reporting",
+            "icon": "📊",
+            "order": 5
+        }
+    },
+    {
+        "model": "helpcenter.faqsection",
+        "pk": 6,
+        "fields": {
+            "title": "Billing & Subscription",
+            "icon": "💳",
+            "order": 6
+        }
+    },
+    {
+        "model": "helpcenter.faqitem",
+        "pk": 101,
+        "fields": {
+            "section": 1,
+            "question": "How do I create a new project?",
+            "answer": "To create a new project, navigate to your dashboard and click the 'New Project' button. Enter a title, description, deadlines, and optional metadata. Projects can later be customized with templates, tags, visibility settings, and workflow structures.",
+            "order": 1
+        }
+    },
+    {
+        "model": "helpcenter.faqitem",
+        "pk": 102,
+        "fields": {
+            "section": 1,
+            "question": "How do I set project goals?",
+            "answer": "Open the project settings and scroll to the 'Goals & Objectives' section. Here, you can add measurable goals such as milestones, KPIs, deadlines, and expected outcomes. These goals will appear on project dashboards.",
+            "order": 2
+        }
+    },
+    {
+        "model": "helpcenter.faqitem",
+        "pk": 103,
+        "fields": {
+            "section": 1,
+            "question": "How do I duplicate an existing project?",
+            "answer": "Select the project menu and click 'Duplicate'. You can choose to copy tasks, deadlines, assignees, files, or keep the duplicated project clean. This is useful for recurring workflows.",
+            "order": 3
+        }
+    },
+    {
+        "model": "helpcenter.tutorial",
+        "pk": 1,
+        "fields": {
+            "title": "Creating Your First Project",
+            "description": "Learn how to set up your first project, define goals, add structure, and customize workflows.",
+            "duration": "5:12",
+            "gradient_from": "blue-400",
+            "gradient_to": "purple-500",
+            "views": 2300,
+            "order": 1
+        }
+    },
+    {
+        "model": "helpcenter.tutorial",
+        "pk": 2,
+        "fields": {
+            "title": "Advanced Task Management",
+            "description": "Master dependencies, automations, subtasks, and advanced task-level settings.",
+            "duration": "8:45",
+            "gradient_from": "green-400",
+            "gradient_to": "blue-500",
+            "views": 1900,
+            "order": 2
+        }
+    },
+    {
+        "model": "helpcenter.supportcard",
+        "pk": 1,
+        "fields": {
+            "title": "Live Chat Support",
+            "description": "Get real-time support for setting up projects, resolving issues, or optimizing workflows.",
+            "button_text": "Start Chat Now",
+            "url": "/support/chat",
+            "icon_color": "blue-500",
+            "order": 1
+        }
+    },
+    {
+        "model": "helpcenter.supportcard",
+        "pk": 2,
+        "fields": {
+            "title": "Schedule Personal Demo",
+            "description": "Book a 1-on-1 call with a product expert to get a personalized walkthrough.",
+            "button_text": "Book Demo Call",
+            "url": "/schedule_demo",
+            "icon_color": "green-500",
+            "order": 2
+        }
+    }
+]

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "customers",
     "profiles",
     "subscriptions",
+    'helpcenter',
     # Third-party
     "crispy_forms",
     "crispy_tailwind",

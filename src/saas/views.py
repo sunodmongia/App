@@ -175,3 +175,14 @@ class TermsAndConditionsView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Terms and Conditions"
         return context
+
+
+
+class FeaturesView(TemplateView):
+    template_name = "features.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["features"] = Feature.objects.filter(active=True)
+        return context
+    
