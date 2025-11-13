@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import *
+from .views import HelpCenterView
 
 urlpatterns = [
-    path("help-center/", help_center, name="help-center"),
+    path("", HelpCenterView.as_view(), name="help-center"),
 ]
