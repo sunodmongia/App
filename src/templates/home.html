@@ -11,10 +11,16 @@
     </p>
 
     <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-      <a href="{% url 'account_signup' %}"
+      {% if user.is_authenticated %}
+      <a href="{% url 'pricing' %}"
         class="px-8 py-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors shadow-lg hover:shadow-blue-500/30">
         Start Free Trial
       </a>
+      {% else %}
+      <a href="{% url 'pricing' %}"
+        class="px-8 py-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors shadow-lg hover:shadow-blue-500/30">
+        Start Free Trial
+      {% endif %}
       <a href="{% url 'demo' %}"
         class="px-8 py-4 border-2 border-black text-black font-semibold rounded-lg hover:bg-black hover:text-white transition-colors">
         Watch Demo
