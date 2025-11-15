@@ -20,16 +20,19 @@ class UserProfile(models.Model):
         return self.user.username
 
 
+# Create or update profile when a User is created/updated
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
     else:
+        # Only update the profile, no weird save loops
         instance.userprofile.save()
 
 
+# Delete profile image when profile is deleted (BUT DO NOT delete the user)
 @receiver(pre_delete, sender=UserProfile)
-def delete_profile_and_user(sender, instance, **kwargs):
-    if instance.profile_image and os.path.isfile(instance.profile_image.path):
-        os.remove(instance.profile_image.path)
-    instance.user.delete()
+def delete_profile_image(sender, instance, **kwargs):
+    if instance.profile_image and instance.profile_image.path:
+        if os.path.isfile(instance.profile_image.path):
+            os.remove(instance.profile_image.path)
