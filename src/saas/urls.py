@@ -13,7 +13,6 @@ urlpatterns = [
     path("features", FeaturesView.as_view(), name="features"),
     path('privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
     path('terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-condtion"),
-    path("help-center/", HelpCenterView.as_view(), name="help-center"),
     path("signup-trial/", StartTrialView.as_view(), name="signup-trial"),
     path("schedule-demo/", ScheduleDemoView.as_view(), name="schedule_demo"),
 ]

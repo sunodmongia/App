@@ -1,21 +1,70 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% block title %}Contact Us{% endblock %}
 
 {% block content %}
-<div class="pt-12 max-w-3xl mx-auto py-16 px-4">
-    <h1 class="text-4xl font-bold text-center mb-8">Contact Us</h1>
-    <p class="text-center text-gray-600 mb-12">
-        Have questions or feedback? Fill out the form below and we'll get back to you as soon as possible.
-    </p>
-    <form method="post" novalidate>
+<style>
+  .contact-wrapper {
+    background-color: #f9fafb;
+    min-height: 100vh;
+  }
+
+  .contact-card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .contact-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+    border-color: #4f46e5 !important;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
+  }
+
+  button:focus {
+    outline: none;
+  }
+</style>
+
+<section class="contact-wrapper flex items-center justify-center py-24 px-6">
+  <div class="max-w-2xl w-full">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-extrabold text-gray-900 mb-3">Contact Us</h1>
+      <p class="text-gray-600 text-base max-w-md mx-auto">
+        We’d love to hear from you. Whether you have a question, feedback, or a business inquiry — just drop us a message below.
+      </p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="contact-card p-10">
+      <form method="post" novalidate class="space-y-6">
         {% csrf_token %}
         {{ form|crispy }}
-        <div class="mt-6">
-            <button type="submit"
-                class="w-full py-4 bg-gradient-to-r from-black to-gray-800 border border-black text-black font-bold text-lg rounded-lg hover:from-gray-900 hover:to-gray-700 transition-all">
-                Send Message
-            </button>
+
+        <!-- Submit Button -->
+        <div class="pt-4">
+          <button type="submit"
+                  class="w-full py-3.5 bg-indigo-600 text-white font-semibold text-lg rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition">
+            Send Message
+          </button>
         </div>
-    </form>
-</div>
+      </form>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="text-center mt-10 text-sm text-gray-500">
+      We typically respond within <span class="font-medium text-gray-700">24 hours</span>.
+    </div>
+  </div>
+</section>
+
 {% endblock %}

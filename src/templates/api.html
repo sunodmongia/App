@@ -1,107 +1,165 @@
 {% extends "base.html" %}
-
 {% block content %}
 
 <style>
-    .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
+  .gradient-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .code-block {
+    font-family: "Fira Code", monospace;
+    border-radius: 0.75rem;
+    overflow-x: auto;
+  }
+
+  .endpoint-tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+  }
+
+  .api-section {
+    scroll-margin-top: 100px;
+  }
+
+  pre::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  pre::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 8px;
+  }
+
+  pre::-webkit-scrollbar-track {
+    background: #1f2937;
+  }
 </style>
 
 <!-- Hero Section -->
-<section class="pt-20 pb-12 gradient-bg text-white text-center">
-    <div class="max-w-4xl mx-auto px-4">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4">API Reference</h1>
-        <p class="text-lg mb-8">Everything you need to integrate SaaSApp into your workflow.</p>
-    </div>
+<section class="pt-24 pb-16 gradient-bg text-white text-center">
+  <div class="max-w-4xl mx-auto px-4">
+    <h1 class="text-5xl font-extrabold mb-4 tracking-tight">API Reference</h1>
+    <p class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+      Integrate <strong>SaaSApp</strong> into your workflow with our clean, RESTful API.  
+      Fast, secure, and built for developers.
+    </p>
+  </div>
 </section>
 
-<!-- API Docs -->
-<section class="py-16 bg-gray-50">
-    <div class="max-w-5xl mx-auto px-4 space-y-20 text-gray-900">
+<!-- API Documentation Section -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-4 space-y-24 text-gray-900">
 
-        <!-- Authentication -->
-        <div>
-            <h2 class="text-3xl font-bold mb-6">Authentication</h2>
-            <p class="mb-4">All requests require authentication using a Bearer token.</p>
+    <!-- Authentication -->
+    <div class="api-section" id="authentication">
+      <h2 class="text-3xl font-bold mb-6">🔐 Authentication</h2>
+      <p class="text-gray-700 mb-6 leading-relaxed">
+        Every request must include a valid <code class="text-blue-600">Bearer Token</code> in the header.  
+        You can obtain a token by logging in via the <strong>Auth API</strong>.
+      </p>
 
-            <!-- Login Request -->
-            <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
-                <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b">
-                    <span class="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">POST</span>
-                    <code class="text-sm text-gray-800">/api/v1/auth/login</code>
-                </div>
-                <pre class="bg-gray-900 text-green-300 text-sm p-6 overflow-x-auto"><code>{
+      <!-- Request Example -->
+      <div class="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden mb-8">
+        <div class="flex items-center justify-between bg-gray-100 px-5 py-3 border-b border-gray-200">
+          <span class="endpoint-tag bg-green-600 text-white">POST</span>
+          <code class="text-sm text-gray-800 font-semibold">/api/v1/auth/login</code>
+        </div>
+        <pre class="code-block bg-gray-900 text-green-300 text-sm p-6"><code>{
   "email": "user@example.com",
   "password": "yourpassword"
 }</code></pre>
-            </div>
+      </div>
 
-            <!-- Login Response -->
-            <div class="bg-white rounded-xl shadow overflow-hidden">
-                <div class="bg-gray-100 px-4 py-2 border-b text-sm font-semibold">Sample Response</div>
-                <pre class="bg-gray-900 text-blue-300 text-sm p-6 overflow-x-auto"><code>{
+      <!-- Response Example -->
+      <div class="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden">
+        <div class="bg-gray-100 px-5 py-3 border-b border-gray-200 text-sm font-semibold text-gray-800">
+          Sample Response
+        </div>
+        <pre class="code-block bg-gray-900 text-blue-300 text-sm p-6"><code>{
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI..."
 }</code></pre>
-            </div>
+      </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="api-section" id="projects">
+      <h2 class="text-3xl font-bold mb-6">📁 Projects</h2>
+      <p class="text-gray-700 mb-6">Manage your organization’s projects — create, fetch, and organize your workspace.</p>
+
+      <!-- GET Projects -->
+      <div class="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden mb-8">
+        <div class="flex items-center justify-between bg-gray-100 px-5 py-3 border-b border-gray-200">
+          <span class="endpoint-tag bg-blue-600 text-white">GET</span>
+          <code class="text-sm text-gray-800 font-semibold">/api/v1/projects</code>
         </div>
+        <pre class="code-block bg-gray-900 text-green-300 text-sm p-6"><code>Authorization: Bearer &lt;your_token&gt;</code></pre>
+      </div>
 
-        <!-- Projects -->
-        <div>
-            <h2 class="text-3xl font-bold mb-6">Projects</h2>
-
-            <!-- List Projects -->
-            <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
-                <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b">
-                    <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">GET</span>
-                    <code class="text-sm text-gray-800">/api/v1/projects</code>
-                </div>
-                <pre
-                    class="bg-gray-900 text-green-300 text-sm p-6 overflow-x-auto"><code>Authorization: Bearer &lt;your_token&gt;</code></pre>
-            </div>
-
-            <!-- Create Project -->
-            <div class="bg-white rounded-xl shadow overflow-hidden">
-                <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b">
-                    <span class="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">POST</span>
-                    <code class="text-sm text-gray-800">/api/v1/projects</code>
-                </div>
-                <pre class="bg-gray-900 text-green-300 text-sm p-6 overflow-x-auto"><code>{
+      <!-- POST Project -->
+      <div class="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden">
+        <div class="flex items-center justify-between bg-gray-100 px-5 py-3 border-b border-gray-200">
+          <span class="endpoint-tag bg-green-600 text-white">POST</span>
+          <code class="text-sm text-gray-800 font-semibold">/api/v1/projects</code>
+        </div>
+        <pre class="code-block bg-gray-900 text-green-300 text-sm p-6"><code>{
   "name": "New Project",
   "description": "Project description here"
 }</code></pre>
-            </div>
+      </div>
+    </div>
+
+    <!-- Tasks -->
+    <div class="api-section" id="tasks">
+      <h2 class="text-3xl font-bold mb-6">🗂️ Tasks</h2>
+      <p class="text-gray-700 mb-6">Each project can have multiple tasks. Use these endpoints to manage them efficiently.</p>
+
+      <!-- GET Tasks -->
+      <div class="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden mb-8">
+        <div class="flex items-center justify-between bg-gray-100 px-5 py-3 border-b border-gray-200">
+          <span class="endpoint-tag bg-blue-600 text-white">GET</span>
+          <code class="text-sm text-gray-800 font-semibold">/api/v1/projects/{project_id}/tasks</code>
         </div>
+        <pre class="code-block bg-gray-900 text-green-300 text-sm p-6"><code>Authorization: Bearer &lt;your_token&gt;</code></pre>
+      </div>
 
-        <!-- Tasks -->
-        <div>
-            <h2 class="text-3xl font-bold mb-6">Tasks</h2>
-
-            <!-- List Tasks -->
-            <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
-                <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b">
-                    <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">GET</span>
-                    <code class="text-sm text-gray-800">/api/v1/projects/{project_id}/tasks</code>
-                </div>
-                <pre
-                    class="bg-gray-900 text-green-300 text-sm p-6 overflow-x-auto"><code>Authorization: Bearer &lt;your_token&gt;</code></pre>
-            </div>
-
-            <!-- Create Task -->
-            <div class="bg-white rounded-xl shadow overflow-hidden">
-                <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b">
-                    <span class="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">POST</span>
-                    <code class="text-sm text-gray-800">/api/v1/projects/{project_id}/tasks</code>
-                </div>
-                <pre class="bg-gray-900 text-green-300 text-sm p-6 overflow-x-auto"><code>{
+      <!-- POST Task -->
+      <div class="bg-white rounded-2xl shadow border border-gray-200 overflow-hidden">
+        <div class="flex items-center justify-between bg-gray-100 px-5 py-3 border-b border-gray-200">
+          <span class="endpoint-tag bg-green-600 text-white">POST</span>
+          <code class="text-sm text-gray-800 font-semibold">/api/v1/projects/{project_id}/tasks</code>
+        </div>
+        <pre class="code-block bg-gray-900 text-green-300 text-sm p-6"><code>{
   "title": "Task title",
   "due_date": "2025-08-15",
   "priority": "high"
 }</code></pre>
-            </div>
-        </div>
-
+      </div>
     </div>
+
+  </div>
 </section>
+
+<!-- Floating Sidebar Navigation -->
+<aside
+  class="hidden lg:flex fixed top-28 left-10 flex-col bg-white border border-gray-200 shadow-lg rounded-xl p-4 space-y-3 text-sm font-medium text-gray-700">
+  <a href="#authentication" class="hover:text-blue-600 transition">Authentication</a>
+  <a href="#projects" class="hover:text-blue-600 transition">Projects</a>
+  <a href="#tasks" class="hover:text-blue-600 transition">Tasks</a>
+</aside>
+
+<script>
+  // Smooth Scroll Behavior for Sidebar
+  document.querySelectorAll('aside a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(link.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    });
+  });
+</script>
 
 {% endblock %}
