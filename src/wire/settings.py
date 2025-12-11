@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "customers",
     "profiles",
     "subscriptions",
-    'helpcenter',
+    "helpcenter",
     # Third-party
     "crispy_forms",
     "crispy_tailwind",
@@ -158,37 +158,6 @@ ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
 SOCIALACCOUNT_PROVIDERS = {
     "github": {
-<<<<<<< HEAD
-        'APP':{
-            "client_id": config('OAUTH_GITHUB_CLIENT_ID'),
-            "secret": config('OAUTH_GITHUB_SECRET'),
-        },
-        "SCOPE": [
-            "user",
-            "repo",
-            "read:org",
-        ],
-    },
-    "openid_connect": {
-        "APPS": [
-            {
-                "provider_id": "linkedin",
-                "name": "LinkedIn",
-                "client_id": "<insert-id>",
-                "secret": "<insert-secret>",
-                "settings": {
-                    "server_url": "https://www.linkedin.com/oauth",
-                },
-            }
-        ]
-    },
-    "google": {
-        "APP": {
-            "client_id": config('OAUTH_GOOGLE_CLIENT_ID'),
-            "secret": config('OAUTH_GOOGLE_SECRET'),
-        },
-    },
-=======
         "APP": {
             "client_id": config("OAUTH_GITHUB_CLIENT_ID"),
             "secret": config("OAUTH_GITHUB_SECRET"),
@@ -199,10 +168,10 @@ SOCIALACCOUNT_PROVIDERS = {
         "APP": {
             "client_id": config("OAUTH_GOOGLE_CLIENT_ID"),
             "secret": config("OAUTH_GOOGLE_SECRET"),
-        },
-    },
->>>>>>> 993a47384ac9c386a626e85d441dc4a1dfe6fe0f
+        }
+    }
 }
+
 
 
 # ---------------------------------------------------------------------
@@ -221,8 +190,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-<<<<<<< HEAD
-=======
 
 
 # ---------------------------------------------------------------------
@@ -255,4 +222,3 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 # Default primary key
 # ---------------------------------------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
->>>>>>> 993a47384ac9c386a626e85d441dc4a1dfe6fe0f
