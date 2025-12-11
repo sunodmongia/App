@@ -1,5 +1,3 @@
-# models.py
-
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -74,6 +72,7 @@ class ContactMessage(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     resolve = models.BooleanField(default=False)
+    email_history = models.TextField(blank=True, default="")
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}: {self.subject}'

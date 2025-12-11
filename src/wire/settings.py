@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     # "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
-    'allauth.socialaccount.providers.google',
+    "allauth.socialaccount.providers.google",
     "slippers",
 ]
 
@@ -159,6 +159,10 @@ ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
 SOCIALACCOUNT_PROVIDERS = {
     "github": {
+        'APP':{
+            "client_id": config('OAUTH_GITHUB_CLIENT_ID'),
+            "secret": config('OAUTH_GITHUB_SECRET'),
+        },
         "SCOPE": [
             "user",
             "repo",
@@ -177,7 +181,13 @@ SOCIALACCOUNT_PROVIDERS = {
                 },
             }
         ]
-    }
+    },
+    "google": {
+        "APP": {
+            "client_id": config('OAUTH_GOOGLE_CLIENT_ID'),
+            "secret": config('OAUTH_GOOGLE_SECRET'),
+        },
+    },
 }
 
 # Internationalization
