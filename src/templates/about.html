@@ -5,115 +5,130 @@
 {% load static %}
 {% block content %}
 
-<body class="bg-white text-gray-900">
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-20">
+<body class="bg-white text-gray-900 antialiased">
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-28">
 
-        <!-- Hero/About Intro -->
-        <section class="text-center space-y-4">
-            <h1 class="text-4xl md:text-5xl font-extrabold">About SaaSApp</h1>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                At SaaSApp, our mission is to empower teams of all sizes to collaborate seamlessly,
-                automate workflows, and scale their business operations with confidence.
-            </p>
-        </section>
+    <!-- Hero / Intro -->
+    <section class="text-center space-y-6">
+      <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900">
+        About <span class="text-blue-600">SaaSApp</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        Our mission is simple — empower modern teams to collaborate effortlessly, automate workflows, and grow with confidence.
+      </p>
+    </section>
 
-        <!-- Mission, Vision, Values -->
-        <section class="grid md:grid-cols-3 gap-12 text-center">
-            <div class="space-y-4 px-6">
-                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-purple-100 rounded-full">
-                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8c.464-1.084 2-1.084 2.464 0l1.695 3.965 4.303.06c1.167.017 1.644 1.512.802 2.23l-3.2 2.773.952 4.282c.278 1.25-1.094 2.196-2.22 1.606L12 18.347l-3.796 2.57c-1.126.59-2.498-.356-2.22-1.606l.952-4.282-3.2-2.773c-.842-.718-.365-2.213.802-2.23l4.303-.06L12 8z" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold">Our Mission</h3>
-                <p class="text-gray-600">
-                    Deliver an all-in-one platform that makes collaboration effortless, data-driven decisions
-                    actionable, and growth unstoppable.
-                </p>
-            </div>
-            <div class="space-y-4 px-6">
-                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-blue-100 rounded-full">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold">Our Vision</h3>
-                <p class="text-gray-600">
-                    Become the world’s most trusted platform for modern business operations, where teams thrive and
-                    companies scale.
-                </p>
-            </div>
-            <div class="space-y-4 px-6">
-                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-green-100 rounded-full">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold">Our Values</h3>
-                <p class="text-gray-600">
-                    Integrity, innovation, and customer obsession guide every decision we make.
-                </p>
-            </div>
-        </section>
+    <!-- Mission / Vision / Values -->
+    <section class="grid md:grid-cols-3 gap-12 text-center">
+      <!-- Mission -->
+      <div class="space-y-4 p-6 rounded-2xl shadow-sm hover:shadow-md transition bg-gray-50">
+        <div class="flex items-center justify-center w-16 h-16 mx-auto bg-purple-100 rounded-full">
+          <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8c.464-1.084 2-1.084 2.464 0l1.695 3.965 4.303.06c1.167.017 1.644 1.512.802 2.23l-3.2 2.773.952 4.282c.278 1.25-1.094 2.196-2.22 1.606L12 18.347l-3.796 2.57c-1.126.59-2.498-.356-2.22-1.606l.952-4.282-3.2-2.773c-.842-.718-.365-2.213.802-2.23l4.303-.06L12 8z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900">Our Mission</h3>
+        <p class="text-gray-600 leading-relaxed">
+          Deliver an all-in-one platform that makes collaboration effortless, data-driven decisions actionable, and growth unstoppable.
+        </p>
+      </div>
 
-        <!-- History / Story -->
-        <section class="space-y-8">
-            <h2 class="text-3xl font-bold text-center">Our Story</h2>
-            <p class="text-gray-700 leading-relaxed">
-                Founded in 2020 by a team of engineers and business experts, SaaSApp was born from the frustration
-                of juggling multiple disconnected tools. We set out to build a unified platform that brings together
-                project management, collaboration, analytics, and automation under one roof. Today, thousands of users
-                rely on SaaSApp daily to power their workflows and achieve their goals.
-            </p>
-        </section>
+      <!-- Vision -->
+      <div class="space-y-4 p-6 rounded-2xl shadow-sm hover:shadow-md transition bg-gray-50">
+        <div class="flex items-center justify-center w-16 h-16 mx-auto bg-blue-100 rounded-full">
+          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900">Our Vision</h3>
+        <p class="text-gray-600 leading-relaxed">
+          Become the world’s most trusted platform for modern business operations — where teams thrive and companies scale fearlessly.
+        </p>
+      </div>
 
-        <!-- Team Section -->
-        <section class="space-y-8">
-            <h2 class="text-3xl font-bold text-center">Meet the Team</h2>
-            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8">
-                <!-- Team Member -->
-                <div class="text-center">
-                    <img src="/static/images/team/alex.jpg" alt="Alex King"
-                        class="mx-auto w-32 h-32 rounded-full mb-4 object-cover" />
-                    <h4 class="font-semibold">Alex King</h4>
-                    <p class="text-sm text-gray-500">CEO & Co-Founder</p>
-                </div>
-                <div class="text-center">
-                    <img src="/static/images/team/sara.jpg" alt="Sara Lee"
-                        class="mx-auto w-32 h-32 rounded-full mb-4 object-cover" />
-                    <h4 class="font-semibold">Sara Lee</h4>
-                    <p class="text-sm text-gray-500">CTO & Co-Founder</p>
-                </div>
-                <div class="text-center">
-                    <img src="/static/images/team/john.jpg" alt="John Doe"
-                        class="mx-auto w-32 h-32 rounded-full mb-4 object-cover" />
-                    <h4 class="font-semibold">John Doe</h4>
-                    <p class="text-sm text-gray-500">Head of Product</p>
-                </div>
-                <div class="text-center">
-                    <img src="/static/images/team/emma.jpg" alt="Emma Smith"
-                        class="mx-auto w-32 h-32 rounded-full mb-4 object-cover" />
-                    <h4 class="font-semibold">Emma Smith</h4>
-                    <p class="text-sm text-gray-500">Head of Marketing</p>
-                </div>
-            </div>
-        </section>
+      <!-- Values -->
+      <div class="space-y-4 p-6 rounded-2xl shadow-sm hover:shadow-md transition bg-gray-50">
+        <div class="flex items-center justify-center w-16 h-16 mx-auto bg-green-100 rounded-full">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900">Our Values</h3>
+        <p class="text-gray-600 leading-relaxed">
+          Integrity, innovation, and customer obsession guide every decision we make — from design to delivery.
+        </p>
+      </div>
+    </section>
 
-        <!-- Call to Action -->
-        <section class="text-center">
-            <h2 class="text-3xl font-bold mb-4">Ready to join us?</h2>
-            <p class="text-gray-600 mb-8">Experience the platform that’s transforming teams worldwide.</p>
-            <a href="{% url 'pricing' %}">
-                <button class="px-8 py-4 bg-black text-white font-bold rounded-lg hover:bg-gray-800 transition-colors">
-                    Start Your Free Trial
-                </button>
-            </a>
-        </section>
+    <!-- Story -->
+    <section class="text-center max-w-4xl mx-auto space-y-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Our Story</h2>
+      <p class="text-gray-700 leading-relaxed text-lg">
+        Founded in 2020 by engineers and business innovators, SaaSApp was built to unify fragmented business tools. 
+        What began as a small startup quickly evolved into a global platform helping thousands of organizations boost productivity and collaboration. 
+        We exist to make business operations simple, scalable, and human again.
+      </p>
+    </section>
 
-    </main>
-    <script src="https://cdn.tailwindcss.com"></script>
-    </div>
+    <!-- Team -->
+    <section class="space-y-10">
+      <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900">Meet the Team</h2>
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10">
+        {% for member in team %}
+        <div class="text-center hover:scale-105 transition-transform">
+          <img src="{{ member.image.url }}" alt="{{ member.name }}"
+            class="mx-auto w-32 h-32 rounded-full mb-4 object-cover shadow-sm">
+          <h4 class="font-semibold text-gray-900">{{ member.name }}</h4>
+          <p class="text-sm text-gray-500">{{ member.role }}</p>
+        </div>
+        {% empty %}
+        <!-- Static Fallback -->
+        <div class="text-center">
+          <img src="{% static 'images/team/alex.jpg' %}" alt="Alex King"
+            class="mx-auto w-32 h-32 rounded-full mb-4 object-cover shadow-sm" />
+          <h4 class="font-semibold text-gray-900">Alex King</h4>
+          <p class="text-sm text-gray-500">CEO & Co-Founder</p>
+        </div>
+        <div class="text-center">
+          <img src="{% static 'images/team/sara.jpg' %}" alt="Sara Lee"
+            class="mx-auto w-32 h-32 rounded-full mb-4 object-cover shadow-sm" />
+          <h4 class="font-semibold text-gray-900">Sara Lee</h4>
+          <p class="text-sm text-gray-500">CTO & Co-Founder</p>
+        </div>
+        <div class="text-center">
+          <img src="{% static 'images/team/john.jpg' %}" alt="John Doe"
+            class="mx-auto w-32 h-32 rounded-full mb-4 object-cover shadow-sm" />
+          <h4 class="font-semibold text-gray-900">John Doe</h4>
+          <p class="text-sm text-gray-500">Head of Product</p>
+        </div>
+        <div class="text-center">
+          <img src="{% static 'images/team/emma.jpg' %}" alt="Emma Smith"
+            class="mx-auto w-32 h-32 rounded-full mb-4 object-cover shadow-sm" />
+          <h4 class="font-semibold text-gray-900">Emma Smith</h4>
+          <p class="text-sm text-gray-500">Head of Marketing</p>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="text-center bg-gray-50 py-16 rounded-3xl shadow-inner">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Join Us?</h2>
+      <p class="text-gray-600 mb-8 max-w-xl mx-auto text-lg">
+        Experience the all-in-one platform transforming teams across the globe.
+      </p>
+      <a href="{% url 'pricing' %}">
+        <button
+          class="px-8 py-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-black">
+          Start Your Free Trial
+        </button>
+      </a>
+    </section>
+  </main>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</body>
 
 {% endblock %}

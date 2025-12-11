@@ -1,36 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Black & White Navbar</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .nav-link {
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: #000;
-            transition: width 0.3s;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-    </style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #000;
+      transition: width 0.3s;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+  </style>
 </head>
 
-<div class="pt-16 bg-white text-black">
+<body class="bg-white text-black">
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-300 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <a href="/" class="text-2xl font-bold text-black">Wire</a>
 
+<<<<<<< HEAD
     <!-- Navbar -->
     <nav class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-300 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -81,47 +84,110 @@
                     </button>
                 </div>
             </div>
+=======
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="{% url 'pricing' %}" class="nav-link font-medium text-gray-800 hover:text-black">Pricing</a>
+          <a href="{% url 'features' %}" class="nav-link font-medium text-gray-800 hover:text-black">Features</a>
+          <a href="#testimonials" class="nav-link font-medium text-gray-800 hover:text-black">Customers</a>
+          <a href="{% url 'about' %}" class="nav-link font-medium text-gray-800 hover:text-black">About</a>
+>>>>>>> 993a47384ac9c386a626e85d441dc4a1dfe6fe0f
         </div>
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-300">
-            <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="{% url 'pricing' %}"
-                    class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Pricing</a>
-                <a href="{% url 'features' %}"
-                    class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Features</a>
-                <a href="#testimonials"
-                    class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Customers</a>
-                <a href="{% url 'about' %}"
-                    class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">About</a>
-                <div class="mt-4 px-3 space-y-2">
-                    {% if not request.user.is_authenticated %}
-                    <a href="{% url 'account_login' %}"
-                        class="block w-full text-center px-4 py-2 text-sm font-semibold border border-gray-300 rounded-lg hover:bg-gray-50">Sign
-                        In</a>
-                    <a href="{% url 'account_signup' %}"
-                        class="block w-full text-center px-4 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800">Sign
-                        Up</a>
-                    {% else %}
-                    <a href="{% url 'account_logout' %}"
-                        class="block w-full text-center px-4 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800">Sign
-                        Out</a>
-                    {% endif %}
+        <!-- Right Side (Auth Section) -->
+        <div class="hidden md:flex items-center space-x-4 relative">
+          {% if not request.user.is_authenticated %}
+            <a href="{% url 'account_login' %}" class="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-black">Sign In</a>
+            <a href="{% url 'signup-trial' %}" class="px-6 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+              Start Free Trial
+            </a>
+          {% else %}
+          <!-- Profile Dropdown -->
+          <div class="relative">
+            <button id="profile-menu-button" class="flex items-center gap-2 focus:outline-none hover:bg-gray-100 rounded-full px-2 py-1 transition">
+              {% if request.user.userprofile.profile_image %}
+                <img src="{{ request.user.userprofile.profile_image.url }}" alt="{{ request.user.username }}"
+                     class="w-9 h-9 rounded-full object-cover border border-gray-300">
+              {% else %}
+                <div class="w-9 h-9 rounded-full bg-gray-200 text-black flex items-center justify-center text-sm font-bold border border-gray-300">
+                  {{ request.user.username|slice:":1"|upper }}
                 </div>
+              {% endif %}
+            </button>
+
+            <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
+              <a href="{% url 'profile-home' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">My Profile</a>
+              <hr class="my-1">
+              {%if user.is_superuser %}
+              <a href="{% url 'profile-list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile List</a>
+              <hr class="my-1">
+              {% endif %}
+              <a href="{% url 'account_logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-50">Sign Out</a>
             </div>
+          </div>
+          {% endif %}
         </div>
-    </nav>
 
-    <script>
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button id="mobile-menu-button" class="p-2 rounded-md text-gray-700 hover:bg-gray-100">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
 
-        if (mobileMenuButton && mobileMenu) {
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-300">
+      <div class="px-2 pt-2 pb-3 space-y-1">
+        <a href="{% url 'pricing' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Pricing</a>
+        <a href="{% url 'features' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Features</a>
+        <a href="#testimonials" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">Customers</a>
+        <a href="{% url 'about' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black">About</a>
+
+        <div class="mt-4 px-3 space-y-2">
+          {% if not request.user.is_authenticated %}
+            <a href="{% url 'account_login' %}"
+              class="block w-full text-center px-4 py-2 text-sm font-semibold border border-gray-300 rounded-lg hover:bg-gray-50">Sign In</a>
+            <a href="{% url 'account_signup' %}"
+              class="block w-full text-center px-4 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800">Sign Up</a>
+          {% else %}
+            <a href="{% url 'profile-home' %}"
+              class="block w-full text-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">My Profile</a>
+            <a href="{% url 'account_logout' %}"
+              class="block w-full text-center px-4 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800">Sign Out</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Navbar Behavior -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const mobileButton = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const profileButton = document.getElementById("profile-menu-button");
+      const profileDropdown = document.getElementById("profile-dropdown");
+
+      mobileButton?.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      profileButton?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!profileButton?.contains(e.target)) {
+          profileDropdown?.classList.add("hidden");
         }
-    </script>
-
+      });
+    });
+  </script>
+</body>
 </html>

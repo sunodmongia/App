@@ -1,281 +1,264 @@
-<!-- templates/privacy_guide.html -->
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 
 <style>
-    .gradient-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
+  /* --- Base Visual System --- */
+  .gradient-bg {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  }
+
+  .section-fade {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .section-fade.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .toc-link.active {
+    background-color: #eef2ff;
+    color: #4338ca;
+    font-weight: 600;
+  }
+
+  .toc-link:hover {
+    background-color: #eef2ff;
+  }
+
+  article h2 {
+    margin-top: 3rem;
+    font-weight: 700;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  article h3 {
+    margin-top: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+  }
+
+  article p,
+  article li {
+    color: #4b5563;
+  }
 </style>
-<section class="relative gradient-bg pt-12 pb-20 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-12">
-        <div class="lg:w-1/2 text-center lg:text-left space-y-4">
-            <div
-                class="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs uppercase font-semibold">
-                Legal Policies</div>
-            <h1 class="text-4xl md:text-5xl font-extrabold text-white">SaaS Privacy Policy: Complete Guide to
-                Compliance and Trust</h1>
-            <div class="flex items-center justify-center lg:justify-start space-x-4 text-white text-sm">
-                <span>By Wire Team</span>
-                <span>•</span>
-                <time datetime="2025-08-08">August 8, 2025</time>
-                <span>•</span>
-                <span>16 min read</span>
-            </div>
-        </div>
+
+<!-- HERO -->
+<section class="relative gradient-bg py-24 text-white overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-12">
+    <div class="lg:w-2/3 space-y-5 text-center lg:text-left">
+      <span class="inline-block bg-white/20 px-3 py-1 text-xs uppercase tracking-wide rounded-full font-semibold">
+        Legal & Compliance
+      </span>
+      <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
+        Privacy Policy — Transparency & Trust
+      </h1>
+      <p class="text-base md:text-lg opacity-90 max-w-2xl">
+        How SaaSApp collects, protects, and uses your data. Built for transparency, compliance, and your confidence.
+      </p>
+      <div class="flex flex-wrap justify-center lg:justify-start gap-3 text-sm opacity-80">
+        <span>By SaaSApp Team</span><span>•</span>
+        <time datetime="2025-08-08">August 8, 2025</time><span>•</span>
+        <span>Updated Regularly</span>
+      </div>
     </div>
+    <div class="lg:w-1/3 hidden lg:flex justify-end">
+      <img src="{% static 'images/privacy-modern.svg' %}" alt="Privacy illustration"
+        class="rounded-2xl shadow-2xl w-full max-w-sm object-contain">
+    </div>
+  </div>
+  <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-gray-50/70 to-transparent"></div>
 </section>
 
-<!-- Mobile TOC Button -->
+<!-- MOBILE TOC BUTTON -->
 <div class="fixed bottom-8 right-6 z-40 lg:hidden">
-    <button id="tocBtn" aria-label="Open Table of Contents"
-        class="bg-gradient-to-br from-pink-600 to-indigo-600 text-white px-6 py-3 rounded-full shadow-lg font-semibold flex items-center gap-2 animate-bounce hover:animate-none focus:outline-none focus:ring-2 focus:ring-white">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-        Sections
-    </button>
+  <button id="tocBtn" aria-label="Open Table of Contents"
+    class="bg-gradient-to-br from-indigo-600 to-violet-600 text-white px-6 py-3 rounded-full shadow-xl font-semibold flex items-center gap-2 animate-bounce hover:animate-none focus:outline-none focus:ring-2 focus:ring-white/70">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+    Sections
+  </button>
 </div>
 
-<!-- Main Content Area with Sticky TOC -->
-<section class="py-12 bg-gradient-to-tr from-[#f8fafe] to-[#f1ecfe] min-h-screen">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row gap-12">
+<!-- MAIN CONTENT -->
+<section class="relative py-20 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row gap-12">
 
-        <!-- Main Policy Content -->
-        <main
-            class="relative prose prose-indigo lg:prose-lg max-w-none bg-white rounded-3xl shadow-xl p-10 md:p-16 z-10 overflow-y-auto"
-            id="policy-content" tabindex="-1" style="scroll-margin-top:4rem;">
-            <article>
-                <p
-                    class="lead font-medium mb-10 border-l-4 border-indigo-400 text-gray-900 bg-indigo-50 p-5 rounded-lg">
-                    Welcome—this privacy policy outlines how <strong>SaaSApp</strong> collects, uses, and safeguards
-                    your personal data.
-                </p>
+    <!-- CONTENT -->
+    <main id="policy-content"
+      class="section-fade prose prose-indigo lg:prose-lg bg-white shadow-xl rounded-3xl p-10 md:p-16 max-w-none z-10 border border-gray-100"
+      tabindex="-1" style="scroll-margin-top:4rem;">
+      <article>
 
-                <!-- Each section starts with an anchor for TOC -->
-                <h2 id="scope" class="flex items-center gap-3">🔍 Scope</h2>
-                <p>This policy covers data collected through our platform, website, apps, APIs, and offline channels.
-                </p>
+        <p
+          class="text-lg leading-relaxed font-medium mb-10 border-l-4 border-indigo-400 text-gray-900 bg-indigo-50 p-5 rounded-lg shadow-sm">
+          At <strong>SaaSApp</strong>, privacy isn’t a legal checkbox — it’s a product feature.  
+          This policy explains how we protect your data across our apps, APIs, and services.
+        </p>
 
-                <h2 id="info-we-collect" class="flex items-center gap-3">📊 Information We Collect</h2>
-                <h3 id="info-provided" class="border-l-4 border-pink-500 pl-4">1.1 Provided by You</h3>
-                <ul>
-                    <li>Account info: contact details, company, role, avatars.</li>
-                    <li>Communications: messages, surveys, and support requests.</li>
-                    <li>Billing: payment data (processed securely by third parties).</li>
-                </ul>
+        <h2 id="scope">🔍 Scope</h2>
+        <p>This policy covers data collected through our platform, website, mobile apps, and integrations.</p>
 
-                <h3 id="info-automatic" class="border-l-4 border-indigo-500 pl-4">1.2 Automatically Collected</h3>
-                <ul>
-                    <li>Device & browser info: IP, OS, screen size, usage events.</li>
-                    <li>Cookies and tracking (analytics, ads, personalization).</li>
-                </ul>
+        <h2 id="info-we-collect">📊 Data We Collect</h2>
+        <h3 id="info-provided" class="border-l-4 border-pink-500 pl-4">1.1 Provided by You</h3>
+        <ul>
+          <li>Account info (email, organization, preferences).</li>
+          <li>Communications and feedback from surveys or support.</li>
+          <li>Billing info handled securely via third-party providers.</li>
+        </ul>
 
-                <h3 id="third-party-info" class="border-l-4 border-purple-500 pl-4">1.3 From Third Parties</h3>
-                <p>We may combine data from partners, social networks, and public sources for enhanced services.</p>
+        <h3 id="info-automatic" class="border-l-4 border-indigo-500 pl-4">1.2 Automatically Collected</h3>
+        <ul>
+          <li>Usage logs, browser data, IP, OS type, and actions taken.</li>
+          <li>Cookies for security, analytics, and personalization.</li>
+        </ul>
 
-                <h2 id="how-we-use" class="flex items-center gap-3">⚡ How We Use Your Data</h2>
-                <ul>
-                    <li>Operate and improve our platform and services.</li>
-                    <li>Manage subscriptions and process payments.</li>
-                    <li>Personalize content and communications.</li>
-                    <li>Detect threats, abuse, and fraud prevention.</li>
-                    <li>Comply with legal obligations and enforce our rights.</li>
-                </ul>
+        <h2 id="how-we-use">⚡ How We Use It</h2>
+        <ul>
+          <li>To operate and improve the platform.</li>
+          <li>To manage billing, authentication, and customer support.</li>
+          <li>To detect abuse, ensure reliability, and meet compliance.</li>
+        </ul>
 
-                <h2 id="legal-bases" class="flex items-center gap-3">🛡️ Legal Bases</h2>
-                <p>Depending on region: consent, contractual necessity, legitimate interests, or compliance with laws.
-                </p>
+        <h2 id="legal-bases">🛡️ Legal Bases</h2>
+        <p>Our processing relies on your consent, contract fulfillment, legitimate interests, or legal obligation — depending on your location.</p>
 
-                <h2 id="cookies" class="flex items-center gap-3">🍪 Cookies</h2>
-                <ul>
-                    <li>Essential: login and core functions</li>
-                    <li>Analytics: user behavior and site performance</li>
-                    <li>Marketing: with your consent only</li>
-                </ul>
-                <p>You can adjust these anytime in your browser or via our platform settings.</p>
+        <h2 id="cookies">🍪 Cookies</h2>
+        <p>We use minimal cookies — essential for functionality, analytics for improvement, and marketing only with explicit consent.</p>
 
-                <h2 id="sharing" class="flex items-center gap-3">🔗 Sharing & Disclosure</h2>
-                <ul>
-                    <li>Service providers: hosting, analytics, payments, communications.</li>
-                    <li>Legal: compliance, fraud prevention, legal processes.</li>
-                    <li>Business transactions: mergers, acquisitions with notice.</li>
-                </ul>
-                <p>We do not sell your personal information.</p>
+        <h2 id="sharing">🔗 Sharing & Disclosure</h2>
+        <ul>
+          <li>Trusted sub-processors (hosting, analytics, communications).</li>
+          <li>Legal or regulatory disclosures when required.</li>
+          <li>Business transfers, with prior notice.</li>
+        </ul>
+        <p>We <strong>never sell</strong> personal information.</p>
 
-                <h2 id="data-retention" class="flex items-center gap-3">🗄️ Data Retention</h2>
-                <p>We keep your data only as long as necessary for operations, legal requirements, or your instructions.
-                </p>
+        <h2 id="security">🔒 Security</h2>
+        <p>We apply enterprise-grade protection:</p>
+        <ul>
+          <li>256-bit encryption in transit and at rest.</li>
+          <li>Access control, intrusion monitoring, and periodic audits.</li>
+          <li>Dedicated incident response with 24/7 monitoring.</li>
+        </ul>
 
-                <h2 id="security" class="flex items-center gap-3">🔒 Security</h2>
-                <ul>
-                    <li>Encryption at rest and in transit</li>
-                    <li>Access controls and monitoring</li>
-                    <li>Regular audits and vulnerability scanning</li>
-                    <li>Incident reporting via <a href="mailto:sunodmongia2003@gmail.com"
-                            class="text-indigo-600 underline">sunodmongia2003@gmail.com</a></li>
-                </ul>
+        <h2 id="your-rights">📝 Your Rights</h2>
+        <p>Depending on your region, you can:</p>
+        <ul>
+          <li>Request access, correction, or deletion of data.</li>
+          <li>Withdraw consent or restrict processing.</li>
+          <li>Request data portability to another provider.</li>
+        </ul>
+        <p>To exercise these rights, email us at
+          <a href="mailto:sunodmongia2003@gmail.com" class="text-indigo-600 font-medium underline">
+            sunodmongia2003@gmail.com
+          </a>.
+        </p>
 
-                <h2 id="international" class="flex items-center gap-3">🌎 International Transfers</h2>
-                <p>Your data may be transferred outside your country with appropriate safeguards.</p>
+        <h2 id="contact">📬 Contact</h2>
+        <address class="not-italic leading-relaxed">
+          <strong>SaaSApp Privacy Team</strong><br>
+          123 SaaSApp Ave, Suite 100, Cloud City<br>
+          +91-452-854-122<br>
+          <a href="mailto:sunodmongia2003@gmail.com" class="text-indigo-600 font-medium underline">
+            sunodmongia2003@gmail.com
+          </a>
+        </address>
+      </article>
+    </main>
 
-                <h2 id="children" class="flex items-center gap-3">👶 Children's Privacy</h2>
-                <p>The platform is intended for users aged 13+. We do not knowingly collect data from children below
-                    this age.</p>
+    <!-- TOC (DESKTOP) -->
+    <aside class="hidden lg:block lg:w-80 sticky top-28 self-start">
+      <nav
+        class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 max-h-[calc(100vh-7rem)] overflow-y-auto space-y-3">
+        <h3 class="text-lg font-semibold text-indigo-700 mb-4">On this page</h3>
+        <ul class="space-y-2 text-gray-700 font-medium text-sm">
+          <li><a href="#scope" class="toc-link block rounded px-3 py-2">🔍 Scope</a></li>
+          <li><a href="#info-we-collect" class="toc-link block rounded px-3 py-2">📊 Data We Collect</a></li>
+          <li><a href="#how-we-use" class="toc-link block rounded px-3 py-2">⚡ How We Use</a></li>
+          <li><a href="#legal-bases" class="toc-link block rounded px-3 py-2">🛡️ Legal Bases</a></li>
+          <li><a href="#cookies" class="toc-link block rounded px-3 py-2">🍪 Cookies</a></li>
+          <li><a href="#sharing" class="toc-link block rounded px-3 py-2">🔗 Sharing</a></li>
+          <li><a href="#security" class="toc-link block rounded px-3 py-2">🔒 Security</a></li>
+          <li><a href="#your-rights" class="toc-link block rounded px-3 py-2">📝 Your Rights</a></li>
+          <li><a href="#contact" class="toc-link block rounded px-3 py-2">📬 Contact</a></li>
+        </ul>
+      </nav>
+    </aside>
 
-                <h2 id="your-rights" class="flex items-center gap-3">📝 Your Rights</h2>
-                <ul>
-                    <li>Access, correct, or delete your data</li>
-                    <li>Object to or restrict processing</li>
-                    <li>Withdraw consent where applicable</li>
-                    <li>Receive data portability</li>
-                </ul>
-                <p>Contact us at <a href="mailto:sunodmongia2003@gmail.com"
-                        class="text-indigo-600 underline">sunodmongia2003@gmail.com</a> to exercise your rights.</p>
-
-                <h2 id="contact" class="flex items-center gap-3">📬 Contact</h2>
-                <address>
-                    SaaSApp Privacy Team<br />
-                    <a href="mailto:sunodmongia2003@gmail.com"
-                        class="text-indigo-600 underline">sunodmongia2003@gmail.com</a><br />
-                    Phone: +91 (452) 854122<br />
-                    123 SaaSApp Ave, Suite 100, Cloud City
-                </address>
-            </article>
-        </main>
-
-        <!-- Desktop Table of Contents -->
-        <aside class="hidden lg:block lg:w-80 sticky top-28 self-start">
-            <nav
-                class="bg-white shadow-lg rounded-2xl p-6 border border-gray-100 max-h-[calc(100vh-7rem)] overflow-y-auto">
-                <h3 class="text-lg font-semibold text-indigo-700 mb-6">On this page</h3>
-                <ul class="space-y-3 text-gray-700 font-medium">
-                    <li><a href="#scope"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🔍
-                            Scope</a></li>
-                    <li><a href="#info-we-collect"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">📊
-                            Information We Collect</a></li>
-                    <li><a href="#how-we-use"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">⚡
-                            How We Use Your Data</a></li>
-                    <li><a href="#legal-bases"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🛡️
-                            Legal Bases</a></li>
-                    <li><a href="#cookies"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🍪
-                            Cookies</a></li>
-                    <li><a href="#sharing"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🔗
-                            Sharing & Disclosure</a></li>
-                    <li><a href="#data-retention"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🗄️
-                            Data Retention</a></li>
-                    <li><a href="#security"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🔒
-                            Security</a></li>
-                    <li><a href="#international"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🌎
-                            International Transfers</a></li>
-                    <li><a href="#children"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">👶
-                            Children's Privacy</a></li>
-                    <li><a href="#your-rights"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">📝
-                            Your Rights</a></li>
-                    <li><a href="#contact"
-                            class="toc-link block rounded px-3 py-1 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">📬
-                            Contact</a></li>
-                </ul>
-            </nav>
-        </aside>
-    </div>
+  </div>
 </section>
 
-<!-- Mobile TOC Modal -->
-<div id="mobileToc" class="fixed inset-0 z-50 hidden bg-black bg-opacity-70 backdrop-blur-sm">
-    <div
-        class="absolute top-24 left-1/2 -translate-x-1/2 w-11/12 max-w-md bg-white rounded-3xl shadow-lg p-6 overflow-auto max-h-[70vh]">
-        <h3 class="text-xl font-semibold text-indigo-700 mb-6">Jump to Section</h3>
-        <ul class="space-y-3 text-gray-800">
-            <li><a href="#scope"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🔍
-                    Scope</a></li>
-            <li><a href="#info-we-collect"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">📊
-                    Information We Collect</a></li>
-            <li><a href="#how-we-use"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">⚡
-                    How We Use Your Data</a></li>
-            <li><a href="#legal-bases"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🛡️
-                    Legal Bases</a></li>
-            <li><a href="#cookies"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🍪
-                    Cookies</a></li>
-            <li><a href="#sharing"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🔗
-                    Sharing & Disclosure</a></li>
-            <li><a href="#data-retention"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🗄️
-                    Data Retention</a></li>
-            <li><a href="#security"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🔒
-                    Security</a></li>
-            <li><a href="#international"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">🌎
-                    International Transfers</a></li>
-            <li><a href="#children"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">👶
-                    Children's Privacy</a></li>
-            <li><a href="#your-rights"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">📝
-                    Your Rights</a></li>
-            <li><a href="#contact"
-                    class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400">📬
-                    Contact</a></li>
-        </ul>
-        <button type="button" id="closeTocBtn"
-            class="mt-6 block w-full rounded-3xl bg-indigo-700 text-white py-3 font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-white">Close</button>
-    </div>
+<!-- MOBILE TOC MODAL -->
+<div id="mobileToc"
+  class="fixed inset-0 z-50 hidden bg-black bg-opacity-70 backdrop-blur-sm flex items-center justify-center">
+  <div class="w-11/12 max-w-md bg-white rounded-3xl shadow-2xl p-6 overflow-auto max-h-[70vh]">
+    <h3 class="text-xl font-semibold text-indigo-700 mb-4">Jump to Section</h3>
+    <ul class="space-y-3 text-gray-800 text-sm">
+      <li><a href="#scope" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">🔍 Scope</a></li>
+      <li><a href="#info-we-collect" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">📊 Data We
+          Collect</a></li>
+      <li><a href="#how-we-use" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">⚡ How We Use</a></li>
+      <li><a href="#legal-bases" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">🛡️ Legal Bases</a>
+      </li>
+      <li><a href="#cookies" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">🍪 Cookies</a></li>
+      <li><a href="#sharing" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">🔗 Sharing</a></li>
+      <li><a href="#security" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">🔒 Security</a></li>
+      <li><a href="#your-rights" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">📝 Your Rights</a>
+      </li>
+      <li><a href="#contact" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">📬 Contact</a></li>
+    </ul>
+    <button id="closeTocBtn"
+      class="mt-6 w-full rounded-3xl bg-indigo-700 text-white py-3 font-semibold shadow-lg hover:bg-indigo-800 transition">
+      Close
+    </button>
+  </div>
 </div>
 
 <script>
-    // Desktop TOC smooth scrolling
-    document.querySelectorAll('.toc-link').forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            const id = link.getAttribute('href');
-            document.querySelector(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // Close mobile TOC if on mobile
-            if (window.innerWidth < 1024) {
-                document.getElementById('mobileToc').classList.add('hidden');
-            }
-        });
+  // Smooth Scroll
+  document.querySelectorAll('.toc-link, .mobile-toc-link').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const id = link.getAttribute('href');
+      document.querySelector(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('mobileToc').classList.add('hidden');
     });
+  });
 
-    // Mobile TOC toggle
-    const tocBtn = document.getElementById('tocBtn');
-    const mobileToc = document.getElementById('mobileToc');
-    const closeTocBtn = document.getElementById('closeTocBtn');
-
-    tocBtn?.addEventListener('click', () => {
-        mobileToc.classList.remove('hidden');
+  // Active TOC highlight
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const link = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+      if (entry.isIntersecting) {
+        document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+        link?.classList.add('active');
+      }
     });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('main h2').forEach(sec => observer.observe(sec));
 
-    closeTocBtn?.addEventListener('click', () => {
-        mobileToc.classList.add('hidden');
-    });
+  // Fade In on Scroll
+  const fadeSections = document.querySelectorAll('.section-fade');
+  const fadeObs = new IntersectionObserver(entries => {
+    entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
+  }, { threshold: 0.1 });
+  fadeSections.forEach(el => fadeObs.observe(el));
 
-    // Mobile TOC links smooth scrolling
-    document.querySelectorAll('.mobile-toc-link').forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            const id = link.getAttribute('href');
-            document.querySelector(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
-            mobileToc.classList.add('hidden');
-        });
-    });
+  // Mobile TOC toggle
+  const tocBtn = document.getElementById('tocBtn');
+  const mobileToc = document.getElementById('mobileToc');
+  const closeTocBtn = document.getElementById('closeTocBtn');
+  tocBtn?.addEventListener('click', () => mobileToc.classList.remove('hidden'));
+  closeTocBtn?.addEventListener('click', () => mobileToc.classList.add('hidden'));
 </script>
+
 {% endblock %}

@@ -35,7 +35,11 @@ class DemoScheduleAdmin(admin.ModelAdmin):
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
     form = ContactMessageAdminForm
+<<<<<<< HEAD
     change_form_template = 'change_form.html'
+=======
+    change_form_template = "change_form.html"
+>>>>>>> 993a47384ac9c386a626e85d441dc4a1dfe6fe0f
 
     list_display = (
         "first_name",
@@ -55,6 +59,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
         "message",
         "created_at",
     )
+<<<<<<< HEAD
 
     fields = [
         "first_name",
@@ -106,3 +111,67 @@ class ContactMessageAdmin(admin.ModelAdmin):
             return super().response_change(request, obj)
 
         return super().change_view(request, object_id, form_url, extra_context)
+=======
+
+    fields = [
+        "first_name",
+        "last_name",
+        "email",
+        "subject",
+        "message",
+        "resolve",
+        "created_at",
+        "custom_email_subject",
+        "custom_email_message",
+    ]
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        obj = self.get_object(request, object_id)
+
+        if request.method == "POST" and "send_custom_email" in request.POST:
+            form = self.get_form(request, obj)(request.POST, instance=obj)
+            if form.is_valid():
+                subject = form.cleaned_data.get("custom_email_subject")
+                message = form.cleaned_data.get("custom_email_message")
+
+                if subject and message:
+                    try:
+                        send_mail(
+                            subject=subject,
+                            message=message,
+                            from_email="sunodmongia2003@gmail.com",
+                            recipient_list=[obj.email],
+                            fail_silently=False,
+                        )
+
+                        timestamp = timezone.now().strftime("%Y-%m-%d %H:%M")
+                        history_entry = (
+                            f"[{timestamp}] Subject: {subject}\n{message}\n\n"
+                        )
+                        obj.email_history += history_entry
+                        obj.save(update_fields=["email_history"])
+
+                        self.message_user(
+                            request,
+                            f"✅ Email sent successfully to {obj.email}",
+                            level=messages.SUCCESS,
+                        )
+                    except Exception as e:
+                        self.message_user(
+                            request,
+                            f"❌ Failed to send email: {str(e)}",
+                            level=messages.ERROR,
+                        )
+            return super().response_change(request, obj)
+
+        return super().change_view(request, object_id, form_url, extra_context)
+
+
+@admin.register(Feature)
+class FeatureAdmin(admin.ModelAdmin):
+    list_display = ("title", "active", "display_order")
+    list_editable = ("active", "display_order")
+    search_fields = ("title",)
+
+
+>>>>>>> 993a47384ac9c386a626e85d441dc4a1dfe6fe0f
