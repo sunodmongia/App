@@ -1,7 +1,7 @@
 import requests
 
 
-api_key = "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"
+api_key = None
 url = "https://api.groq.com/openai/v1/models"
 
 headers = {
