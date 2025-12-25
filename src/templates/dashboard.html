@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="flex min-h-screen bg-gray-100">
+
+<!-- Sidebar -->
+<aside class="w-64 bg-white border-r hidden md:flex flex-col">
+  <div class="p-6 text-2xl font-bold">WiRE</div>
+  <nav class="flex-1 space-y-1 px-4 text-sm">
+    <a class="block px-4 py-2 bg-gray-100 rounded font-semibold">Dashboard</a>
+    <a class="block px-4 py-2 hover:bg-gray-50">Usage</a>
+    <a class="block px-4 py-2 hover:bg-gray-50">Team</a>
+    <a class="block px-4 py-2 hover:bg-gray-50">Billing</a>
+    <a class="block px-4 py-2 hover:bg-gray-50">API Keys</a>
+    <a class="block px-4 py-2 hover:bg-gray-50">Logs</a>
+  </nav>
+</aside>
+
+<!-- Main -->
+<main class="flex-1">
+
+<!-- Top Bar -->
+<div class="flex justify-between items-center px-8 py-4 bg-white border-b">
+  <div>
+    <h1 class="text-xl font-semibold">Dashboard</h1>
+    <p class="text-sm text-gray-500">Live usage for your organization</p>
+  </div>
+  <div class="flex items-center gap-4">
+    <span class="px-3 py-1 text-xs bg-black text-white rounded">Pro Plan</span>
+    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">
+      {{ request.user.username|slice:":1"|upper }}
+    </div>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="p-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+  <div class="bg-white p-6 rounded-xl border shadow-sm">
+    <p class="text-sm text-gray-500">Revenue</p>
+    <p class="text-3xl font-bold mt-2">₹ <span id="revenue">0</span></p>
+    <p class="text-xs text-green-600 mt-1">Live</p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl border shadow-sm">
+    <p class="text-sm text-gray-500">Active Users</p>
+    <p class="text-3xl font-bold mt-2" id="users">0</p>
+    <p class="text-xs text-blue-600 mt-1">Online</p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl border shadow-sm">
+    <p class="text-sm text-gray-500">API Requests</p>
+    <p class="text-3xl font-bold mt-2" id="api">0</p>
+    <p class="text-xs text-purple-600 mt-1">This month</p>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl border shadow-sm">
+    <p class="text-sm text-gray-500">Storage</p>
+    <p class="text-3xl font-bold mt-2"><span id="storage">0</span> GB</p>
+    <p class="text-xs text-orange-600 mt-1">Used</p>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="px-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="bg-white p-6 rounded-xl border shadow-sm">
+    <h3 class="font-semibold mb-4">API Traffic</h3>
+    <canvas id="apiChart" height="120"></canvas>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl border shadow-sm">
+    <h3 class="font-semibold mb-4">Revenue</h3>
+    <canvas id="revenueChart" height="120"></canvas>
+  </div>
+</div>
+
+<!-- Activity -->
+<div class="px-8 mt-8">
+  <div class="bg-white p-6 rounded-xl border shadow-sm">
+    <h3 class="font-semibold mb-4">Live Activity</h3>
+    <ul id="activity" class="space-y-3 text-sm"></ul>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+const ws = new WebSocket(
+  (location.protocol === "https:" ? "wss://" : "ws://") +
+  location.host + "/ws/dashboard/"
+);
+
+ws.onopen = () => {
+  console.log("Live dashboard connected");
+};
+
+ws.onmessage = (e) => {
+  const data = JSON.parse(e.data);
+  updateDashboard(data);
+};
+
+ws.onclose = () => {
+  console.log("Dashboard disconnected");
+};
+
+function updateDashboard(data) {
+  if (data.api_calls !== undefined)
+      document.getElementById("api_calls").innerText = data.api_calls;
+
+  if (data.users !== undefined)
+      document.getElementById("users").innerText = data.users;
+
+  if (data.storage !== undefined)
+      document.getElementById("storage").innerText = data.storage;
+
+  if (data.revenue !== undefined)
+      document.getElementById("revenue").innerText = "₹" + data.revenue.toLocaleString();
+
+  if (data.event) {
+    const li = document.createElement("li");
+    li.className = "text-sm text-gray-700";
+    li.innerText = "• " + data.event;
+
+    const feed = document.getElementById("activity_feed");
+    feed.prepend(li);
+
+    // Keep only last 20 events
+    while (feed.children.length > 20) {
+      feed.removeChild(feed.lastChild);
+    }
+  }
+}
+</script>
+
+
+{% endblock %}
