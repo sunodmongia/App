@@ -7,15 +7,10 @@ from pathlib import Path
 from decouple import config, Csv
 import dj_database_url
 
-# ---------------------------------------------------------------------
-# Paths
-# ---------------------------------------------------------------------
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# ---------------------------------------------------------------------
-# Security & Debug
-# ---------------------------------------------------------------------
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
 
@@ -26,9 +21,6 @@ ALLOWED_HOSTS = config(
 )
 
 
-# ---------------------------------------------------------------------
-# Installed Apps
-# ---------------------------------------------------------------------
 INSTALLED_APPS = [
     # Django
     "django.contrib.admin",
@@ -43,7 +35,8 @@ INSTALLED_APPS = [
     "customers",
     "profiles",
     "subscriptions",
-    'helpcenter',
+    "helpcenter",
+    "chatbot",
     # Third-party
     "crispy_forms",
     "crispy_tailwind",
@@ -172,6 +165,13 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ]
+}
+
+GROQ_API_KEY = config("GROQ_API_KEY")
 
 # ---------------------------------------------------------------------
 # Crispy Forms
