@@ -1,621 +1,165 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
 
-<section class="pt-28 pb-20 bg-gradient-to-b from-white to-gray-50 text-center relative overflow-hidden">
-  <div class="max-w-6xl mx-auto px-6 lg:px-8">
-    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight text-gray-900 mb-6">
-      Streamline Your <span class="text-blue-600">Business Operations</span>
-    </h1>
-    <p class="text-lg sm:text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-      Collaborate, manage, and scale efficiently — all in one intuitive platform trusted by 10,000+ companies.
-    </p>
+<section class="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
 
-    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-      {% if user.is_authenticated %}
-      <a href="{% url 'pricing' %}"
-        class="px-8 py-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors shadow-lg hover:shadow-blue-500/30">
-        Start Free Trial
-      </a>
+  <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.3),transparent_70%)]"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6 py-32 grid lg:grid-cols-2 gap-20 items-center">
+
+    <!-- LEFT COLUMN -->
+    <div>
+      <h1 class="text-6xl font-extrabold leading-tight mb-8">
+        Powering the Future of
+        <span class="text-blue-500">Cloud & AI</span>
+      </h1>
+
+      <p class="text-xl text-slate-300 mb-10 max-w-xl">
+        WireTech provides cloud hosting, storage and AI APIs for startups and enterprises.
+        Build, deploy and scale faster than ever.
+      </p>
+
+      {% if request.user.is_authenticated %}
+
+        <div class="flex gap-6">
+          <a href="{% url 'dashboard' %}"
+             class="px-10 py-4 bg-blue-600 hover:bg-blue-700 rounded-xl text-lg font-bold shadow-xl shadow-blue-600/30 transition">
+            Go to Dashboard
+          </a>
+        </div>
+
       {% else %}
-      <a href="{% url 'pricing' %}"
-        class="px-8 py-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors shadow-lg hover:shadow-blue-500/30">
-        Start Free Trial
+
+        <div class="flex gap-6">
+          <a href="{% url 'pricing' %}"
+             class="px-10 py-4 bg-blue-600 hover:bg-blue-700 rounded-xl text-lg font-bold shadow-xl shadow-blue-600/30 transition">
+            Start Free Trial
+          </a>
+
+          <a href="{% url 'demo' %}"
+             class="px-10 py-4 border border-white/30 rounded-xl text-lg hover:bg-white/10 transition">
+            Watch Demo
+          </a>
+        </div>
+
+        <div class="mt-10 flex items-center gap-8 text-slate-400">
+          <span>✓ No credit card</span>
+          <span>✓ 14-day free trial</span>
+          <span>✓ Cancel anytime</span>
+        </div>
+
       {% endif %}
-      <a href="{% url 'demo' %}"
-        class="px-8 py-4 border-2 border-black text-black font-semibold rounded-lg hover:bg-black hover:text-white transition-colors">
-        Watch Demo
-      </a>
     </div>
 
-    <p class="text-sm text-gray-500 mb-10">
-      ✓ Free 14-day trial &nbsp; • &nbsp; No credit card required &nbsp; • &nbsp; Cancel anytime
-    </p>
-
-    <div class="max-w-4xl mx-auto mb-12">
-      <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6">
-        Trusted by leading teams worldwide
-      </p>
-      <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 lg:gap-x-12">
-        <svg class="h-8 w-auto text-gray-400" viewBox="0 0 130 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11.393 2.044h5.116v27.912h-5.116V2.044zM24.717 2.044h5.116v27.912h-5.116V2.044zM39.605 16c0-6.904 4.58-13.956 12.8-13.956 8.219 0 12.8 7.052 12.8 13.956 0 6.903-4.58 13.956-12.8 13.956-8.219 0-12.8-7.053-12.8-13.956zm20.553 0c0-4.327-2.924-9.012-7.753-9.012-4.83 0-7.754 4.685-7.754 9.012 0 4.326 2.924 9.012 7.754 9.012 4.829 0 7.753-4.686 7.753-9.012zM70.368 2.044h5.116v27.912h-5.116V2.044zM83.475 2.044h5.116v27.912h-5.116V2.044zM96.798 2.044h5.116v27.912h-5.116V2.044zM111.47 16c0-6.904 4.58-13.956 12.8-13.956 8.22 0 12.801 7.052 12.801 13.956 0 6.903-4.58 13.956-12.8 13.956-8.22 0-12.801-7.053-12.801-13.956zm20.553 0c0-4.327-2.923-9.012-7.753-9.012-4.83 0-7.754 4.685-7.754 9.012 0 4.326 2.924 9.012 7.754 9.012 4.83 0 7.753-4.686 7.753-9.012z" fill="currentColor"></path>
-        </svg>
-        <svg class="h-8 w-auto text-gray-400" viewBox="0 0 116 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22.65 16.008c0 6.096-4.944 11.04-11.04 11.04S.57 22.104.57 16.008c0-6.096 4.944-11.04 11.04-11.04s11.04 4.944 11.04 11.04zM11.61 6.336c-5.34 0-9.672 4.332-9.672 9.672s4.332 9.672 9.672 9.672 9.672-4.332 9.672-9.672-4.332-9.672-9.672-9.672zM32.887 4.968h3.9v22.068h-3.9V4.968zM46.702 16.008c0 6.096-4.944 11.04-11.04 11.04s-11.04-4.944-11.04-11.04 4.944-11.04 11.04-11.04 11.04 4.944 11.04 11.04zM35.662 6.336c-5.34 0-9.672 4.332-9.672 9.672s4.332 9.672 9.672 9.672 9.672-4.332 9.672-9.672-4.332-9.672-9.672-9.672zM63.535 4.968h3.9v22.068h-3.9V4.968zM80.48 4.968h3.888l5.88 9.06v.216l6.084-9.276h3.888v22.068h-3.9V12.012l-6.084 9.276h-.216l-5.88-9.06v15.024h-3.9V4.968zM111.451 4.968h3.9v22.068h-3.9V4.968z" fill="currentColor"></path>
-        </svg>
-        <svg class="h-8 w-auto text-gray-400" viewBox="0 0 102 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19.141 4.968h3.9v22.068h-3.9V4.968zM36.095 4.968h3.888l5.88 9.06v.216l6.084-9.276h3.888v22.068h-3.9V12.012l-6.084 9.276h-.216l-5.88-9.06v15.024h-3.9V4.968zM66.979 4.968h3.9v22.068h-3.9V4.968zM80.794 16.008c0 6.096-4.944 11.04-11.04 11.04s-11.04-4.944-11.04-11.04 4.944-11.04 11.04-11.04 11.04 4.944 11.04 11.04zM69.754 6.336c-5.34 0-9.672 4.332-9.672 9.672s4.332 9.672 9.672 9.672 9.672-4.332 9.672-9.672-4.332-9.672-9.672-9.672zM98.113 4.968h3.9v22.068h-3.9V4.968zM11.61 16.008c0 6.096-4.944 11.04-11.04 11.04S.57 22.104.57 16.008c0-6.096 4.944-11.04 11.04-11.04s11.04 4.944 11.04 11.04zM11.61 6.336c-5.34 0-9.672 4.332-9.672 9.672s4.332 9.672 9.672 9.672 9.672-4.332 9.672-9.672-4.332-9.672-9.672-9.672z" fill="currentColor"></path>
-        </svg>
+    <!-- RIGHT COLUMN -->
+    <div class="relative">
+      <div class="absolute inset-0 bg-blue-600/20 blur-3xl rounded-full"></div>
+      <div class="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400"
+             class="rounded-xl shadow-lg">
       </div>
     </div>
 
-    <div
-      class="floating-animation relative bg-white border border-gray-200 rounded-2xl shadow-xl p-6 mx-auto max-w-4xl transition-transform">
-      <h3 class="text-xl font-semibold mb-3 text-gray-900">Product Dashboard Preview</h3>
-      <p class="text-gray-600 mb-6">A quick look at how our platform empowers your business operations</p>
-      
-      <div class="rounded-lg overflow-hidden border border-gray-300 shadow-inner">
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop" 
-             alt="SaaSApp Dashboard Preview" 
-             class="w-full">
-      </div>
-    </div>
   </div>
 </section>
 
-<section id="features" class="py-24 bg-white">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Everything You Need to Scale</h2>
-      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-        Manage, automate, and analyze your business operations — all from one platform.
+
+
+<!-- LOGOS -->
+<section class="py-20 bg-black text-slate-400 text-center">
+  <p class="uppercase tracking-widest mb-10 text-sm">Trusted by fast growing teams</p>
+  <div class="flex flex-wrap justify-center gap-16 text-lg font-semibold opacity-60">
+    <span>NeonDB</span>
+    <span>CloudForge</span>
+    <span>ScaleOps</span>
+    <span>DataNest</span>
+    <span>AIFlow</span>
+  </div>
+</section>
+
+
+<!-- FEATURES -->
+<section class="py-32 bg-slate-950 text-white">
+  <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12">
+
+    <div class="bg-slate-900 border border-white/5 rounded-2xl p-10 hover:border-blue-500 transition">
+      <h3 class="text-2xl font-bold mb-4">Cloud Hosting</h3>
+      <p class="text-slate-400">
+        Deploy Django, Node, and full-stack apps with global uptime, SSL and automated backups.
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-      {% for feature in features %}
-      <div class="feature-card bg-gray-50 hover:bg-white border border-gray-200 p-8 rounded-2xl shadow-md hover:shadow-lg transition hover:-translate-y-1.5">
-        <div class="w-12 h-12 mb-5 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-          </svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-3">{{ feature.title }}</h3>
-        <p class="text-gray-600">{{ feature.description }}</p>
-      </div>
-      {% empty %}
-      <div class="feature-card bg-gray-50 hover:bg-white border border-gray-200 p-8 rounded-2xl shadow-md hover:shadow-lg transition hover:-translate-y-1.5">
-        <div class="w-12 h-12 mb-5 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-          </svg>
-        </div>
-        <h3 class="text-xl font-bold mb-3">Lightning Fast</h3>
-        <p class="text-gray-600">Experience unmatched speed with scalable infrastructure and optimized performance.</p>
-      </div>
-      <div class="feature-card bg-gray-50 hover:bg-white border border-gray-200 p-8 rounded-2xl shadow-md hover:shadow-lg transition hover:-translate-y-1.5">
-        <div class="w-12 h-12 mb-5 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.286zm-1.12 0a14.927 14.927 0 01-7.846 3.286C3.14 6.411 3 6.688 3 7v2.75c0 4.21 3.001 7.906 7.5 9.455 4.499-1.55 7.5-5.245 7.5-9.455V7c0-.312-.14-.589-.354-.784A14.927 14.927 0 0112.002 2.714z" />
-          </svg>
-        </div>
-        <h3 class="text-xl font-bold mb-3">Bank-Level Security</h3>
-        <p class="text-gray-600">Your data stays encrypted, private, and safe with top-tier security protocols.</p>
-      </div>
-      <div class="feature-card bg-gray-50 hover:bg-white border border-gray-200 p-8 rounded-2xl shadow-md hover:shadow-lg transition hover:-translate-y-1.5">
-        <div class="w-12 h-12 mb-5 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 00-12 0m12 0a9.094 9.094 0 01-12 0m12 0v-4.5m-12 4.5v-4.5m12 0a9 9 0 00-12 0m12 0h.008M9 15h.008M12 15h.008M15 15h.008M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-        </div>
-        <h3 class="text-xl font-bold mb-3">Team Collaboration</h3>
-        <p class="text-gray-600">Work together in real-time and streamline communication across your organization.</p>
-      </div>
-      {% endfor %}
+    <div class="bg-slate-900 border border-white/5 rounded-2xl p-10 hover:border-blue-500 transition">
+      <h3 class="text-2xl font-bold mb-4">Cloud Storage</h3>
+      <p class="text-slate-400">
+        Secure, encrypted object storage for backups, files, media and enterprise workloads.
+      </p>
     </div>
+
+    <div class="bg-slate-900 border border-white/5 rounded-2xl p-10 hover:border-blue-500 transition">
+      <h3 class="text-2xl font-bold mb-4">AI APIs</h3>
+      <p class="text-slate-400">
+        Build chatbots, search engines and automation with our high-performance AI endpoints.
+      </p>
+    </div>
+
   </div>
 </section>
 
-<section id="testimonials" class="py-24 bg-gray-50">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="text-center mb-14">
-      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">Loved by Thousands</h2>
-      <p class="text-lg text-gray-600">Real stories from real companies making a real impact.</p>
-    </div>
 
-    <div class="grid md:grid-cols-3 gap-10">
-      <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-        <div class="flex items-center text-yellow-400 mb-2">
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-        </div>
-        <blockquote class="text-gray-700 text-lg mb-5 italic">
-          “SaaSApp revolutionized how our team collaborates. Productivity increased by 40% in the first month!”
-        </blockquote>
-        <div class="flex items-center gap-4">
-          <img class="w-12 h-12 rounded-full object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?&w=128&h=128&auto=format&fit=crop" alt="Profile photo of Sarah Johnson">
-          <div>
-            <p class="font-semibold text-gray-900">Sarah Johnson</p>
-            <p class="text-gray-500 text-sm">CEO, TechCorp</p>
-          </div>
-        </div>
-      </div>
+<!-- CTA -->
+<footer class="bg-slate-950 border-t border-white/10 text-slate-400">
+  <div class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-4 gap-12">
 
-      <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-        <div class="flex items-center text-yellow-400 mb-2">
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-        </div>
-        <blockquote class="text-gray-700 text-lg mb-5 italic">
-          “Their analytics tools helped us find insights that improved ROI by 30%. Absolutely incredible.”
-        </blockquote>
-        <div class="flex items-center gap-4">
-          <img class="w-12 h-12 rounded-full object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?&w=128&h=128&auto=format&fit=crop" alt="Profile photo of Michael Chen">
-          <div>
-            <p class="font-semibold text-gray-900">Michael Chen</p>
-            <p class="text-gray-500 text-sm">Marketing Director, GrowthCo</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-        <div class="flex items-center text-yellow-400 mb-2">
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.83 5.632h5.922c.969 0 1.371 1.24.588 1.81l-4.79 3.477 1.83 5.631c.3.921-.755 1.688-1.539 1.118l-4.79-3.477-4.79 3.477c-.784.57-1.838-.197-1.539-1.118l1.83-5.631-4.79-3.477c-.783-.57-.38-1.81.588-1.81h5.922L9.049 2.927z"></path></svg>
-        </div>
-        <blockquote class="text-gray-700 text-lg mb-5 italic">
-          “Phenomenal support and reliability. SaaSApp became the backbone of our operations.”
-        </blockquote>
-        <div class="flex items-center gap-4">
-          <img class="w-12 h-12 rounded-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?&w=128&h=128&auto=format&fit=crop" alt="Profile photo of Emily Rodriguez">
-          <div>
-            <p class="font-semibold text-gray-900">Emily Rodriguez</p>
-            <p class="text-gray-500 text-sm">Operations Manager, ScaleCorp</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="py-24 bg-black text-center text-white">
-  <div class="max-w-4xl mx-auto px-6">
-    <h2 class="text-3xl md:text-4xl font-bold mb-5">Ready to streamline your business?</h2>
-    <p class="text-lg text-gray-300 mb-8">Join 10,000+ teams already using SaaSApp to scale faster and smarter.</p>
-    <div class="flex flex-col sm:flex-row justify-center gap-4">
-      <a href="{% url 'account_signup' %}"
-        class="px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-transform hover:scale-105">Start Free Trial</a>
-      <a href="{% url 'schedule_demo' %}"
-        class="px-8 py-4 border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-black transition-transform hover:scale-105">
-        Schedule Demo</a>
-    </div>
-    <p class="text-gray-400 text-sm mt-6">Free 14-day trial • No credit card required • Setup in 2 minutes</p>
-  </div>
-</section>
-
-<footer class="bg-gray-900 text-gray-300 py-14 border-t border-gray-800">
-  <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10">
+    <!-- Brand -->
     <div>
-      <h3 class="text-2xl font-bold text-white mb-3">SaaSApp</h3>
-      <p class="text-gray-400 mb-4">The all-in-one platform to simplify business operations and scale your success.</p>
-      <div class="flex space-x-4 text-gray-400">
-        <a href="https://www.linkedin.com/in/sunod-kumar" class="hover:text-white transition-colors">LinkedIn</a>
-        <a href="https://www.github.com/sunodmongia" class="hover:text-white transition-colors">GitHub</a>
+      <h3 class="text-2xl font-bold text-white mb-4">WireTech</h3>
+      <p class="text-sm leading-relaxed mb-6">
+        Cloud infrastructure, AI APIs and storage built for modern businesses that want to scale faster.
+      </p>
+
+      <div class="flex space-x-4 text-sm">
+        <a href="https://github.com/sunodmongia" class="hover:text-white transition">GitHub</a>
+        <a href="https://linkedin.com/in/sunod-kumar" class="hover:text-white transition">LinkedIn</a>
       </div>
     </div>
 
+    <!-- Product -->
     <div>
-      <h4 class="font-semibold text-white mb-3">Product</h4>
-      <ul class="space-y-2">
-        <li><a href="{% url 'pricing' %}" class="hover:text-white transition-colors">Pricing</a></li>
-        <li><a href="{% url 'api-view' %}" class="hover:text-white transition-colors">API</a></li>
+      <h4 class="font-semibold text-white mb-4">Product</h4>
+      <ul class="space-y-3 text-sm">
+        <li><a href="{% url 'pricing' %}" class="hover:text-white">Pricing</a></li>
+        <li><a href="{% url 'api-view' %}" class="hover:text-white">API</a></li>
+        <li><a href="{% url 'demo' %}" class="hover:text-white">Live Demo</a></li>
       </ul>
     </div>
 
+    <!-- Resources -->
     <div>
-      <h4 class="font-semibold text-white mb-3">Resources</h4>
-      <ul class="space-y-2">
-        <li><a href="{% url 'help-center' %}" class="hover:text-white transition-colors">Help Center</a></li>
-        <li><a href="{% url 'case-studies' %}" class="hover:text-white transition-colors">Case Studies</a></li>
+      <h4 class="font-semibold text-white mb-4">Resources</h4>
+      <ul class="space-y-3 text-sm">
+        <li><a href="{% url 'help-center' %}" class="hover:text-white">Help Center</a></li>
+        <li><a href="{% url 'case-studies' %}" class="hover:text-white">Case Studies</a></li>
+        <li><a href="{% url 'blog' %}" class="hover:text-white">Blog</a></li>
       </ul>
     </div>
 
+    <!-- Company -->
     <div>
-      <h4 class="font-semibold text-white mb-3">Company</h4>
-      <ul class="space-y-2">
-        <li><a href="{% url 'blog' %}" class="hover:text-white transition-colors">Blog</a></li>
-        <li><a href="{% url 'contact-us' %}" class="hover:text-white transition-colors">Contact</a></li>
+      <h4 class="font-semibold text-white mb-4">Company</h4>
+      <ul class="space-y-3 text-sm">
+        <li><a href="{% url 'contact-us' %}" class="hover:text-white">Contact</a></li>
+        <li><a href="{% url 'terms-and-condtion' %}" class="hover:text-white">Terms & Conditions</a></li>
+        <li><a href="{% url 'privacy-policy' %}" class="hover:text-white">Privacy Policy</a></li>
       </ul>
     </div>
+
   </div>
 
-  <hr class="border-gray-700 my-10">
-  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-6">
-    <p class="text-gray-500 text-sm">© 2025 SaaSApp. All rights reserved.</p>
-    <div class="flex space-x-6 text-sm text-gray-400 mt-3 md:mt-0">
-      <a href="{% url 'terms-and-condtion' %}" class="hover:text-white transition-colors">Terms & Condition</a>
-      <a href="{% url 'privacy-policy' %}" class="hover:text-white transition-colors">Privacy Policy</a>
-    </div>
+  <div class="border-t border-white/10 py-6 text-center text-sm">
+    © 2025 WireTech. All rights reserved.
   </div>
 </footer>
 
-<script>
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const target = document.querySelector(link.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-</script>
-
-<style>
-  /* Moved the feature-card hover effect to Tailwind classes.
-    Keeping the floating animation here is fine, though in a production
-    build, this would be moved to tailwind.config.js
-  */
-  .floating-animation {
-    animation: float 6s ease-in-out infinite;
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-</style>
-<<<<<<< HEAD
-</head>
-
-<body class="bg-white text-gray-900">
-
-    <!-- Hero Section -->
-    <section class="pt-16 pb-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-extrabold text-black mb-6">
-                    Streamline Your Business <br>
-                    <span class="text-blue-600">Operations</span>
-                </h1>
-                <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                    The all-in-one platform that helps teams collaborate, manage projects, and scale their business
-                    efficiently. Trusted by 10,000+ companies worldwide.
-                </p>
-
-                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                    <a href="{% url 'signup-trial' %}"
-                        class="px-8 py-4 bg-black text-white font-bold text-lg rounded-lg hover:bg-gray-800 transition-colors">
-                        Start Free Trial
-                    </a>
-                    <a href="{% url 'demo' %}"
-                        class="px-8 py-4 border-2 border-black text-black font-bold text-lg rounded-lg hover:bg-black hover:text-white transition-colors">
-                        Watch Demo
-                    </a>
-                </div>
-
-                <!-- Trust Badges -->
-                <div class="text-sm text-gray-500 mb-8">
-                    <p>✓ Free 14-day trial &nbsp;&nbsp; ✓ No credit card required &nbsp;&nbsp; ✓ Cancel anytime</p>
-                </div>
-
-                <!-- Social Proof Logos -->
-                <div class="mb-12">
-                    <p class="text-sm text-gray-500 mb-4">Trusted by leading companies</p>
-                    <div class="flex flex-wrap justify-center items-center gap-8 opacity-60">
-                        <div class="bg-gray-100 border border-gray-300 px-6 py-2 rounded text-gray-700 font-semibold">
-                            Company A</div>
-                        <div class="bg-gray-100 border border-gray-300 px-6 py-2 rounded text-gray-700 font-semibold">
-                            Company B</div>
-                        <div class="bg-gray-100 border border-gray-300 px-6 py-2 rounded text-gray-700 font-semibold">
-                            Company C</div>
-                        <div class="bg-gray-100 border border-gray-300 px-6 py-2 rounded text-gray-700 font-semibold">
-                            Company D</div>
-                    </div>
-                </div>
-
-                <!-- Product Preview -->
-                <div class="relative max-w-4xl mx-auto floating-animation">
-                    <div class="bg-gray-100 border border-gray-300 rounded-lg shadow-2xl p-4">
-                        <div class="bg-white border border-gray-200 rounded-lg shadow-inner p-8 text-center">
-                            <h3 class="text-2xl font-bold mb-4 text-black">Product Dashboard Preview</h3>
-                            <p class="text-gray-600">Interactive demo of our platform's main interface</p>
-                            <div
-                                class="mt-6 bg-gradient-to-r from-gray-200 to-gray-400 h-64 rounded-lg flex items-center justify-center border border-gray-300">
-                                <span class="text-black font-bold text-xl">Dashboard UI Preview</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    Everything you need to scale your business
-                </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Our comprehensive suite of tools helps you manage every aspect of your business operations from a
-                    single, intuitive platform.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Feature Card 1 -->
-                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
-                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Lightning Fast</h3>
-                    <p class="text-gray-600">Experience blazing fast performance with our optimized infrastructure that
-                        scales with your needs.</p>
-                </div>
-
-                <!-- Feature Card 2 -->
-                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Bank-level Security</h3>
-                    <p class="text-gray-600">Your data is protected with enterprise-grade security, encryption, and
-                        compliance standards.</p>
-                </div>
-
-                <!-- Feature Card 3 -->
-                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Team Collaboration</h3>
-                    <p class="text-gray-600">Seamlessly collaborate with your team members in real-time with our
-                        intuitive collaboration tools.</p>
-                </div>
-
-                <!-- Feature Card 4 -->
-                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
-                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Advanced Analytics</h3>
-                    <p class="text-gray-600">Make data-driven decisions with comprehensive analytics and reporting
-                        dashboards.</p>
-                </div>
-
-                <!-- Feature Card 5 -->
-                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
-                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Easy Integration</h3>
-                    <p class="text-gray-600">Connect with 500+ popular tools and services through our extensive
-                        integration library.</p>
-                </div>
-
-                <!-- Feature Card 6 -->
-                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">24/7 Support</h3>
-                    <p class="text-gray-600">Get help whenever you need it with our round-the-clock customer support
-                        team.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Social Proof/Testimonials Section -->
-    <section id="testimonials" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    Loved by thousands of businesses
-                </h2>
-                <p class="text-xl text-gray-600">See what our customers say about us</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Testimonial 1 -->
-                <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400">
-                            ★★★★★
-                        </div>
-                    </div>
-                    <blockquote class="text-gray-700 mb-6">
-                        "SaaSApp has transformed how we manage our projects. The intuitive interface and powerful
-                        features have increased our productivity by 40%."
-                    </blockquote>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                        <div>
-                            <p class="font-semibold">Sarah Johnson</p>
-                            <p class="text-sm text-gray-600">CEO, TechCorp</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 2 -->
-                <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400">
-                            ★★★★★
-                        </div>
-                    </div>
-                    <blockquote class="text-gray-700 mb-6">
-                        "The analytics dashboard gives us insights we never had before. We can now make data-driven
-                        decisions that drive real results."
-                    </blockquote>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                        <div>
-                            <p class="font-semibold">Michael Chen</p>
-                            <p class="text-sm text-gray-600">Marketing Director, GrowthCo</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400">
-                            ★★★★★
-                        </div>
-                    </div>
-                    <blockquote class="text-gray-700 mb-6">
-                        "Outstanding customer support and a platform that actually works as advertised. Highly recommend
-                        for any growing business."
-                    </blockquote>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                        <div>
-                            <p class="font-semibold">Emily Rodriguez</p>
-                            <p class="text-sm text-gray-600">Operations Manager, ScaleCorp</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- CTA Section -->
-    <section class="py-20 bg-black">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-                Ready to streamline your business?
-            </h2>
-            <p class="text-xl text-gray-300 mb-8">
-                Join thousands of successful companies using SaaSApp to scale their operations efficiently.
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{% url 'account_signup' %}"
-                    class="px-8 py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-gray-200 transition-colors">
-                    Start Free Trial
-                </a>
-                <a href="{% url 'schedule_demo' %}"
-                    class="px-8 py-4 border-2 border-white text-white font-bold text-lg rounded-lg hover:bg-white hover:text-black transition-colors">
-                    Schedule Demo
-                </a>
-            </div>
-
-            <p class="text-gray-400 text-sm mt-6">
-                Free 14-day trial • No credit card required • Setup in 2 minutes
-            </p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-16 border-t border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-8">
-                <!-- Company Info -->
-                <div>
-                    <h3 class="text-2xl font-bold mb-2">WiRE</h3>
-                    <p class="text-gray-400 mb-2">The all-in-one platform for modern businesses to streamline operations
-                        and scale efficiently.</p>
-                    <div class="flex space-x-4">
-                        <a href="https://www.linkedin.com/in/sunod-kumar"
-                            class="text-gray-400 hover:text-white">LinkedIn</a>
-                        <a href="https://www.github.com/sunodmongia" class="text-gray-400 hover:text-white">GitHub</a>
-                    </div>
-                </div>
-
-                <!-- Product -->
-                <div>
-                    <h4 class="font-semibold mb-2">Product</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="{% url 'pricing' %}" class="hover:text-white">Pricing</a></li>
-                        <li><a href="{% url 'api-view' %}" class="hover:text-white">API</a></li>
-                    </ul>
-                </div>
-
-                <!-- Resources -->
-                <div>
-                    <h4 class="font-semibold mb-2">Resources</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="{% url 'help-center' %}" class="hover:text-white">Help Center</a></li>
-
-                        <li><a href="{% url 'case-studies' %}" class="hover:text-white">Case Studies</a></li>
-                    </ul>
-                </div>
-
-                <!-- Company -->
-                <div>
-                    <h4 class="font-semibold mb-2">Company</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <!-- <li><a href="{% url 'blog' %}" class="hover:text-white">Blog</a></li> -->
-                        <li><a href="{% url 'contact-us' %}" class="hover:text-white">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <hr class="border-gray-700 my-8">
-
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-400 text-sm">
-                    © 2025 SaaSApp. All rights reserved.
-                </p>
-                <div class="flex space-x-6 text-sm text-gray-400 mt-4 md:mt-0">
-                    <a href="{% url 'terms-and-condtion' %}" class="hover:text-white">Terms & Condition</a>
-                    <a href="{% url 'privacy-policy' %}" class="hover:text-white">Privacy Policy</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
-    <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    </script>
-</body>
-
-</html>
-=======
->>>>>>> 993a47384ac9c386a626e85d441dc4a1dfe6fe0f
 
 {% endblock %}

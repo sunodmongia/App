@@ -1,320 +1,150 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% load tailwind_field %}
-{% load widget_tweaks %}
 {% block content %}
-<style>
-    /* Toggle styles */
-    .toggle-switch {
-        cursor: pointer;
-    }
 
-    .plans-list>div {
-        transition: all 0.3s ease-in-out;
-    }
-</style>
-</head>
+<div class="bg-gradient-to-b from-gray-50 to-white min-h-screen">
 
-<div class="bg-gray-50 text-gray-900">
+<!-- HEADER -->
+<section class="text-center pt-28 pb-16">
+    <h1 class="text-5xl font-extrabold mb-4">Simple, Transparent Pricing</h1>
+    <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+        Choose a plan that scales with your business. Cancel anytime. 30-day money-back guarantee.
+    </p>
+</section>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Pricing Plans</h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                Choose the plan that fits your needs. No hidden fees, all plans come with a 30-day money-back guarantee.
-            </p>
-        </header>
+<!-- BILLING TOGGLE -->
+<div class="flex justify-center items-center gap-4 mb-14">
+    <span id="monthly-label" class="font-semibold">Monthly</span>
 
-        <!-- Billing toggle -->
-        <div class="flex items-center justify-center mb-12 space-x-4">
-            <span id="annual-label" class="text-lg font-semibold text-gray-600">Annual<span class="text-black">(Save
-                    20%)</span></span>
-            <div id="billing-toggle"
-                class="relative inline-flex h-6 w-11 items-center rounded-full bg-black toggle-switch"
-                aria-label="Toggle Billing">
-                <div class="inline-block h-4 w-4 transform rounded-full bg-white transition translate-x-6"
-                    id="toggle-thumb"></div>
-            </div>
-            <span id="monthly-label" class="text-lg font-semibold">Monthly</span>
-        </div>
+    <div id="billing-toggle" class="w-14 h-7 bg-black rounded-full flex items-center px-1 cursor-pointer">
+        <div id="toggle-thumb" class="w-5 h-5 bg-white rounded-full transition-all"></div>
+    </div>
 
-        <div class="grid md:grid-cols-4 gap-8 plans-list">
-            <!-- Free Plan -->
-            <div class="bg-white border border-gray-200 p-8 rounded-xl shadow-lg flex flex-col">
-                <div class="text-center mb-8">
-                    <h3 class="text-2xl font-bold mb-4 text-black">Free</h3>
-                    <div class="mb-4">
-                        <span class="text-4xl font-bold text-black" data-monthly-price="$0" data-annual-price="$0"> $0
-                        </span>
-                        <span class="text-gray-600">/month</span>
-                    </div>
-                    <p class="text-gray-600">Perfect for individuals and small projects</p>
-                </div>
-
-                <ul class="space-y-4 mb-8 flex-grow">
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>1 user
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>1GB storage
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Basic support
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Limited integrations
-                    </li>
-                </ul>
-
-                <a href="{% url 'account_signup' %}" class="mt-auto">
-                    <button
-                        class="w-full py-3 bg-gray-100 border border-gray-300 text-gray-800 font-semibold rounded-lg hover:bg-gray-200 transition-colors">
-                        Get Started
-                    </button>
-                </a>
-            </div>
-
-            <!-- Starter Plan -->
-            <div class="bg-white border border-gray-200 p-8 rounded-xl shadow-lg flex flex-col">
-                <div class="text-center mb-8">
-                    <h3 class="text-2xl font-bold mb-4 text-black">Starter</h3>
-                    <div class="mb-4">
-                        <span class="text-4xl font-bold text-black price" data-monthly-price="29"
-                            data-annual-price="278">$29</span>
-                        <span class="text-gray-600">/month</span>
-                    </div>
-                    <p class="text-gray-600">Perfect for small teams getting started</p>
-                </div>
-
-                <ul class="space-y-4 mb-8 flex-grow">
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Up to 5 team members
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>10GB storage
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Basic integrations
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Email support
-                    </li>
-                </ul>
-
-                <a href="{% url 'account_signup' %}" class="mt-auto">
-                    <button
-                        class="w-full py-3 bg-gray-100 border border-gray-300 text-gray-800 font-semibold rounded-lg hover:bg-gray-200 transition-colors">
-                        Get Started
-                    </button>
-                </a>
-            </div>
-
-            <!-- Professional Plan (Popular) -->
-            <div class="bg-white border-2 border-black p-8 rounded-xl shadow-xl relative flex flex-col">
-                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span class="bg-black text-white px-4 py-1 rounded-full text-sm font-semibold">Most Popular</span>
-                </div>
-
-                <div class="text-center mb-8">
-                    <h3 class="text-2xl font-bold mb-4 text-black">Professional</h3>
-                    <div class="mb-4">
-                        <span class="text-4xl font-bold text-black price" data-monthly-price="79"
-                            data-annual-price="758">$79</span>
-                        <span class="text-gray-600">/month</span>
-                    </div>
-                    <p class="text-gray-600">Best for growing businesses</p>
-                </div>
-
-                <ul class="space-y-4 mb-8 flex-grow">
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Up to 25 team members
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>100GB storage
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Advanced integrations
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Priority support
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Advanced analytics
-                    </li>
-                </ul>
-
-                <a href="{% url 'account_signup' %}" class="mt-auto">
-                    <button
-                        class="w-full py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors">
-                        Get Started
-                    </button>
-                </a>
-            </div>
-
-            <!-- Enterprise Plan -->
-            <div class="bg-white border border-gray-200 p-8 rounded-xl shadow-lg flex flex-col">
-                <div class="text-center mb-8">
-                    <h3 class="text-2xl font-bold mb-4 text-black">Enterprise</h3>
-                    <div class="mb-4">
-                        <span class="text-4xl font-bold text-black price" data-monthly-price="199"
-                            data-annual-price="1910">$199</span>
-                        <span class="text-gray-600">/month</span>
-                    </div>
-                    <p class="text-gray-600">For large organizations</p>
-                </div>
-
-                <ul class="space-y-4 mb-8 flex-grow">
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Unlimited team members
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>1TB storage
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>Custom integrations
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>24/7 phone support
-                    </li>
-                    <li class="flex items-center">
-                        <svg class="w-5 h-5 text-black mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>White-label options
-                    </li>
-                </ul>
-
-                <button
-                    class="mt-auto w-full py-3 bg-gray-100 border border-gray-300 text-gray-800 font-semibold rounded-lg hover:bg-gray-200 transition-colors">
-                    Contact Sales
-                </button>
-            </div>
-        </div>
-
-        <!-- Money Back Guarantee -->
-        <div class="text-center mt-12">
-            <p class="text-gray-600">
-                <svg class="w-5 h-5 text-black inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                30-day money-back guarantee on all plans
-            </p>
-        </div>
-    </main>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
-        // Price toggle functionality
-        const toggle = document.getElementById('billing-toggle');
-        const toggleThumb = document.getElementById('toggle-thumb');
-        const monthlyLabel = document.getElementById('monthly-label');
-        const annualLabel = document.getElementById('annual-label');
-        const priceElements = document.querySelectorAll('.price, [data-monthly-price]');
-
-        let annualBilling = false; // default is monthly
-
-        function updatePrices() {
-            priceElements.forEach(el => {
-                let monthly = el.getAttribute('data-monthly-price');
-                let annual = el.getAttribute('data-annual-price');
-
-                if (!monthly || !annual) return;
-
-                if (annualBilling) {
-                    // Show annual price with /year notation
-                    if (el.classList.contains('price')) {
-                        el.textContent = `$${annual}`;
-                        el.nextElementSibling.textContent = '/year';
-                    } else {
-                        el.textContent = annual;
-                    }
-                } else {
-                    // Show monthly price with /month
-                    if (el.classList.contains('price')) {
-                        el.textContent = `$${monthly}`;
-                        el.nextElementSibling.textContent = '/month';
-                    } else {
-                        el.textContent = monthly;
-                    }
-                }
-            });
-        }
-
-        toggle.addEventListener('click', () => {
-            annualBilling = !annualBilling;
-
-            // Move toggle thumb
-            if (annualBilling) {
-                toggleThumb.classList.remove('translate-x-6');
-                toggleThumb.classList.add('translate-x-1');
-                monthlyLabel.classList.add('text-gray-600');
-                annualLabel.classList.remove('text-gray-600');
-                annualLabel.classList.add('text-black');
-            } else {
-                toggleThumb.classList.remove('translate-x-1');
-                toggleThumb.classList.add('translate-x-6');
-                monthlyLabel.classList.remove('text-gray-600');
-                annualLabel.classList.add('text-gray-600');
-                annualLabel.classList.remove('text-black');
-            }
-
-            updatePrices();
-        });
-
-        // Initialize prices on page load
-        updatePrices();
-    </script>
+    <span id="annual-label" class="font-semibold text-gray-400">
+        Annual <span class="text-green-600">(Save 20%)</span>
+    </span>
 </div>
+
+<!-- PLANS -->
+<div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8 px-6">
+
+<!-- FREE -->
+<div class="bg-white p-8 rounded-xl shadow border flex flex-col">
+    <h3 class="text-2xl font-bold mb-2">Free</h3>
+    <p class="text-gray-500 mb-4">For individuals testing the platform</p>
+    <div class="text-4xl font-extrabold mb-6">₹0</div>
+
+    <ul class="space-y-3 text-gray-700 mb-8">
+        <li>✔ 1 user</li>
+        <li>✔ 1GB storage</li>
+        <li>✔ Basic support</li>
+    </ul>
+
+    <a href="{% url 'account_signup' %}" class="mt-auto">
+        <button class="w-full py-3 bg-gray-100 rounded-lg font-semibold hover:bg-gray-200">
+            Get Started
+        </button>
+    </a>
+</div>
+
+<!-- STARTER -->
+<div class="bg-white p-8 rounded-xl shadow border flex flex-col">
+    <h3 class="text-2xl font-bold mb-2">Starter</h3>
+    <p class="text-gray-500 mb-4">Small teams & early stage startups</p>
+
+    <div class="text-5xl font-extrabold mb-6 price"
+         data-monthly="2499"
+         data-annual="23990">₹2,499</div>
+
+    <ul class="space-y-3 text-gray-700 mb-8">
+        <li>✔ 5 users</li>
+        <li>✔ 10GB storage</li>
+        <li>✔ Email support</li>
+        <li>✔ Basic integrations</li>
+    </ul>
+
+    <a href="{% url 'account_signup' %}" class="mt-auto">
+        <button class="w-full py-3 bg-gray-100 rounded-lg font-semibold hover:bg-gray-200">
+            Get Started
+        </button>
+    </a>
+</div>
+
+<!-- PRO -->
+<div class="bg-black text-white p-8 rounded-xl shadow-xl flex flex-col relative scale-105">
+    <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-black text-sm px-3 py-1 rounded-full">
+        Most Popular
+    </span>
+
+    <h3 class="text-2xl font-bold mb-2">Professional</h3>
+    <p class="text-gray-300 mb-4">Growing companies</p>
+
+    <div class="text-6xl font-extrabold mb-6 price"
+         data-monthly="6999"
+         data-annual="67190">₹6,999</div>
+
+    <ul class="space-y-3 mb-8 text-gray-200">
+        <li>✔ 25 users</li>
+        <li>✔ 100GB storage</li>
+        <li>✔ Priority support</li>
+        <li>✔ Advanced analytics</li>
+        <li>✔ AI APIs</li>
+    </ul>
+
+    <a href="{% url 'account_signup' %}" class="mt-auto">
+        <button class="w-full py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200">
+            Start Now
+        </button>
+    </a>
+</div>
+
+<!-- ENTERPRISE -->
+<div class="bg-white p-8 rounded-xl shadow border flex flex-col">
+    <h3 class="text-2xl font-bold mb-2">Enterprise</h3>
+    <p class="text-gray-500 mb-4">Large organizations</p>
+
+    <div class="text-5xl font-extrabold mb-6 price"
+         data-monthly="19999"
+         data-annual="191990">₹19,999</div>
+
+    <ul class="space-y-3 text-gray-700 mb-8">
+        <li>✔ Unlimited users</li>
+        <li>✔ 1TB storage</li>
+        <li>✔ Dedicated support</li>
+        <li>✔ Custom AI & APIs</li>
+        <li>✔ SLA & onboarding</li>
+    </ul>
+
+    <button class="mt-auto w-full py-3 bg-gray-100 rounded-lg font-semibold hover:bg-gray-200">
+        Contact Sales
+    </button>
+</div>
+
+</div>
+
+<!-- TOGGLE SCRIPT -->
+<script>
+const toggle = document.getElementById("billing-toggle");
+const thumb = document.getElementById("toggle-thumb");
+const prices = document.querySelectorAll(".price");
+const monthlyLabel = document.getElementById("monthly-label");
+const annualLabel = document.getElementById("annual-label");
+
+let annual = false;
+
+toggle.addEventListener("click", () => {
+    annual = !annual;
+
+    thumb.style.transform = annual ? "translateX(28px)" : "translateX(0)";
+    monthlyLabel.classList.toggle("text-gray-400", annual);
+    annualLabel.classList.toggle("text-gray-400", !annual);
+
+    prices.forEach(p => {
+        const val = annual ? p.dataset.annual : p.dataset.monthly;
+        p.textContent = "₹" + Number(val).toLocaleString("en-IN");
+    });
+});
+</script>
+
+</div>
+
 {% endblock %}

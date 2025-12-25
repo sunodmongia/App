@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,6 +11,7 @@
     .nav-link {
       position: relative;
     }
+
     .nav-link::after {
       content: '';
       position: absolute;
@@ -20,6 +22,7 @@
       background: #000;
       transition: width 0.3s;
     }
+
     .nav-link:hover::after {
       width: 100%;
     }
@@ -28,116 +31,111 @@
 
 <body class="bg-white text-black">
 
-<!-- SINGLE NAVBAR (correct) -->
-<nav class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-300 z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-16">
+  <!-- SINGLE NAVBAR (correct) -->
+  <nav class="fixed top-0 inset-x-0 bg-white/90 backdrop-blur border-b border-gray-200 z-50">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex h-16 items-center justify-between">
 
-      <!-- Logo -->
-      <div class="flex-shrink-0">
-        <a href="/" class="text-2xl font-bold text-black">WiRE</a>
-      </div>
+        <!-- Brand -->
+        <a href="/" class="flex items-center gap-2 text-2xl font-extrabold tracking-tight">
+          <span class="text-black">WiRETech</span>
+        </a>
 
-      <!-- Desktop Menu -->
-      <div class="hidden md:block">
-        <div class="ml-10 flex items-baseline space-x-8">
-          <a href="{% url 'pricing' %}" class="nav-link font-medium text-gray-800 hover:text-black">Pricing</a>
-          <a href="{% url 'features' %}" class="nav-link font-medium text-gray-800 hover:text-black">Features</a>
-          <a href="#testimonials" class="nav-link font-medium text-gray-800 hover:text-black">Customers</a>
-          <a href="{% url 'about' %}" class="nav-link font-medium text-gray-800 hover:text-black">About</a>
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-10 text-sm font-medium text-gray-700">
+          <a href="{% url 'dashboard' %}" class="hover:text-black transition">Dashboard</a>
+          <a href="{% url 'features' %}" class="hover:text-black transition">Features</a>
+          <a href="{% url 'pricing' %}" class="hover:text-black transition">Pricing</a>
+          <a href="{% url 'about' %}" class="hover:text-black transition">About</a>
         </div>
-      </div>
 
-      <!-- Desktop: Auth Section -->
-      <div class="hidden md:flex items-center space-x-4 relative">
-        {% if not request.user.is_authenticated %}
-          <a href="{% url 'account_login' %}" class="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-black">Sign In</a>
-          <a href="{% url 'signup-trial' %}" class="px-6 py-2 text-sm font-bold bg-black text-white rounded-lg hover:bg-gray-800">
-            Start Free Trial
+        <!-- Auth -->
+        <div class="hidden md:flex items-center gap-4">
+          {% if not request.user.is_authenticated %}
+          <a href="{% url 'account_login' %}" class="text-sm text-gray-600 hover:text-black">
+            Sign in
           </a>
-        {% else %}
-        <!-- Profile Dropdown -->
-        <div class="relative">
-          <button id="profile-menu-button" class="flex items-center gap-2 hover:bg-gray-100 rounded-full px-2 py-1">
-            {% if request.user.userprofile.profile_image %}
+          <a href="{% url 'signup-trial' %}"
+            class="px-5 py-2 rounded-lg bg-black text-white text-sm font-semibold hover:bg-gray-800 transition">
+            Start free trial
+          </a>
+          {% else %}
+          <div class="relative">
+            <button id="profile-menu-button" class="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-gray-100">
+              {% if request.user.userprofile.profile_image %}
               <img src="{{ request.user.userprofile.profile_image.url }}"
-                   class="w-9 h-9 rounded-full border object-cover">
-            {% else %}
-              <div class="w-9 h-9 rounded-full bg-gray-200 text-black flex items-center justify-center text-sm font-bold border">
+                class="w-9 h-9 rounded-full object-cover border">
+              {% else %}
+              <div class="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold">
                 {{ request.user.username|slice:":1"|upper }}
               </div>
-            {% endif %}
-          </button>
+              {% endif %}
+            </button>
 
-          <div id="profile-dropdown"
-               class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
-            <a href="{% url 'profile-home' %}" class="block px-4 py-2 text-sm hover:bg-gray-50">My Profile</a>
-            {% if user.is_superuser %}
-            <a href="{% url 'profile-list' %}" class="block px-4 py-2 text-sm hover:bg-gray-50">Profile List</a>
-            {% endif %}
-            <a href="{% url 'account_logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-50">Sign Out</a>
+            <div id="profile-dropdown"
+              class="hidden absolute right-0 mt-3 w-52 bg-white border rounded-xl shadow-lg overflow-hidden">
+              <a href="{% url 'profile-home' %}" class="block px-4 py-3 text-sm hover:bg-gray-50">My account</a>
+              {% if user.is_superuser %}
+              <a href="{% url 'profile-list' %}" class="block px-4 py-3 text-sm hover:bg-gray-50">Admin</a>
+              {% endif %}
+              <a href="{% url 'account_logout' %}" class="block px-4 py-3 text-sm text-red-600 hover:bg-red-50">Sign
+                out</a>
+            </div>
           </div>
+          {% endif %}
         </div>
-        {% endif %}
-      </div>
 
-      <!-- Mobile Menu Button (only one) -->
-      <div class="md:hidden">
-        <button id="mobile-menu-button" class="p-2 rounded-md text-gray-700 hover:bg-gray-100">
+        <!-- Mobile Button -->
+        <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg hover:bg-gray-100">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h16" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
       </div>
-
     </div>
-  </div>
 
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-300">
-    <div class="px-2 pt-2 pb-3 space-y-1">
-      <a href="{% url 'pricing' %}" class="block px-3 py-2">Pricing</a>
-      <a href="{% url 'features' %}" class="block px-3 py-2">Features</a>
-      <a href="#testimonials" class="block px-3 py-2">Customers</a>
-      <a href="{% url 'about' %}" class="block px-3 py-2">About</a>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t bg-white">
+      <div class="px-6 py-4 space-y-4 text-sm font-medium text-gray-700">
+        <a href="{% url 'dashboard' %}" class="block">Dashboard</a>
+        <a href="{% url 'features' %}" class="block">Features</a>
+        <a href="{% url 'pricing' %}" class="block">Pricing</a>
+        <a href="{% url 'about' %}" class="block">About</a>
 
-      <div class="mt-4 px-3 space-y-2">
-        {% if not request.user.is_authenticated %}
-          <a href="{% url 'account_login' %}"
-             class="block w-full text-center px-4 py-2 border rounded-lg">Sign In</a>
-          <a href="{% url 'account_signup' %}"
-             class="block w-full text-center px-4 py-2 bg-black text-white rounded-lg">Sign Up</a>
-        {% else %}
-          <a href="{% url 'profile-home' %}" class="block w-full text-center px-4 py-2">My Profile</a>
-          <a href="{% url 'account_logout' %}" class="block w-full text-center px-4 py-2 bg-black text-white rounded-lg">Sign Out</a>
-        {% endif %}
+        <div class="pt-4 border-t space-y-3">
+          {% if not request.user.is_authenticated %}
+          <a href="{% url 'account_login' %}" class="block w-full text-center py-2 border rounded-lg">Sign in</a>
+          <a href="{% url 'signup-trial' %}" class="block w-full text-center py-2 bg-black text-white rounded-lg">Start
+            free trial</a>
+          {% else %}
+          <a href="{% url 'profile-home' %}" class="block">My account</a>
+          <a href="{% url 'account_logout' %}" class="block text-red-600">Sign out</a>
+          {% endif %}
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const mobileButton = document.getElementById("mobile-menu-button");
-    const mobileMenu = document.getElementById("mobile-menu");
-    const profileButton = document.getElementById("profile-menu-button");
-    const profileDropdown = document.getElementById("profile-dropdown");
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const mobileBtn = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const profileBtn = document.getElementById("profile-menu-button");
+      const profileMenu = document.getElementById("profile-dropdown");
 
-    mobileButton?.addEventListener("click", () => {
-      mobileMenu.classList.toggle("hidden");
+      mobileBtn?.addEventListener("click", () => mobileMenu.classList.toggle("hidden"));
+
+      profileBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", () => {
+        profileMenu?.classList.add("hidden");
+      });
     });
-
-    profileButton?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      profileDropdown.classList.toggle("hidden");
-    });
-
-    document.addEventListener("click", () => {
-      profileDropdown?.classList.add("hidden");
-    });
-  });
-</script>
+  </script>
 
 </body>
+
 </html>

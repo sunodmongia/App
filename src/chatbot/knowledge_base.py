@@ -10,9 +10,13 @@ Office Hours: 10:00 AM - 7:00 PM IST (Monday to Saturday)
 Emergency Support: 24/7 for Enterprise customers
 
 ---------------------------------------------------
-About WireTech
+About Wire
 ---------------------------------------------------
-WireTech provides modern cloud and AI infrastructure for startups, businesses, and developers. 
+
+---------------------------------------------------
+About Wire
+---------------------------------------------------
+Wire provides modern cloud and AI infrastructure for startups, businesses, and developers. 
 Our goal is to make hosting, storage, and AI deployment simple, fast, and affordable.
 
 ---------------------------------------------------
@@ -70,7 +74,7 @@ Account & Security
 Support & Troubleshooting
 ---------------------------------------------------
 - Email support: support@wiretech.com
-- Typical response time: 2–4 hours during office hours
+- Typical response time: 2-4 hours during office hours
 - Technical issues are prioritized
 - Users can request ticket escalation if the problem is urgent
 

@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "subscriptions",
     "helpcenter",
     "chatbot",
-
+    "channels",
     # Third-party
     "crispy_forms",
     "crispy_tailwind",
@@ -90,7 +90,14 @@ TEMPLATES = [
 
 ROOT_URLCONF = "wire.urls"
 WSGI_APPLICATION = "wire.wsgi.application"
+ASGI_APPLICATION = "project.asgi.application"
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+    }
+}
 
 # ---------------------------------------------------------------------
 # Database (NeonDB via Decouple)
@@ -163,7 +170,7 @@ SOCIALACCOUNT_PROVIDERS = {
             "client_id": config("OAUTH_GOOGLE_CLIENT_ID"),
             "secret": config("OAUTH_GOOGLE_SECRET"),
         }
-    }
+    },
 }
 
 REST_FRAMEWORK = {

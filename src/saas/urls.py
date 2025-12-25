@@ -11,8 +11,13 @@ urlpatterns = [
     path("contact/", ContactUsView.as_view(), name="contact-us"),
     path("api/", APIView.as_view(), name="api-view"),
     path("features", FeaturesView.as_view(), name="features"),
-    path('privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
-    path('terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-condtion"),
+    path("privacy-policy", PrivacyPolicyView.as_view(), name="privacy-policy"),
+    path(
+        "terms-and-conditions",
+        TermsAndConditionsView.as_view(),
+        name="terms-and-condtion",
+    ),
     path("signup-trial/", StartTrialView.as_view(), name="signup-trial"),
     path("schedule-demo/", ScheduleDemoView.as_view(), name="schedule_demo"),
+    path("dashboard/", CustomerAPI.as_view(), name="dashboard"),
 ]

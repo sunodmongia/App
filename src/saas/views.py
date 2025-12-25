@@ -1,3 +1,6 @@
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, FormView
 from django.contrib.auth.hashers import make_password
@@ -10,6 +13,9 @@ from django.conf import settings
 
 from saas.forms import *
 from saas.models import *
+from .tracking import record_api_call
+from .consumers import *
+
 
 
 class HomeView(TemplateView):
@@ -20,7 +26,7 @@ class AboutView(TemplateView):
     template_name = "about.html"
 
 
-class UserDemoView(LoginRequiredMixin, TemplateView):
+class UserDemoView(TemplateView):
     template_name = "demo.html"
     login_url = "account_login"
 
@@ -180,3 +186,42 @@ class FeaturesView(TemplateView):
         return context
     
 
+class CustomerAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        org = request.user.organization
+
+        # Enforce plan limits
+        usage = Usage.objects.get(org=org)
+
+        if usage.api_calls >= org.plan.api_limit:
+            return Response(
+                {"error": "API limit exceeded. Upgrade your plan."},
+                status=402
+            )
+
+        prompt = request.data.get("prompt")
+
+        # This is where you call AI / RAG / etc
+        result = f"processed {prompt}"
+
+        # Track usage AFTER successful execution
+        record_api_call(org)
+
+        return Response({
+            "result": result,
+            "remaining": org.plan.api_limit - usage.api_calls
+        })
+
+def api_endpoint(request):
+    usage = Usage.objects.get(user=request.user)
+    usage.api_calls += 1
+    usage.revenue += 0.01  # ₹ per call
+    usage.save()
+
+    broadcast(request.user, {
+        "api_calls": usage.api_calls,
+        "revenue": usage.revenue,
+        "event": "API call"
+    })

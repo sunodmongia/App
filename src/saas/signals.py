@@ -4,6 +4,9 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import *
 
 
 @receiver(user_logged_in)
@@ -96,3 +99,11 @@ def get_client_ip(request):
     else:
         ip = request.META.get("REMOTE_ADDR")
     return ip
+
+
+@receiver(post_save, sender=User)
+def create_org(sender, instance, created, **kwargs):
+    if created:
+        org = Organization.objects.create(name=instance.username, owner=instance)
+        Usage.objects.create(org=org)
+        TeamMember.objects.create(org=org, user=instance, role="Owner")

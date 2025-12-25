@@ -98,3 +98,54 @@ class Feature(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Organization(models.Model):
+    name = models.CharField(max_length=100)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Usage(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    api_calls = models.IntegerField(default=0)
+    storage_mb = models.FloatField(default=0)
+    active_users = models.IntegerField(default=1)
+
+    automations_run = models.IntegerField(default=0)
+    reports_generated = models.IntegerField(default=0)
+
+    revenue = models.FloatField(default=0)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Event(models.Model):
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    type = models.CharField(max_length=100)
+    data = models.JSONField(default=dict)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class TeamMember(models.Model):
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=50)
+
+
+class Automation(models.Model):
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    trigger = models.CharField(max_length=100)
+    action = models.CharField(max_length=100)
+    enabled = models.BooleanField(default=True)
+
+
+# dashboard/models.py
+class UsageEvent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event_type = models.CharField(max_length=50)
+    value = models.FloatField(default=0)
+    meta = models.JSONField(default=dict)
+    created_at = models.DateTimeField(auto_now_add=True)
