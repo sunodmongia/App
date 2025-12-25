@@ -271,5 +271,351 @@
     50% { transform: translateY(-10px); }
   }
 </style>
+<<<<<<< HEAD
+</head>
+
+<body class="bg-white text-gray-900">
+
+    <!-- Hero Section -->
+    <section class="pt-16 pb-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-black mb-6">
+                    Streamline Your Business <br>
+                    <span class="text-blue-600">Operations</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                    The all-in-one platform that helps teams collaborate, manage projects, and scale their business
+                    efficiently. Trusted by 10,000+ companies worldwide.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                    <a href="{% url 'signup-trial' %}"
+                        class="px-8 py-4 bg-black text-white font-bold text-lg rounded-lg hover:bg-gray-800 transition-colors">
+                        Start Free Trial
+                    </a>
+                    <a href="{% url 'demo' %}"
+                        class="px-8 py-4 border-2 border-black text-black font-bold text-lg rounded-lg hover:bg-black hover:text-white transition-colors">
+                        Watch Demo
+                    </a>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="text-sm text-gray-500 mb-8">
+                    <p>✓ Free 14-day trial &nbsp;&nbsp; ✓ No credit card required &nbsp;&nbsp; ✓ Cancel anytime</p>
+                </div>
+
+                <!-- Social Proof Logos -->
+                <div class="mb-12">
+                    <p class="text-sm text-gray-500 mb-4">Trusted by leading companies</p>
+                    <div class="flex flex-wrap justify-center items-center gap-8 opacity-60">
+                        <div class="bg-gray-100 border border-gray-300 px-6 py-2 rounded text-gray-700 font-semibold">
+                            Company A</div>
+                        <div class="bg-gray-100 border border-gray-300 px-6 py-2 rounded text-gray-700 font-semibold">
+                            Company B</div>
+                        <div class="bg-gray-100 border border-gray-300 px-6 py-2 rounded text-gray-700 font-semibold">
+                            Company C</div>
+                        <div class="bg-gray-100 border border-gray-300 px-6 py-2 rounded text-gray-700 font-semibold">
+                            Company D</div>
+                    </div>
+                </div>
+
+                <!-- Product Preview -->
+                <div class="relative max-w-4xl mx-auto floating-animation">
+                    <div class="bg-gray-100 border border-gray-300 rounded-lg shadow-2xl p-4">
+                        <div class="bg-white border border-gray-200 rounded-lg shadow-inner p-8 text-center">
+                            <h3 class="text-2xl font-bold mb-4 text-black">Product Dashboard Preview</h3>
+                            <p class="text-gray-600">Interactive demo of our platform's main interface</p>
+                            <div
+                                class="mt-6 bg-gradient-to-r from-gray-200 to-gray-400 h-64 rounded-lg flex items-center justify-center border border-gray-300">
+                                <span class="text-black font-bold text-xl">Dashboard UI Preview</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Everything you need to scale your business
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Our comprehensive suite of tools helps you manage every aspect of your business operations from a
+                    single, intuitive platform.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature Card 1 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Lightning Fast</h3>
+                    <p class="text-gray-600">Experience blazing fast performance with our optimized infrastructure that
+                        scales with your needs.</p>
+                </div>
+
+                <!-- Feature Card 2 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Bank-level Security</h3>
+                    <p class="text-gray-600">Your data is protected with enterprise-grade security, encryption, and
+                        compliance standards.</p>
+                </div>
+
+                <!-- Feature Card 3 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Team Collaboration</h3>
+                    <p class="text-gray-600">Seamlessly collaborate with your team members in real-time with our
+                        intuitive collaboration tools.</p>
+                </div>
+
+                <!-- Feature Card 4 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Advanced Analytics</h3>
+                    <p class="text-gray-600">Make data-driven decisions with comprehensive analytics and reporting
+                        dashboards.</p>
+                </div>
+
+                <!-- Feature Card 5 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Easy Integration</h3>
+                    <p class="text-gray-600">Connect with 500+ popular tools and services through our extensive
+                        integration library.</p>
+                </div>
+
+                <!-- Feature Card 6 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">24/7 Support</h3>
+                    <p class="text-gray-600">Get help whenever you need it with our round-the-clock customer support
+                        team.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof/Testimonials Section -->
+    <section id="testimonials" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    Loved by thousands of businesses
+                </h2>
+                <p class="text-xl text-gray-600">See what our customers say about us</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400">
+                            ★★★★★
+                        </div>
+                    </div>
+                    <blockquote class="text-gray-700 mb-6">
+                        "SaaSApp has transformed how we manage our projects. The intuitive interface and powerful
+                        features have increased our productivity by 40%."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+                        <div>
+                            <p class="font-semibold">Sarah Johnson</p>
+                            <p class="text-sm text-gray-600">CEO, TechCorp</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400">
+                            ★★★★★
+                        </div>
+                    </div>
+                    <blockquote class="text-gray-700 mb-6">
+                        "The analytics dashboard gives us insights we never had before. We can now make data-driven
+                        decisions that drive real results."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+                        <div>
+                            <p class="font-semibold">Michael Chen</p>
+                            <p class="text-sm text-gray-600">Marketing Director, GrowthCo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400">
+                            ★★★★★
+                        </div>
+                    </div>
+                    <blockquote class="text-gray-700 mb-6">
+                        "Outstanding customer support and a platform that actually works as advertised. Highly recommend
+                        for any growing business."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+                        <div>
+                            <p class="font-semibold">Emily Rodriguez</p>
+                            <p class="text-sm text-gray-600">Operations Manager, ScaleCorp</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- CTA Section -->
+    <section class="py-20 bg-black">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+                Ready to streamline your business?
+            </h2>
+            <p class="text-xl text-gray-300 mb-8">
+                Join thousands of successful companies using SaaSApp to scale their operations efficiently.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{% url 'account_signup' %}"
+                    class="px-8 py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-gray-200 transition-colors">
+                    Start Free Trial
+                </a>
+                <a href="{% url 'schedule_demo' %}"
+                    class="px-8 py-4 border-2 border-white text-white font-bold text-lg rounded-lg hover:bg-white hover:text-black transition-colors">
+                    Schedule Demo
+                </a>
+            </div>
+
+            <p class="text-gray-400 text-sm mt-6">
+                Free 14-day trial • No credit card required • Setup in 2 minutes
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-16 border-t border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-2">WiRE</h3>
+                    <p class="text-gray-400 mb-2">The all-in-one platform for modern businesses to streamline operations
+                        and scale efficiently.</p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.linkedin.com/in/sunod-kumar"
+                            class="text-gray-400 hover:text-white">LinkedIn</a>
+                        <a href="https://www.github.com/sunodmongia" class="text-gray-400 hover:text-white">GitHub</a>
+                    </div>
+                </div>
+
+                <!-- Product -->
+                <div>
+                    <h4 class="font-semibold mb-2">Product</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{% url 'pricing' %}" class="hover:text-white">Pricing</a></li>
+                        <li><a href="{% url 'api-view' %}" class="hover:text-white">API</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources -->
+                <div>
+                    <h4 class="font-semibold mb-2">Resources</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{% url 'help-center' %}" class="hover:text-white">Help Center</a></li>
+
+                        <li><a href="{% url 'case-studies' %}" class="hover:text-white">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h4 class="font-semibold mb-2">Company</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <!-- <li><a href="{% url 'blog' %}" class="hover:text-white">Blog</a></li> -->
+                        <li><a href="{% url 'contact-us' %}" class="hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="border-gray-700 my-8">
+
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2025 SaaSApp. All rights reserved.
+                </p>
+                <div class="flex space-x-6 text-sm text-gray-400 mt-4 md:mt-0">
+                    <a href="{% url 'terms-and-condtion' %}" class="hover:text-white">Terms & Condition</a>
+                    <a href="{% url 'privacy-policy' %}" class="hover:text-white">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
+=======
+>>>>>>> 993a47384ac9c386a626e85d441dc4a1dfe6fe0f
 
 {% endblock %}

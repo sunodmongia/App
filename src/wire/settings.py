@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "subscriptions",
     "helpcenter",
     "chatbot",
+
     # Third-party
     "crispy_forms",
     "crispy_tailwind",
@@ -161,8 +162,8 @@ SOCIALACCOUNT_PROVIDERS = {
         "APP": {
             "client_id": config("OAUTH_GOOGLE_CLIENT_ID"),
             "secret": config("OAUTH_GOOGLE_SECRET"),
-        },
-    },
+        }
+    }
 }
 
 REST_FRAMEWORK = {
@@ -172,6 +173,7 @@ REST_FRAMEWORK = {
 }
 
 GROQ_API_KEY = config("GROQ_API_KEY")
+
 
 # ---------------------------------------------------------------------
 # Crispy Forms
