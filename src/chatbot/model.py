@@ -1,6 +1,5 @@
 import requests
 
-
 api_key = None
 url = "https://api.groq.com/openai/v1/models"
 

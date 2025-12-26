@@ -142,7 +142,6 @@ class Automation(models.Model):
     enabled = models.BooleanField(default=True)
 
 
-# dashboard/models.py
 class UsageEvent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event_type = models.CharField(max_length=50)
