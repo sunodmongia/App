@@ -1,5 +1,5 @@
 from .models import Usage, Event
-from .consumers import *
+from saas.consumers import *
 
 
 def record_api_call(org):

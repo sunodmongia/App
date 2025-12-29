@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
@@ -19,5 +20,9 @@ urlpatterns = [
     ),
     path("signup-trial/", StartTrialView.as_view(), name="signup-trial"),
     path("schedule-demo/", ScheduleDemoView.as_view(), name="schedule_demo"),
-    path("dashboard/", CustomerAPI.as_view(), name="dashboard"),
+    path("dashboard/", DashboardView.as_view(), name="dashboard"),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

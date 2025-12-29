@@ -5,33 +5,151 @@
 {% block content %}
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+        --brand: #667eea;
+        --brand-dark: #5a67d8;
+        --accent: #764ba2;
+        --bg: #f5f7fb;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --card: #ffffff;
+        --radius: 14px;
+        --shadow-sm: 0 4px 10px rgba(0, 0, 0, .04);
+        --shadow-md: 0 10px 30px rgba(0, 0, 0, .08);
+        --shadow-lg: 0 20px 50px rgba(0, 0, 0, .12);
+    }
+
+    /* ===== GLOBAL ===== */
+    body {
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    /* ===== HERO ===== */
     .gradient-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background:
+            linear-gradient(135deg, var(--brand), var(--accent));
     }
 
-    .form-input {
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    /* ===== CARDS ===== */
+    .bg-white {
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(0, 0, 0, .03);
+        transition: all .35s ease;
     }
 
-    .form-input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    .bg-white:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
     }
 
+    /* ===== FORM ===== */
+    .form-input,
+    input,
+    select,
+    textarea {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        padding: 12px 14px;
+        background: #fff;
+        transition: all .25s ease;
+    }
+
+    .form-input:focus,
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: var(--brand);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, .18);
+    }
+
+    /* ===== BUTTON ===== */
+    button,
+    a.bg-black {
+        color: #fff !important;
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(102, 126, 234, .4);
+        transition: all .3s ease;
+    }
+
+    button:hover,
+    a.bg-black:hover {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 18px 45px rgba(102, 126, 234, .5);
+    }
+
+    /* ===== ICON BUBBLES ===== */
+    .bg-purple-100,
+    .bg-blue-100,
+    .bg-green-100,
+    .bg-orange-100 {
+        background: linear-gradient(135deg, rgba(102, 126, 234, .15), rgba(118, 75, 162, .15));
+    }
+
+    /* ===== FAQ ===== */
+    .shadow-md {
+        box-shadow: var(--shadow-sm);
+        border: 1px solid rgba(0, 0, 0, .03);
+    }
+
+    /* ===== TESTIMONIAL ===== */
+    blockquote {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        position: relative;
+        padding-left: 20px;
+    }
+
+    blockquote:before {
+        content: "“";
+        position: absolute;
+        left: 0;
+        top: -10px;
+        font-size: 3rem;
+        color: var(--brand);
+        opacity: .3;
+    }
+
+    /* ===== TIME SLOTS ===== */
     .time-slot {
-        transition: all 0.3s ease;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        padding: 12px;
+        cursor: pointer;
+        background: #fff;
+        box-shadow: var(--shadow-sm);
+        transition: all .25s ease;
     }
 
     .time-slot:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow-md);
     }
 
     .time-slot.selected {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, var(--brand), var(--accent));
         color: white;
+        border: none;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+        background: linear-gradient(180deg, #0f172a, #020617);
+    }
+
+    footer a {
+        transition: color .2s ease;
+    }
+
+    footer a:hover {
+        color: var(--brand);
     }
 </style>
+
 </head>
 
 <div class="bg-gray-50 min-h-screen">
@@ -231,20 +349,18 @@
         // Handle time slot selection
         document.querySelectorAll('.time-slot').forEach(slot => {
             slot.addEventListener('click', function () {
-                // Remove selected class from all slots
-                document.querySelectorAll('.time-slot').forEach(s => {
-                    s.classList.remove('selected');
-                });
-
-                // Add selected class to clicked slot
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
                 this.classList.add('selected');
+                document.getElementById("selected_time").value = this.innerText;
             });
         });
 
-        // Set minimum date to today
         document.addEventListener('DOMContentLoaded', function () {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('preferred_date').setAttribute('min', today);
+            const dateField = document.getElementById('preferred_date');
+            if (dateField) {
+                const today = new Date().toISOString().split('T')[0];
+                dateField.setAttribute('min', today);
+            }
         });
     </script>
 </div>

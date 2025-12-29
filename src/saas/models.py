@@ -1,11 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from subscriptions.models import Subscription
 
 User = get_user_model()
 
-from django.db import models
-
-# Optional: use choices for cleaner data and better UI
 COMPANY_SIZE_CHOICES = [
     ("1-10", "1-10"),
     ("11-50", "11-50"),
@@ -103,6 +101,10 @@ class Feature(models.Model):
 class Organization(models.Model):
     name = models.CharField(max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    subscription = models.ForeignKey(
+        Subscription, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    stripe_customer_id = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 

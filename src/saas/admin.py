@@ -1,12 +1,14 @@
 from django.contrib import admin
-from saas.models import *
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import *
 from django.utils import timezone
+from django.contrib import admin
+from django.utils.timezone import now
+from datetime import timedelta
 
-# importing request
-from django.http import request
+from .forms import *
+from .models import *
+from .analytics import get_usage
 
 
 @admin.register(TrialSignup)
@@ -171,3 +173,31 @@ class FeatureAdmin(admin.ModelAdmin):
     list_display = ("title", "active", "display_order")
     list_editable = ("active", "display_order")
     search_fields = ("title",)
+
+
+@admin.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ("name", "owner", "created_at")
+    search_fields = ("name", "owner__username")
+
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ("type", "org", "created_at")
+    list_filter = ("type", "created_at")
+    search_fields = ("type", "org__name")
+
+
+@admin.register(Usage)
+class UsageAdmin(admin.ModelAdmin):
+    list_display = ("user", "api_calls", "storage_mb", "revenue", "updated_at")
+
+
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ("org", "user", "role")
+
+
+@admin.register(Automation)
+class AutomationAdmin(admin.ModelAdmin):
+    list_display = ("org", "name", "trigger", "enabled")

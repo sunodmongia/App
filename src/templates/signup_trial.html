@@ -6,26 +6,166 @@
 <title>Start Your Free Trial - SaaSApp</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-    .gradient-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* ========================
+   DESIGN SYSTEM
+======================== */
+    :root {
+        --brand: #6366f1;
+        --brand2: #8b5cf6;
+        --bg: #f4f6fb;
+        --card: #ffffff;
+        --text: #0f172a;
+        --muted: #64748b;
+
+        --radius: 14px;
+
+        --shadow-sm: 0 4px 12px rgba(0, 0, 0, .04);
+        --shadow-md: 0 12px 30px rgba(0, 0, 0, .08);
+        --shadow-lg: 0 30px 80px rgba(0, 0, 0, .12);
     }
 
+    /* ========================
+   BASE
+======================== */
+    body {
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================
+   HERO
+======================== */
+    .gradient-bg {
+        background:
+            radial-gradient(circle at top right, rgba(255, 255, 255, .15), transparent 40%),
+            linear-gradient(135deg, var(--brand), var(--brand2));
+    }
+
+    /* ========================
+   CARDS
+======================== */
+    .bg-white {
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(0, 0, 0, .04);
+        transition: all .35s ease;
+    }
+
+    .bg-white:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* ========================
+   FORM
+======================== */
+    input,
+    select,
+    textarea {
+        width: 100%;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 0.95rem;
+        transition: all .25s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        background: #fff;
+        border-color: var(--brand);
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, .2);
+    }
+
+    /* ========================
+   PRIMARY BUTTON
+======================== */
+    button,
+    a.bg-black {
+        background: linear-gradient(135deg, var(--brand), var(--brand2));
+        color: white !important;
+        border-radius: 12px;
+        box-shadow: 0 16px 40px rgba(99, 102, 241, .45);
+        letter-spacing: .3px;
+        transition: all .3s ease;
+    }
+
+    button:hover,
+    a.bg-black:hover {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 24px 60px rgba(99, 102, 241, .6);
+    }
+
+
+    /* ========================
+   STEP CARDS
+======================== */
     .step-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px;
+        background: white;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid rgba(0, 0, 0, .04);
+        transition: all .3s ease;
     }
 
     .step-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
     }
 
-    .form-input {
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    /* ========================
+   TESTIMONIAL
+======================== */
+    blockquote {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        position: relative;
+        padding-left: 22px;
     }
 
-    .form-input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    blockquote::before {
+        content: "“";
+        position: absolute;
+        left: 0;
+        top: -14px;
+        font-size: 3.5rem;
+        color: var(--brand);
+        opacity: .25;
+    }
+
+    /* ========================
+   SOCIAL PROOF LOGOS
+======================== */
+    .bg-gray-100 {
+        background: white;
+        border-radius: 10px;
+        box-shadow: var(--shadow-sm);
+        transition: all .25s ease;
+    }
+
+    .bg-gray-100:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* ========================
+   FOOTER
+======================== */
+    footer {
+        background: linear-gradient(180deg, #020617, #020617);
+    }
+
+    footer a {
+        transition: color .25s ease;
+    }
+
+    footer a:hover {
+        color: var(--brand);
     }
 </style>
 </head>

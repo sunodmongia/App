@@ -1,138 +1,121 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="flex min-h-screen bg-gray-100">
+<div class="p-6 bg-gray-100">
 
-<!-- Sidebar -->
-<aside class="w-64 bg-white border-r hidden md:flex flex-col">
-  <div class="p-6 text-2xl font-bold">WiRE</div>
-  <nav class="flex-1 space-y-1 px-4 text-sm">
-    <a class="block px-4 py-2 bg-gray-100 rounded font-semibold">Dashboard</a>
-    <a class="block px-4 py-2 hover:bg-gray-50">Usage</a>
-    <a class="block px-4 py-2 hover:bg-gray-50">Team</a>
-    <a class="block px-4 py-2 hover:bg-gray-50">Billing</a>
-    <a class="block px-4 py-2 hover:bg-gray-50">API Keys</a>
-    <a class="block px-4 py-2 hover:bg-gray-50">Logs</a>
-  </nav>
-</aside>
+<h1 class="text-3xl font-bold mb-4">SaaS Control Panel</h1>
 
-<!-- Main -->
-<main class="flex-1">
+<!-- DATE FILTER -->
+<form method="get" class="flex gap-3 mb-6">
+    <select name="days" class="border px-3 py-2 rounded">
+        <option value="7"  {% if days == 7 %}selected{% endif %}>Last 7 days</option>
+        <option value="30" {% if days == 30 %}selected{% endif %}>Last 30 days</option>
+        <option value="90" {% if days == 90 %}selected{% endif %}>Last 90 days</option>
+        <option value="365" {% if days == 365 %}selected{% endif %}>Last 1 year</option>
+    </select>
+    <button class="bg-black text-white px-4 py-2 rounded">Apply</button>
+</form>
 
-<!-- Top Bar -->
-<div class="flex justify-between items-center px-8 py-4 bg-white border-b">
-  <div>
-    <h1 class="text-xl font-semibold">Dashboard</h1>
-    <p class="text-sm text-gray-500">Live usage for your organization</p>
-  </div>
-  <div class="flex items-center gap-4">
-    <span class="px-3 py-1 text-xs bg-black text-white rounded">Pro Plan</span>
-    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">
-      {{ request.user.username|slice:":1"|upper }}
+<!-- KPI GRID -->
+<div class="grid grid-cols-6 gap-4 mb-8">
+
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-gray-500">Active Orgs</p>
+        <p class="text-2xl font-bold">{{ active_orgs }}</p>
     </div>
-  </div>
+
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-gray-500">Revenue</p>
+        <p class="text-2xl font-bold">₹{{ total_revenue }}</p>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-gray-500">API Calls</p>
+        <p class="text-2xl font-bold">{{ total_api }}</p>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-gray-500">Automations</p>
+        <p class="text-2xl font-bold">{{ total_automations }}</p>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-gray-500">Reports</p>
+        <p class="text-2xl font-bold">{{ total_reports }}</p>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-gray-500">Storage (MB)</p>
+        <p class="text-2xl font-bold">{{ total_storage }}</p>
+    </div>
+
 </div>
 
-<!-- KPIs -->
-<div class="p-8 grid grid-cols-1 md:grid-cols-4 gap-6">
-  <div class="bg-white p-6 rounded-xl border shadow-sm">
-    <p class="text-sm text-gray-500">Revenue</p>
-    <p class="text-3xl font-bold mt-2">₹ <span id="revenue">0</span></p>
-    <p class="text-xs text-green-600 mt-1">Live</p>
-  </div>
-
-  <div class="bg-white p-6 rounded-xl border shadow-sm">
-    <p class="text-sm text-gray-500">Active Users</p>
-    <p class="text-3xl font-bold mt-2" id="users">0</p>
-    <p class="text-xs text-blue-600 mt-1">Online</p>
-  </div>
-
-  <div class="bg-white p-6 rounded-xl border shadow-sm">
-    <p class="text-sm text-gray-500">API Requests</p>
-    <p class="text-3xl font-bold mt-2" id="api">0</p>
-    <p class="text-xs text-purple-600 mt-1">This month</p>
-  </div>
-
-  <div class="bg-white p-6 rounded-xl border shadow-sm">
-    <p class="text-sm text-gray-500">Storage</p>
-    <p class="text-3xl font-bold mt-2"><span id="storage">0</span> GB</p>
-    <p class="text-xs text-orange-600 mt-1">Used</p>
-  </div>
+<!-- TOP ORGS -->
+<div class="bg-white p-6 rounded shadow mb-8">
+    <h2 class="text-xl font-bold mb-4">Top Organizations</h2>
+    <table class="w-full text-left">
+        <tr class="border-b">
+            <th>Org</th>
+            <th>Revenue</th>
+            <th>API Calls</th>
+            <th>Team</th>
+            <th>Automations</th>
+        </tr>
+        {% for org in top_orgs %}
+        <tr class="border-b">
+            <td>{{ org.name }}</td>
+            <td>₹{{ org.revenue|default:"0" }}</td>
+            <td>{{ org.api_calls|default:"0" }}</td>
+            <td>{{ org.team_size }}</td>
+            <td>{{ org.automations }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 
-<!-- Charts -->
-<div class="px-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-  <div class="bg-white p-6 rounded-xl border shadow-sm">
-    <h3 class="font-semibold mb-4">API Traffic</h3>
-    <canvas id="apiChart" height="120"></canvas>
-  </div>
-
-  <div class="bg-white p-6 rounded-xl border shadow-sm">
-    <h3 class="font-semibold mb-4">Revenue</h3>
-    <canvas id="revenueChart" height="120"></canvas>
-  </div>
+<!-- EVENTS -->
+<div class="bg-white p-6 rounded shadow mb-8">
+    <h2 class="text-xl font-bold mb-4">Events (Last {{ days }} Days)</h2>
+    <table class="w-full">
+        <tr><th>Type</th><th>Count</th></tr>
+        {% for e in events %}
+        <tr>
+            <td>{{ e.type }}</td>
+            <td>{{ e.count }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 
-<!-- Activity -->
-<div class="px-8 mt-8">
-  <div class="bg-white p-6 rounded-xl border shadow-sm">
-    <h3 class="font-semibold mb-4">Live Activity</h3>
-    <ul id="activity" class="space-y-3 text-sm"></ul>
-  </div>
+<!-- AUTOMATION HEALTH -->
+<div class="bg-white p-6 rounded shadow mb-8">
+    <h2 class="text-xl font-bold mb-4">Automation Health</h2>
+    <table class="w-full">
+        <tr><th>Org</th><th>Total</th><th>Enabled</th></tr>
+        {% for a in automation_stats %}
+        <tr>
+            <td>{{ a.org__name }}</td>
+            <td>{{ a.total }}</td>
+            <td>{{ a.enabled }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 
-</main>
+<!-- INACTIVE ORGS (CHURN RISK) -->
+<div class="bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-bold mb-4 text-red-600">Inactive Organizations</h2>
+    <table class="w-full">
+        <tr><th>Org</th><th>Last Activity</th></tr>
+        {% for org in inactive_orgs %}
+        <tr>
+            <td>{{ org.name }}</td>
+            <td>{{ org.last_event|date:"Y-m-d" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 
-<script>
-const ws = new WebSocket(
-  (location.protocol === "https:" ? "wss://" : "ws://") +
-  location.host + "/ws/dashboard/"
-);
-
-ws.onopen = () => {
-  console.log("Live dashboard connected");
-};
-
-ws.onmessage = (e) => {
-  const data = JSON.parse(e.data);
-  updateDashboard(data);
-};
-
-ws.onclose = () => {
-  console.log("Dashboard disconnected");
-};
-
-function updateDashboard(data) {
-  if (data.api_calls !== undefined)
-      document.getElementById("api_calls").innerText = data.api_calls;
-
-  if (data.users !== undefined)
-      document.getElementById("users").innerText = data.users;
-
-  if (data.storage !== undefined)
-      document.getElementById("storage").innerText = data.storage;
-
-  if (data.revenue !== undefined)
-      document.getElementById("revenue").innerText = "₹" + data.revenue.toLocaleString();
-
-  if (data.event) {
-    const li = document.createElement("li");
-    li.className = "text-sm text-gray-700";
-    li.innerText = "• " + data.event;
-
-    const feed = document.getElementById("activity_feed");
-    feed.prepend(li);
-
-    // Keep only last 20 events
-    while (feed.children.length > 20) {
-      feed.removeChild(feed.lastChild);
-    }
-  }
-}
-</script>
-
-
+</div>
 {% endblock %}

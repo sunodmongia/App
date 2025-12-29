@@ -24,3 +24,9 @@ class Subscription(models.Model):
 
     class Meta:
         permissions = SUBSCRIPTION_PERMISSIONS
+
+class PlanLimit(models.Model):
+    subscription = models.OneToOneField(Subscription, on_delete=models.CASCADE)
+    api_calls = models.IntegerField()
+    storage_mb = models.IntegerField()
+    automations = models.IntegerField()

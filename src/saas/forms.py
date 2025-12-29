@@ -4,66 +4,45 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit, Div
 
 
-class TrialSignupForm(forms.ModelForm):
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"placeholder": "Create a strong password"}),
-        help_text="Minimum 8 characters with letters and numbers",
-    )
+# ------------------------
+# Shared Tailwind styles
+# ------------------------
+BASE_INPUT = (
+    "w-full px-4 py-3 rounded-lg border border-gray-300 "
+    "focus:outline-none focus:ring-2 focus:ring-indigo-500 "
+    "focus:border-indigo-500 transition"
+)
+CHECKBOX = "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+TEXTAREA = f"{BASE_INPUT} resize-none"
 
+
+# ------------------------
+# Trial Signup Form
+# ------------------------
+class TrialSignupForm(forms.ModelForm):
     class Meta:
         model = TrialSignup
         fields = "__all__"
         widgets = {
             "first_name": forms.TextInput(
-                attrs={
-                    "placeholder": "Enter your First name",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "Enter your First name", "class": BASE_INPUT}
             ),
             "last_name": forms.TextInput(
-                attrs={
-                    "placeholder": "Enter your Last name",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "Enter your Last name", "class": BASE_INPUT}
             ),
             "email": forms.EmailInput(
-                attrs={
-                    "placeholder": "Enter your email address",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "Enter your email address", "class": BASE_INPUT}
             ),
             "company": forms.TextInput(
-                attrs={
-                    "placeholder": "Enter your company name",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "Enter your company name", "class": BASE_INPUT}
             ),
             "phone": forms.TextInput(
-                attrs={
-                    "placeholder": "+1 (555) 123-4567",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "+1 (555) 123-4567", "class": BASE_INPUT}
             ),
-            "company_size": forms.Select(
-                attrs={
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
-                }
-            ),
-            "industry": forms.Select(
-                attrs={
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
-                }
-            ),
-            "terms_accepted": forms.CheckboxInput(
-                attrs={
-                    "class": "h-4 w-4 text-black border border-black focus:ring-purple-500 rounded"
-                }
-            ),
-            "newsletter_opt_in": forms.CheckboxInput(
-                attrs={
-                    "class": "h-4 w-4 text-black border border-black focus:ring-purple-500 rounded"
-                }
-            ),
+            "company_size": forms.Select(attrs={"class": BASE_INPUT}),
+            "industry": forms.Select(attrs={"class": BASE_INPUT}),
+            "terms_accepted": forms.CheckboxInput(attrs={"class": CHECKBOX}),
+            "newsletter_opt_in": forms.CheckboxInput(attrs={"class": CHECKBOX}),
         }
         labels = {
             "terms_accepted": "I accept the terms and conditions",
@@ -71,73 +50,53 @@ class TrialSignupForm(forms.ModelForm):
         }
 
 
+# ------------------------
+# Demo Schedule Call Form
+# ------------------------
 class DemoScheduleCallForm(forms.ModelForm):
     class Meta:
         model = DemoSchedule
         fields = "__all__"
         widgets = {
             "first_name": forms.TextInput(
-                attrs={
-                    "placeholder": "John",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "John", "class": BASE_INPUT}
             ),
             "last_name": forms.TextInput(
-                attrs={
-                    "placeholder": "Doe",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "Doe", "class": BASE_INPUT}
             ),
             "email": forms.EmailInput(
-                attrs={
-                    "placeholder": "john@company.com",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "john@company.com", "class": BASE_INPUT}
             ),
             "phone": forms.TextInput(
-                attrs={
-                    "placeholder": "+1 (555) 123-4567",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "+1 (555) 123-4567", "class": BASE_INPUT}
             ),
             "company": forms.TextInput(
-                attrs={
-                    "placeholder": "Your Company Inc.",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "Your Company Inc.", "class": BASE_INPUT}
             ),
             "job_title": forms.TextInput(
                 attrs={
                     "placeholder": "CEO, Marketing Manager, etc.",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
+                    "class": BASE_INPUT,
                 }
             ),
-            "company_size": forms.Select(
-                attrs={
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
-                }
-            ),
+            "company_size": forms.Select(attrs={"class": BASE_INPUT}),
             "preferred_date": forms.DateInput(
-                attrs={
-                    "type": "date",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"type": "date", "class": BASE_INPUT}
             ),
-            "time_slot": forms.Select(
-                attrs={
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
-                }
-            ),
+            "time_slot": forms.Select(attrs={"class": BASE_INPUT}),
             "use_case": forms.Textarea(
                 attrs={
                     "rows": 4,
                     "placeholder": "Tell us about your specific use case…",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none resize-none",
+                    "class": TEXTAREA,
                 }
             ),
         }
 
 
+# ------------------------
+# Contact Form
+# ------------------------
 class ContactForm(forms.ModelForm):
     class Meta:
         model = ContactMessage
@@ -145,44 +104,35 @@ class ContactForm(forms.ModelForm):
         exclude = ["created_at"]
         widgets = {
             "name": forms.TextInput(
-                attrs={
-                    "placeholder": "Your name",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "Your name", "class": BASE_INPUT}
             ),
             "email": forms.EmailInput(
-                attrs={
-                    "placeholder": "you@example.com",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "you@example.com", "class": BASE_INPUT}
             ),
             "subject": forms.TextInput(
-                attrs={
-                    "placeholder": "Subject",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none",
-                }
+                attrs={"placeholder": "Subject", "class": BASE_INPUT}
             ),
             "message": forms.Textarea(
-                attrs={
-                    "rows": 6,
-                    "placeholder": "Your message...",
-                    "class": "form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none resize-none",
-                }
+                attrs={"rows": 6, "placeholder": "Your message...", "class": TEXTAREA}
             ),
         }
 
 
+# ------------------------
+# Admin Reply Form
+# ------------------------
 class ContactMessageAdminForm(forms.ModelForm):
     custom_email_subject = forms.CharField(
         required=False,
         label="Custom Email Subject",
-        widget=forms.TextInput(attrs={"class": "vTextField", "size": "80"}),
+        widget=forms.TextInput(attrs={"class": "vTextField w-full", "size": "80"}),
     )
+
     custom_email_message = forms.CharField(
         required=False,
         label="Custom Email Message",
         widget=forms.Textarea(
-            attrs={"class": "vLargeTextField", "rows": 8, "cols": 80}
+            attrs={"class": "vLargeTextField w-full", "rows": 8, "cols": 80}
         ),
     )
 

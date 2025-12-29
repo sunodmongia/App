@@ -9,13 +9,18 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.conf import settings
+from django.shortcuts import render
+from django.utils.timezone import now
+from datetime import timedelta
+from django.db.models import Sum, Count, Q
+from django.http import JsonResponse
+from django.db.models.functions import Cast
+from django.db.models import FloatField
 
-
-from saas.forms import *
-from saas.models import *
-from .tracking import record_api_call
+from .models import *
+from .forms import *
 from .consumers import *
-
+from saas.events import log_event
 
 
 class HomeView(TemplateView):
@@ -42,12 +47,10 @@ class StartTrialView(LoginRequiredMixin, FormView):
     success_url = reverse_lazy("pricing")
 
     def form_valid(self, form):
-        # Hash and save password
-        instance = form.save(commit=False)
-        raw_password = form.cleaned_data["password"]
-        instance.password_hash = make_password(raw_password)
-        instance.save()
+        instance = form.save()
+
         messages.success(self.request, "Your free trial signup has been saved.")
+
         send_mail(
             subject="Your Free Trial Has Started",
             message=(
@@ -60,6 +63,7 @@ class StartTrialView(LoginRequiredMixin, FormView):
             recipient_list=[instance.email],
             fail_silently=False,
         )
+
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -176,7 +180,6 @@ class TermsAndConditionsView(TemplateView):
         return context
 
 
-
 class FeaturesView(TemplateView):
     template_name = "features.html"
 
@@ -184,44 +187,70 @@ class FeaturesView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["features"] = Feature.objects.filter(active=True)
         return context
-    
+
 
 class CustomerAPI(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        org = request.user.organization
-
-        # Enforce plan limits
-        usage = Usage.objects.get(org=org)
-
-        if usage.api_calls >= org.plan.api_limit:
-            return Response(
-                {"error": "API limit exceeded. Upgrade your plan."},
-                status=402
-            )
-
         prompt = request.data.get("prompt")
-
-        # This is where you call AI / RAG / etc
         result = f"processed {prompt}"
+        return Response({"result": result})
 
-        # Track usage AFTER successful execution
-        record_api_call(org)
 
-        return Response({
-            "result": result,
-            "remaining": org.plan.api_limit - usage.api_calls
-        })
+class DashboardView(TemplateView):
+    template_name = "dashboard.html"
 
-def api_endpoint(request):
-    usage = Usage.objects.get(user=request.user)
-    usage.api_calls += 1
-    usage.revenue += 0.01  # ₹ per call
-    usage.save()
+    def get_days(self):
+        try:
+            days = int(self.request.GET.get("days", 30))
+            return max(1, min(days, 365))
+        except:
+            return 30
 
-    broadcast(request.user, {
-        "api_calls": usage.api_calls,
-        "revenue": usage.revenue,
-        "event": "API call"
-    })
+    def get_queryset_scope(self):
+        user = self.request.user
+
+        if user.is_staff or user.is_superuser:
+            return Organization.objects.all()
+
+        # Normal user → only their org
+        return Organization.objects.filter(owner=user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        days = self.get_days()
+        start_date = now() - timedelta(days=days)
+
+        orgs = self.get_queryset_scope()
+
+        context["active_orgs"] = (
+            orgs.filter(event__created_at__gte=start_date).distinct().count()
+        )
+
+        context["total_orgs"] = orgs.count()
+
+        context["events"] = (
+            Event.objects.filter(org__in=orgs, created_at__gte=start_date)
+            .values("type")
+            .annotate(count=Count("id"))
+        )
+
+        context["top_orgs"] = orgs.annotate(
+            revenue=Sum(
+                Cast("event__data__amount", FloatField()),
+                filter=Q(event__type="revenue"),
+            ),
+            api_calls=Count("event", filter=Q(event__type="api_call")),
+            team_size=Count("teammember"),
+            automations=Count("automation"),
+        ).order_by("-revenue")
+
+        return context
+
+
+def some_api_view(request):
+    org = request.user.organization
+    log_event(org, "api_call")
+
+    return JsonResponse({"ok": True})
