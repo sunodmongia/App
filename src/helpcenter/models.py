@@ -1,5 +1,5 @@
 from django.db import models
-
+from .real_view_count import get_cached_views
 
 class QuickStartStep(models.Model):
     number = models.PositiveIntegerField()
@@ -59,6 +59,12 @@ class Tutorial(models.Model):
     gradient_from = models.CharField(max_length=20, default="blue-400")
     gradient_to = models.CharField(max_length=20, default="purple-500")
     order = models.PositiveIntegerField(default=0)
+    
+    @property
+    def youtube_views(self):
+        if not self.youtube_id:
+            return None
+        return get_cached_views(self.youtube_id)
 
     class Meta:
         ordering = ["order"]
