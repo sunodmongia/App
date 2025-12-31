@@ -3,13 +3,10 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib import admin
-from django.utils.timezone import now
-from datetime import timedelta
+
 
 from .forms import *
 from .models import *
-from .analytics import get_usage
-
 
 @admin.register(TrialSignup)
 class TrialSignupAdmin(admin.ModelAdmin):
