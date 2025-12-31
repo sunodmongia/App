@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import *
+from .real_view_count import get_cached_views
+
 
 @admin.register(QuickStartStep)
 class QuickStartStepAdmin(admin.ModelAdmin):
@@ -21,8 +23,15 @@ class FAQSectionAdmin(admin.ModelAdmin):
 
 @admin.register(Tutorial)
 class TutorialAdmin(admin.ModelAdmin):
-    list_display = ("title", "duration", "views", "order")
+    list_display = ("title", "duration", "youtube_views", "order")
     list_editable = ("order",)
+
+    def youtube_views(self, obj):
+        if not obj.youtube_views:
+            return "-"
+        return get_cached_views(obj.youtube_views)
+
+    youtube_views.short_description = "Views"
 
 
 @admin.register(SupportCard)

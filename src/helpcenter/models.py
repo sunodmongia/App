@@ -53,7 +53,7 @@ class FAQItem(models.Model):
 class Tutorial(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    youtube_url = models.URLField()
+    youtube_url = models.URLField(blank=True)
     youtube_id = models.CharField(max_length=20, blank=True)
     duration = models.CharField(max_length=20)
     gradient_from = models.CharField(max_length=20, default="blue-400")
