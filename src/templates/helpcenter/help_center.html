@@ -48,40 +48,30 @@
 <div class="bg-gray-50 min-h-screen overflow-x-hidden text-gray-900">
 
     <!-- HEADER -->
-    <section class="pt-24 pb-20 gradient-bg">
+    <section class="pt-20 pb-16 gradient-bg">
         <div class="max-w-5xl mx-auto px-4 text-center">
 
+            <!-- Icon -->
             <div class="flex justify-center mb-8">
-                <div class="w-20 h-20 bg-white/70 rounded-3xl flex items-center justify-center shadow-lg">
-                    <svg class="w-10 h-10 text-gray-800" fill="none" stroke="currentColor">
+                <div class="w-20 h-20 bg-white/80 backdrop-blur rounded-2xl flex items-center justify-center shadow-lg">
+                    <svg class="w-10 h-10 text-gray-900" fill="none" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                 </div>
             </div>
 
-            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+            <!-- Title -->
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
                 Project Management Help Center
             </h1>
 
+            <!-- Subtitle -->
             <p class="text-lg md:text-xl text-gray-800 mb-10 max-w-2xl mx-auto leading-relaxed">
                 Learn how to build, organize, and manage your SaaS projects effectively.
             </p>
-
-            <!-- SEARCH BOX -->
-            <div class="relative max-w-xl mx-auto">
-                <input id="search-input"
-                    class="w-full px-6 py-4 pr-14 bg-white rounded-2xl shadow-xl text-gray-900 text-lg focus:ring-4 focus:ring-indigo-200"
-                    placeholder="Search tutorials, FAQs, guides...">
-                <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-700" fill="none"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0a7 7 0 0114 0z"></path>
-                </svg>
-            </div>
-
-        </div>
     </section>
+
 
     <!-- QUICK START GUIDE -->
     <section class="bg-white py-24">
@@ -111,34 +101,41 @@
     </section>
 
     <!-- FAQ SECTIONS -->
-    <section class="py-20 bg-white">
-        <div class="max-w-6xl mx-auto px-4">
+    <section class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
 
             {% for section in sections %}
-            <div id="{{ section.title|slugify }}" class="mb-auto">
+            <div id="{{ section.title|slugify }}" class="mb-20">
 
                 <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-10 flex items-center gap-3">
-                    <span>{{ section.icon }}</span> {{ section.title }}
+                    <span class="text-2xl">{{ section.icon }}</span>
+                    <span>{{ section.title }}</span>
                 </h2>
 
-                <div class="space-y-6">
-                    {% for faq in section.faqs.all %}
-                    <div class="faq-item border border-gray-300 rounded-3xl shadow-sm bg-white">
+                <div class="space-y-5">
 
-                        <button class="faq-question w-full px-8 py-6 flex justify-between items-center text-left">
-                            <span class="font-semibold text-lg text-gray-900">{{ faq.question }}</span>
-                            <svg class="w-6 h-6 text-gray-700 accordion-icon" fill="none" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    {% for faq in section.faqs.all %}
+                    <div class="border border-gray-200 rounded-xl bg-white shadow-sm">
+
+                        <button
+                            class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left font-medium text-gray-900 hover:bg-gray-50 transition">
+
+                            <span class="text-lg">{{ faq.question }}</span>
+
+                            <svg class="w-5 h-5 transform transition-transform text-gray-500" fill="none"
+                                stroke="currentColor">
+                                <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                     d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
 
-                        <div class="faq-content px-8 pb-6">
-                            <p class="text-gray-700 leading-relaxed">{{ faq.answer|safe }}</p>
+                        <div class="faq-body hidden px-6 pb-6 text-gray-700 leading-relaxed">
+                            {{ faq.answer|safe }}
                         </div>
 
                     </div>
                     {% endfor %}
+
                 </div>
 
             </div>
@@ -147,6 +144,8 @@
         </div>
     </section>
 
+
+    <!-- Video TUTORIAL -->
     <section class="py-20 bg-white border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-6">
 
@@ -213,40 +212,59 @@
     </section>
 
 
-
     <!-- SUPPORT CARDS -->
-    <section class="py-24 bg-gray-100 text-gray-900">
+    <section class="py-20 bg-gray-100 text-gray-900">
         <div class="max-w-5xl mx-auto px-4 text-center">
 
-            <h2 class="text-3xl md:text-4xl font-extrabold mb-6">Need More Help?</h2>
-            <p class="text-lg text-gray-700 mb-16">Our support experts are always available.</p>
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Need More Help?</h2>
+            <p class="text-lg text-gray-700 mb-12">
+                Our support experts are always available.
+            </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
                 {% for card in support_cards %}
-                <div class="bg-white p-10 rounded-3xl border border-gray-300 shadow-sm hover:shadow-xl transition">
+                <div
+                    class="bg-white p-8 rounded-3xl border border-gray-300 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
 
+                    <!-- Icon -->
                     <div
-                        class="w-16 h-16 bg-{{ card.icon_color }}/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-{{ card.icon_color }}" fill="none" stroke="currentColor">
-                            <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 
-                                    4.03-8 9-8s9 3.582 9 8z" />
+                        class="w-16 h-16 {{ card.icon_class }} rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        {% if card.icon == "chat" %}
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                         </svg>
+
+                        {% elif card.icon == "email" %}
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18V8H3v8z" />
+                        </svg>
+
+                        {% elif card.icon == "docs" %}
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 7h10M7 11h10M7 15h6M5 3h10l4 4v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                        </svg>
+                        {% endif %}
                     </div>
 
-                    <h3 class="text-xl font-bold mb-4">{{ card.title }}</h3>
-                    <p class="text-gray-700 mb-6 leading-relaxed">{{ card.description }}</p>
+                    <!-- Content -->
+                    <h3 class="text-xl font-bold mb-3">{{ card.title }}</h3>
+                    <p class="text-gray-700 mb-6 leading-relaxed">
+                        {{ card.description }}
+                    </p>
 
+                    <!-- Button -->
                     {% if card.url %}
-                    <a href="{{ card.url }}">
-                        <button
-                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold">
-                            {{ card.button_text }}
-                        </button>
+                    <a href="{{ card.url }}"
+                        class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold text-center transition">
+                        {{ card.button_text }}
                     </a>
                     {% else %}
                     <button
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold">
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition">
                         {{ card.button_text }}
                     </button>
                     {% endif %}
@@ -255,30 +273,22 @@
                 {% endfor %}
 
             </div>
-
         </div>
     </section>
 
-</div>
 
-<!-- FAQ Script -->
-<script>
-    document.querySelectorAll('.faq-question').forEach(q => {
-        q.addEventListener('click', () => {
-            const item = q.parentElement;
-            const icon = q.querySelector('svg');
+    <!-- FAQ Script -->
+    <script>
+        document.querySelectorAll(".faq-toggle").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const body = btn.nextElementSibling;
+                const icon = btn.querySelector("svg");
 
-            document.querySelectorAll('.faq-item').forEach(i => {
-                if (i !== item) {
-                    i.classList.remove('active');
-                    i.querySelector('svg').style.transform = 'rotate(0deg)';
-                }
+                body.classList.toggle("hidden");
+                icon.classList.toggle("rotate-180");
             });
-
-            item.classList.toggle('active');
-            icon.style.transform = item.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
         });
-    });
-</script>
 
-{% endblock %}
+    </script>
+
+    {% endblock %}
