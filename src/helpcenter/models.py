@@ -1,5 +1,6 @@
 from django.db import models
-from .real_view_count import get_cached_views
+from .real_view_count import *
+
 
 class QuickStartStep(models.Model):
     number = models.PositiveIntegerField()
@@ -51,20 +52,38 @@ class FAQItem(models.Model):
 # 3. Video Tutorials
 # -------------------------
 class Tutorial(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
     youtube_url = models.URLField(blank=True)
     youtube_id = models.CharField(max_length=20, blank=True)
-    duration = models.CharField(max_length=20)
-    gradient_from = models.CharField(max_length=20, default="blue-400")
-    gradient_to = models.CharField(max_length=20, default="purple-500")
+    # Optional override
+    title = models.CharField(max_length=200, blank=True)
+
+    description = models.TextField(blank=True)
     order = models.PositiveIntegerField(default=0)
-    
+
     @property
-    def youtube_views(self):
+    def youtube_data(self):
         if not self.youtube_id:
             return None
-        return get_cached_views(self.youtube_id)
+        return get_cached_youtube_data(self.youtube_id)
+
+    @property
+    def display_title(self):
+        if self.title:
+            return self.title
+        if self.youtube_data:
+            return self.youtube_data["title"]
+        return "Untitled"
+    @property
+    def display_views(self):
+        return self.youtube_data["views"] if self.youtube_data else None
+
+    @property
+    def display_thumbnail(self):
+        return self.youtube_data["thumbnail"] if self.youtube_data else None
+
+    @property
+    def display_duration(self):
+        return self.youtube_data["duration"] if self.youtube_data else None
 
     class Meta:
         ordering = ["order"]

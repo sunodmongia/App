@@ -6,14 +6,43 @@
 {% block content %}
 
 <style>
-    .faq-item { transition: all 0.3s ease; border-radius: 1.25rem; background: #fff; }
-    .faq-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
-    .faq-item.active .faq-content { max-height: 1000px; padding-top: 1.2rem; padding-bottom: 1.2rem; }
-    .faq-item:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
-    .accordion-icon { transition: transform 0.3s ease; }
-    .faq-item.active .accordion-icon { transform: rotate(180deg); }
-    html { scroll-behavior: smooth; }
-    .gradient-bg { background: linear-gradient(145deg, #e3e6ff, #d1c4ff); }
+    .faq-item {
+        transition: all 0.3s ease;
+        border-radius: 1.25rem;
+        background: #fff;
+    }
+
+    .faq-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+
+    .faq-item.active .faq-content {
+        max-height: 1000px;
+        padding-top: 1.2rem;
+        padding-bottom: 1.2rem;
+    }
+
+    .faq-item:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .accordion-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .accordion-icon {
+        transform: rotate(180deg);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .gradient-bg {
+        background: linear-gradient(145deg, #e3e6ff, #d1c4ff);
+    }
 </style>
 
 <div class="bg-gray-50 min-h-screen overflow-x-hidden text-gray-900">
@@ -26,7 +55,7 @@
                 <div class="w-20 h-20 bg-white/70 rounded-3xl flex items-center justify-center shadow-lg">
                     <svg class="w-10 h-10 text-gray-800" fill="none" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                 </div>
             </div>
@@ -42,11 +71,12 @@
             <!-- SEARCH BOX -->
             <div class="relative max-w-xl mx-auto">
                 <input id="search-input"
-                       class="w-full px-6 py-4 pr-14 bg-white rounded-2xl shadow-xl text-gray-900 text-lg focus:ring-4 focus:ring-indigo-200"
-                       placeholder="Search tutorials, FAQs, guides...">
-                <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-700" fill="none" stroke="currentColor">
+                    class="w-full px-6 py-4 pr-14 bg-white rounded-2xl shadow-xl text-gray-900 text-lg focus:ring-4 focus:ring-indigo-200"
+                    placeholder="Search tutorials, FAQs, guides...">
+                <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-700" fill="none"
+                    stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0a7 7 0 0114 0z"></path>
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0a7 7 0 0114 0z"></path>
                 </svg>
             </div>
 
@@ -63,9 +93,11 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
                 {% for step in steps %}
-                <div class="p-8 bg-white border border-gray-200 rounded-3xl shadow-md hover:shadow-xl transition hover:-translate-y-1">
+                <div
+                    class="p-8 bg-white border border-gray-200 rounded-3xl shadow-md hover:shadow-xl transition hover:-translate-y-1">
                     <div class="flex justify-center mb-6">
-                        <div class="w-16 h-16 rounded-3xl bg-{{ step.color }} flex items-center justify-center text-white text-2xl font-extrabold">
+                        <div
+                            class="w-16 h-16 rounded-3xl bg-{{ step.color }} flex items-center justify-center text-white text-2xl font-extrabold">
                             {{ step.number }}
                         </div>
                     </div>
@@ -115,43 +147,72 @@
         </div>
     </section>
 
-    <!-- VIDEO TUTORIALS -->
-    <section class="py-10 bg-white border-t border-gray-200">
-        <div class="max-w-6xl mx-auto px-4">
+    <section class="py-20 bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-6">
 
-            <div class="text-center mb-auto">
+            <div class="text-center mb-14">
                 <h2 class="text-4xl font-extrabold text-gray-900 mb-4">🎥 Video Tutorials</h2>
-                <p class="text-lg text-gray-700">Learn visually with detailed walkthrough videos.</p>
+                <p class="text-lg text-gray-600">Learn visually with step-by-step walkthroughs.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {% for t in tutorials %}
-                <div class="bg-white rounded-3xl border border-gray-300 shadow-md hover:shadow-xl transition">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
 
-                    <div class="h-48 bg-gradient-to-r from-{{ t.gradient_from }} to-{{ t.gradient_to }} rounded-t-3xl flex items-center justify-center relative">
-                        <svg class="w-16 h-16 text-white z-10" fill="currentColor">
-                            <path d="M8 5v14l11-7z"/>
+                {% for t in tutorials %}
+                <div
+                    class="group bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-xl transition overflow-hidden">
+
+                    <a href="{{ t.youtube_url }}" target="_blank" class="relative block h-48 overflow-hidden">
+
+                        {% if t.display_thumbnail %}
+                        <img src="{{ t.display_thumbnail }}"
+                            class="w-full h-full object-cover group-hover:scale-105 transition">
+                        {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600"></div>
+                        {% endif %}
+
+                        <div class="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition"></div>
+
+                        <svg class="absolute inset-0 m-auto w-16 h-16 text-white opacity-90 group-hover:scale-110 transition"
+                            fill="currentColor">
+                            <path d="M8 5v14l11-7z" />
                         </svg>
-                        <div class="absolute inset-0 bg-black/20 rounded-t-3xl"></div>
-                        <span class="absolute top-4 right-4 bg-black/50 text-white text-xs px-3 py-1 rounded-full">{{ t.duration }}</span>
-                    </div>
+
+                        {% if t.display_duration %}
+                        <span class="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-3 py-1 rounded">
+                            {{ t.display_duration }}
+                        </span>
+                        {% endif %}
+                    </a>
 
                     <div class="p-6">
-                        <h3 class="font-bold text-xl text-gray-900 mb-3">{{ t.title }}</h3>
-                        <p class="text-gray-700 text-sm leading-relaxed mb-5">{{ t.description }}</p>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">
+                            {{ t.display_title }}
+                        </h3>
 
-                        <div class="flex justify-between items-center">
-                            <button class="text-indigo-600 font-semibold hover:text-indigo-800 text-sm">Watch Tutorial</button>
-                            <span class="text-gray-500 text-xs">{{ t.views }} views</span>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-5">
+                            {{ t.description }}
+                        </p>
+
+                        <div class="flex items-center justify-between text-sm">
+                            <a href="{{ t.youtube_url }}" target="_blank"
+                                class="font-semibold text-indigo-600 hover:text-indigo-800 transition">
+                                Watch Tutorial →
+                            </a>
+
+                            <span class="text-gray-500">
+                                {{ t.display_views|default:"—" }} views
+                            </span>
                         </div>
                     </div>
 
                 </div>
                 {% endfor %}
-            </div>
 
+            </div>
         </div>
     </section>
+
+
 
     <!-- SUPPORT CARDS -->
     <section class="py-24 bg-gray-100 text-gray-900">
@@ -165,10 +226,11 @@
                 {% for card in support_cards %}
                 <div class="bg-white p-10 rounded-3xl border border-gray-300 shadow-sm hover:shadow-xl transition">
 
-                    <div class="w-16 h-16 bg-{{ card.icon_color }}/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <div
+                        class="w-16 h-16 bg-{{ card.icon_color }}/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <svg class="w-8 h-8 text-{{ card.icon_color }}" fill="none" stroke="currentColor">
                             <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 
-                                    4.03-8 9-8s9 3.582 9 8z"/>
+                                    4.03-8 9-8s9 3.582 9 8z" />
                         </svg>
                     </div>
 
@@ -177,12 +239,14 @@
 
                     {% if card.url %}
                     <a href="{{ card.url }}">
-                        <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold">
+                        <button
+                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold">
                             {{ card.button_text }}
                         </button>
                     </a>
                     {% else %}
-                    <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold">
+                    <button
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold">
                         {{ card.button_text }}
                     </button>
                     {% endif %}

@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from .models import QuickStartStep, FAQSection, Tutorial, SupportCard
-from .real_view_count import get_youtube_views
+from .real_view_count import *
 
 
 class HelpCenterView(TemplateView):
@@ -16,13 +16,10 @@ class HelpCenterView(TemplateView):
         context["support_cards"] = SupportCard.objects.all()
 
         return context
-
 def help_center(request):
     tutorials = Tutorial.objects.all().order_by("order")
 
-    for t in tutorials:
-        t.views = get_youtube_views(t.youtube_id)
-
-    return render(request, "help.html", {
+    return render(request, "helpcenter/help_center.html", {
         "tutorials": tutorials
     })
+

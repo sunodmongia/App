@@ -22,13 +22,25 @@ class FAQSectionAdmin(admin.ModelAdmin):
 
 @admin.register(Tutorial)
 class TutorialAdmin(admin.ModelAdmin):
-    list_display = ("title", "duration", "youtube_views", "order")
+    list_display = ("display_title", "display_duration", "display_views", "display_thumbnail", "order")
     list_editable = ("order",)
 
-    def youtube_views(self, obj):
-        return obj.youtube_views or "-"
+    def display_title(self, obj):
+        return obj.display_title
 
-    youtube_views.short_description = "Views"
+    def display_duration(self, obj):
+        return obj.display_duration or "-"
+
+    def display_views(self, obj):
+        return obj.display_views or "-"
+    
+    def display_thumbnail(self, obj):
+        return obj.display_thumbnail or "-"
+
+    display_title.short_description = "Title"
+    display_duration.short_description = "Duration"
+    display_views.short_description = "Views"
+    display_thumbnail.short_description = "Thumbnail"
 
 
 @admin.register(SupportCard)
