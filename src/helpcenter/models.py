@@ -5,7 +5,9 @@ class QuickStartStep(models.Model):
     number = models.PositiveIntegerField()
     title = models.CharField(max_length=200)
     description = models.TextField()
-    color = models.CharField(max_length=50, help_text="Tailwind color name, e.g., blue, pink, green")
+    color = models.CharField(
+        max_length=50, help_text="Tailwind color name, e.g., blue, pink, green"
+    )
     order = models.PositiveIntegerField(default=0)
 
     class Meta:
@@ -31,7 +33,9 @@ class FAQSection(models.Model):
 
 
 class FAQItem(models.Model):
-    section = models.ForeignKey(FAQSection, on_delete=models.CASCADE, related_name="faqs")
+    section = models.ForeignKey(
+        FAQSection, on_delete=models.CASCADE, related_name="faqs"
+    )
     question = models.CharField(max_length=300)
     answer = models.TextField()
     order = models.PositiveIntegerField(default=0)
@@ -49,10 +53,11 @@ class FAQItem(models.Model):
 class Tutorial(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
+    youtube_url = models.URLField()
+    youtube_id = models.CharField(max_length=20, blank=True)
     duration = models.CharField(max_length=20)
     gradient_from = models.CharField(max_length=20, default="blue-400")
     gradient_to = models.CharField(max_length=20, default="purple-500")
-    views = models.PositiveIntegerField(default=0)
     order = models.PositiveIntegerField(default=0)
 
     class Meta:
