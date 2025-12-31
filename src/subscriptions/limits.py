@@ -1,6 +1,5 @@
 from django.utils.timezone import now
 from datetime import timedelta
-from django.db.models import Count, Q
 from saas.models import Event
 
 def api_calls_last_30_days(org):
