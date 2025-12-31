@@ -8,6 +8,7 @@ from django.contrib import admin
 from .forms import *
 from .models import *
 
+
 @admin.register(TrialSignup)
 class TrialSignupAdmin(admin.ModelAdmin):
     list_display = ("first_name", "last_name", "email", "company", "created_at")
