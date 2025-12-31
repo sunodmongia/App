@@ -101,7 +101,7 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = ContactMessage
         fields = "__all__"
-        exclude = ["created_at"]
+        exclude = [ "resolve", "email_history", "created_at"]
         widgets = {
             "name": forms.TextInput(
                 attrs={"placeholder": "Your name", "class": BASE_INPUT}
