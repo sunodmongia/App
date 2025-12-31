@@ -1,7 +1,7 @@
 from groq import Groq
-from django.conf import settings
+from decouple import config
 
-client = Groq(api_key=settings.GROQ_API_KEY)
+client = Groq(api_key=config("GROQ_API_KEY"))
 
 def ask_groq(message, company_context):
     messages = [
