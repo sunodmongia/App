@@ -35,9 +35,6 @@ class DemoScheduleAdmin(admin.ModelAdmin):
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
     form = ContactMessageAdminForm
-
-    change_form_template = "change_form.html"
-
     change_form_template = "change_form.html"
 
     list_display = (
