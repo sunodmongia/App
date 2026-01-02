@@ -6,7 +6,7 @@ from langchain_chroma import Chroma
 def build_knowledge_base():
     docs = []
     
-    docs += PyPDFLoader("D:/code/Django/App/src/chatbot/Data.pdf").load()
+    docs += PyPDFLoader("D:/code/Django/App/src/chatbot/information.pdf").load()
     # docs += TextLoader("D:/code/Django/App/src/chatbot/data.txt", encoding="utf-8").load()
     
     splitter = RecursiveCharacterTextSplitter(

@@ -75,7 +75,6 @@ FAILURE HANDLING
 ------------------------------
 If the question is outside the provided company information:
 "I'm not able to find that information. Please contact support@wiretech.com for further assistance."
-f
 """,
         },
         {"role": "user", "content": message},
@@ -83,7 +82,7 @@ f
     completion = client.chat.completions.create(
         model="llama-3.1-8b-instant",
         messages=messages,
-        temperature=0.4,
+        temperature=0.0,
         max_tokens=300,
     )
 
