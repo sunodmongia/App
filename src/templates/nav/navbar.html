@@ -43,7 +43,9 @@
 
         <!-- Desktop Nav -->
         <div class="hidden md:flex items-center gap-10 text-sm font-medium text-gray-700">
+          {% if request.user.is_authenticated %}
           <a href="{% url 'dashboard' %}" class="hover:text-black transition">Dashboard</a>
+          {% endif %}
           <a href="{% url 'features' %}" class="hover:text-black transition">Features</a>
           <a href="{% url 'pricing' %}" class="hover:text-black transition">Pricing</a>
           <a href="{% url 'about' %}" class="hover:text-black transition">About</a>
@@ -97,7 +99,9 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="hidden md:hidden border-t bg-white">
       <div class="px-6 py-4 space-y-4 text-sm font-medium text-gray-700">
+        {% if request.user.is_authenticated %}
         <a href="{% url 'dashboard' %}" class="block">Dashboard</a>
+        {% endif %}
         <a href="{% url 'features' %}" class="block">Features</a>
         <a href="{% url 'pricing' %}" class="block">Pricing</a>
         <a href="{% url 'about' %}" class="block">About</a>
