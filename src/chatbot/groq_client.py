@@ -33,9 +33,9 @@ ESCALATION RULES:
 - If user asks about hacking, abuse, or illegal use → refuse
 
 OUTPUT FORMAT:
-- No markdown
-- emojis
-- using bullet points for details (like 1. 2. 3.)
+- Markdown
+- NO Emojis
+- using bullet points for details
 - professional text and experience
 """
     },

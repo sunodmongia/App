@@ -9,6 +9,7 @@ def chatbot(request):
 
     if not user_message:
         return Response({"error": "Message required"}, status=400)
+    
     context = get_company_context()
 
     reply = ask_groq(user_message, context)

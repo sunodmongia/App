@@ -1,92 +1,13 @@
-def get_company_context():
-    return """
-Company Name: Wire
-Industry: Cloud Computing, Web Infrastructure, and AI Services
-Founded: 2024
-Headquarters: India
-Support Email: support@wiretech.com
-Support Phone: +91-800-555-0199
-Office Hours: 10:00 AM - 7:00 PM IST (Monday to Saturday)
-Emergency Support: 24/7 for Enterprise customers
+from langchain_community.vectorstores import Chroma
+from langchain_huggingface import HuggingFaceEmbeddings
 
----------------------------------------------------
-About Wire
----------------------------------------------------
+embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
----------------------------------------------------
-About Wire
----------------------------------------------------
-Wire provides modern cloud and AI infrastructure for startups, businesses, and developers. 
-Our goal is to make hosting, storage, and AI deployment simple, fast, and affordable.
+db = Chroma(
+    persist_directory='kb',
+    embedding_function=embeddings
+)
 
----------------------------------------------------
-Core Services
----------------------------------------------------
-
-1) Web Hosting
-- High-performance cloud hosting for websites and web apps
-- Supports Django, Node.js, PHP, React, and static websites
-- Free SSL certificates
-- Daily backups
-- 99.9% uptime guarantee
-- Plans:
-  • Basic - ₹299/month
-  • Pro - ₹699/month
-  • Business - ₹1499/month
-
-2) Cloud Storage
-- Secure object storage for files, backups, and media
-- Encrypted at rest and in transit
-- Supports S3-compatible APIs
-- Use cases: file hosting, image storage, database backups
-- Pricing: ₹5 per GB per month
-
-3) AI APIs
-- APIs for text generation, chatbots, embeddings, and document processing
-- Used to build customer support bots, search engines, and AI assistants
-- Supports Python, and REST API access
-- Rate-limited for fair usage
-
----------------------------------------------------
-Billing & Payments
----------------------------------------------------
-- Monthly and yearly plans available
-- Payments accepted via UPI, debit card, credit card, and net banking
-- Invoices are emailed automatically after each payment
-
----------------------------------------------------
-Refund Policy
----------------------------------------------------
-- Full refund available within 7 days of purchase
-- Refunds are processed to the original payment method
-- Refunds take 5-7 business days to reflect
-- No refunds after 7 days unless there is a service failure
-
----------------------------------------------------
-Account & Security
----------------------------------------------------
-- Two-factor authentication supported
-- Passwords are encrypted
-- API keys can be regenerated anytime
-- Users are responsible for keeping their credentials safe
-
----------------------------------------------------
-Support & Troubleshooting
----------------------------------------------------
-- Email support: support@wiretech.com
-- Typical response time: 2-4 hours during office hours
-- Technical issues are prioritized
-- Users can request ticket escalation if the problem is urgent
-
----------------------------------------------------
-Service Limitations
----------------------------------------------------
-- Free trial accounts have limited storage and API calls
-- Abuse, spam, or illegal content is strictly prohibited
-- Accounts violating terms may be suspended
-
----------------------------------------------------
-If a question is not covered above, politely ask the user to contact support@wiretech.com
-"""
-
-
+def get_company_context(query, k=4):
+    docs = db.similarity_search(query, k=k)
+    return "\n\n".join(d.page_content for d in docs)
