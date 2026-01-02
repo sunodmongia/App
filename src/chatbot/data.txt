@@ -1,83 +1,200 @@
+Wire — Cloud, Infrastructure & AI Platform
+
 Company Name: Wire
 Industry: Cloud Computing, Web Infrastructure, and AI Services
 Founded: 2024
 Headquarters: India
 Support Email: support@wiretech.com
+
 Support Phone: +91-800-555-0199
-Office Hours: 10:00 AM - 7:00 PM IST (Monday to Saturday)
-Emergency Support: 24/7 for Enterprise customers
+Office Hours: 10:00 AM – 7:00 PM IST (Monday to Saturday)
+Enterprise Emergency Support: 24×7
 
----------------------------------------------------
 About Wire
----------------------------------------------------
-Wire provides modern cloud and AI infrastructure for startups, businesses, and developers. 
-Our goal is to make hosting, storage, and AI deployment simple, fast, and affordable.
 
----------------------------------------------------
+Wire is a modern cloud infrastructure and AI services provider built for startups, developers, and growing businesses.
+
+We deliver reliable hosting, secure storage, and production-ready AI APIs so companies can build, deploy, and scale without managing complex infrastructure.
+
+Our platform focuses on three things:
+
+Performance
+
+Security
+
+Simplicity
+
+If you can build it, Wire gives you the infrastructure to run it.
+
 Core Services
----------------------------------------------------
+1. Web Hosting
 
-1) Web Hosting
-- High-performance cloud hosting for websites and web apps
-- Supports Django, Node.js, PHP, React, and static websites
-- Free SSL certificates
-- Daily backups
-- 99.9% uptime guarantee
-- Plans:
-  • Basic - ₹299/month
-  • Pro - ₹699/month
-  • Business - ₹1499/month
+Wire offers high-performance cloud hosting designed for modern web applications.
 
-2) Cloud Storage
-- Secure object storage for files, backups, and media
-- Encrypted at rest and in transit
-- Supports S3-compatible APIs
-- Use cases: file hosting, image storage, database backups
-- Pricing: ₹5 per GB per month
+Supported technologies:
 
-3) AI APIs
-- APIs for text generation, chatbots, embeddings, and document processing
-- Used to build customer support bots, search engines, and AI assistants
-- Supports Python, and REST API access
-- Rate-limited for fair usage
+Django
 
----------------------------------------------------
+Node.js
+
+PHP
+
+React
+
+Static websites
+
+Every hosting plan includes:
+
+Free SSL certificates
+
+Daily automated backups
+
+99.9% uptime guarantee
+
+Optimized cloud servers
+
+Hosting Plans
+Plan	Price	Best For
+Basic	₹299 / month	Personal sites & small projects
+Pro	₹699 / month	Business websites & APIs
+Business	₹1499 / month	High-traffic apps & production systems
+2. Cloud Storage
+
+Wire provides secure object storage for applications, backups, and media files.
+
+Features:
+
+Encrypted at rest and in transit
+
+S3-compatible APIs
+
+Highly scalable and durable
+
+Common use cases:
+
+File hosting
+
+Image & video storage
+
+Database backups
+
+Application assets
+
+Pricing: ₹5 per GB per month
+
+You only pay for what you use.
+
+3. AI APIs
+
+Wire provides developer-friendly AI APIs to power real-world applications.
+
+Available services:
+
+Text generation
+
+Chatbots
+
+Embeddings
+
+Document processing
+
+These APIs are used for:
+
+Customer support bots
+
+Search engines
+
+Knowledge bases
+
+AI assistants
+
+Access methods:
+
+Python SDK
+
+REST API
+
+All APIs are rate-limited to ensure fair usage and platform stability.
+
 Billing & Payments
----------------------------------------------------
-- Monthly and yearly plans available
-- Payments accepted via UPI, debit card, credit card, and net banking
-- Invoices are emailed automatically after each payment
 
----------------------------------------------------
+Wire supports flexible and transparent billing.
+
+Monthly and yearly plans available
+
+Payment methods:
+
+UPI
+
+Debit cards
+
+Credit cards
+
+Net banking
+
+Invoices are automatically emailed after every successful payment
+
 Refund Policy
----------------------------------------------------
-- Full refund available within 7 days of purchase
-- Refunds are processed to the original payment method
-- Refunds take 5-7 business days to reflect
-- No refunds after 7 days unless there is a service failure
 
----------------------------------------------------
+We stand behind our services.
+
+Full refunds are available within 7 days of purchase
+
+Refunds are issued to the original payment method
+
+Processing time: 5–7 business days
+
+After 7 days, refunds are only provided if there is a verified service failure
+
 Account & Security
----------------------------------------------------
-- Two-factor authentication supported
-- Passwords are encrypted
-- API keys can be regenerated anytime
-- Users are responsible for keeping their credentials safe
 
----------------------------------------------------
+Security is not optional.
+
+Wire provides:
+
+Two-factor authentication (2FA)
+
+Encrypted passwords
+
+API key management with regeneration support
+
+Users are responsible for keeping:
+
+Account credentials
+
+API keys
+
+Access tokens
+
+Compromised credentials are not Wire’s liability.
+
 Support & Troubleshooting
----------------------------------------------------
-- Email support: support@wiretech.com
-- Typical response time: 2-4 hours during office hours
-- Technical issues are prioritized
-- Users can request ticket escalation if the problem is urgent
 
----------------------------------------------------
-Service Limitations
----------------------------------------------------
-- Free trial accounts have limited storage and API calls
-- Abuse, spam, or illegal content is strictly prohibited
-- Accounts violating terms may be suspended
+We provide fast and technical support.
 
----------------------------------------------------
-If a question is not covered above, politely ask the user to contact support@wiretech.com
+Email: support@wiretech.com
+
+Response time: 2–4 hours during office hours
+
+Technical issues receive priority handling
+
+Ticket escalation available for urgent problems
+
+Enterprise customers get 24/7 emergency support.
+
+Service Limitations & Fair Use
+
+To keep the platform stable and secure:
+
+Free trial accounts have limited storage and API usage
+
+Spam, abuse, and illegal content are strictly prohibited
+
+Accounts violating the terms may be suspended or terminated
+
+We do not tolerate misuse of infrastructure.
+
+Contact
+
+If your question is not covered above, contact:
+support@wiretech.com
