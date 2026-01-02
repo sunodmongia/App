@@ -8,6 +8,7 @@ botocore==1.40.3
 cachetools==6.2.4
 certifi==2025.8.3
 cffi==1.17.1
+channels==4.3.2
 chardet==5.2.0
 charset-normalizer==3.4.2
 click==8.2.1
@@ -16,11 +17,8 @@ cookiecutter==2.6.0
 crispy-bootstrap5==2025.6
 crispy-tailwind==1.0.3
 cryptography==45.0.5
-<<<<<<< HEAD
-distro==1.9.0
-=======
 decouple==0.0.7
->>>>>>> 84c85b5bf682ee816b8a9ad296a800469a4bf865
+distro==1.9.0
 dj-database-url==3.0.1
 Django==5.2.4
 django-allauth==65.10.0
@@ -34,6 +32,7 @@ django-widget-tweaks==1.5.0
 djangorestframework==3.16.1
 exceptiongroup==1.3.1
 google-ai-generativelanguage==0.6.15
+google-api-core==2.28.1
 google-api-python-client==2.187.0
 google-auth==2.45.0
 google-auth-httplib2==0.3.0
@@ -43,13 +42,10 @@ groq==1.0.0
 grpcio==1.76.0
 grpcio-status==1.71.2
 gunicorn==23.0.0
-<<<<<<< HEAD
 h11==0.16.0
 httpcore==1.0.9
 httplib2==0.31.0
 httpx==0.28.1
-=======
->>>>>>> 84c85b5bf682ee816b8a9ad296a800469a4bf865
 idna==3.10
 Jinja2==3.1.6
 jmespath==1.0.1
@@ -85,11 +81,8 @@ six==1.17.0
 slippers==0.6.2
 sniffio==1.3.1
 sqlparse==0.5.3
-<<<<<<< HEAD
 stripe==13.2.0
 tenacity==9.1.2
-=======
->>>>>>> 84c85b5bf682ee816b8a9ad296a800469a4bf865
 text-unidecode==1.3
 tqdm==4.67.1
 typeguard==2.13.3
@@ -99,10 +92,7 @@ typing_extensions==4.14.1
 tzdata==2025.2
 uritemplate==4.2.0
 urllib3==2.5.0
-<<<<<<< HEAD
 uvicorn==0.35.0
 websockets==15.0.1
-=======
 wheel==0.45.1
->>>>>>> 84c85b5bf682ee816b8a9ad296a800469a4bf865
 whitenoise==6.9.0
