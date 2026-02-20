@@ -139,6 +139,7 @@ env.bak/
 venv.bak/
 src/media/
 src/chatbot/Activate_model_access.py
+src/update_demo_theme.py
 # Spyder project settings
 .spyderproject
 .spyproject

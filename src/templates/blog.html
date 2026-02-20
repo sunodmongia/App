@@ -1,72 +1,67 @@
 {% extends "base.html" %}
 {% block content %}
-<!-- Hero Section -->
-<style>
-    
-    .gradient-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-</style>
 
-<section class="pt-20 pb-12 text-center gradient-bg text-white">
-    <div class="max-w-3xl mx-auto px-4">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">
-            Our Blog
-        </h1>
-        <p class="text-lg mb-8 opacity-90">
-            Insights, tips, and stories from the SaaSApp team.
-        </p>
+<!-- Hero -->
+<section class="relative pt-24 pb-20 bg-gradient-to-br from-slate-950 to-slate-900 overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.1),transparent_60%)]"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center">
+        <p class="text-indigo-400 text-sm font-semibold uppercase tracking-widest mb-4">Blog</p>
+        <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-lg">Our Blog</h1>
+        <p class="text-lg text-slate-400">Insights, tips, and stories from the WireTech team.</p>
     </div>
 </section>
 
 <!-- Blog Posts Grid -->
-<section class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-
-            {# Fake 12 posts for demo #}
+<section class="py-20 bg-slate-950">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {% for i in "123456789abc"|make_list %}
             <article
-                class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                class="group bg-slate-900/70 border border-white/5 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-900/20">
 
                 <!-- Image -->
-                <a href="#" class="block relative overflow-hidden">
+                <div class="relative overflow-hidden">
                     <img src="https://picsum.photos/seed/{{ forloop.counter }}/800/600"
                         alt="Blog Post {{ forloop.counter }}"
-                        class="object-cover w-full h-52 transition-transform duration-500 hover:scale-110" />
+                        class="object-cover w-full h-48 transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy" />
                     <div
-                        class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500">
-                    </div>
-                </a>
-
-                <!-- Content -->
-                <div class="p-6 flex flex-col flex-grow">
-                    <h2 class="text-lg font-semibold mb-3 leading-snug flex-grow">
-                        <a href="#" class="hover:text-green-600 transition-colors">
-                            Sample Blog Post Title #{{ forloop.counter }}
-                        </a>
-                    </h2>
-                    <p class="text-gray-600 mb-5 text-sm flex-grow">
-                        This is a short summary of blog post number {{ forloop.counter }}.
-                        It provides an engaging preview to encourage reading more.
-                    </p>
-                    <div class="flex items-center justify-between mt-auto">
-                        <time datetime="2025-08-{{ forloop.counter }}" class="text-gray-500 text-xs">
-                            August {{ forloop.counter }}, 2025
-                        </time>
-                        <a href="#" class="text-green-600 font-medium hover:underline text-xs">
-                            Read More →
-                        </a>
+                        class="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     </div>
                 </div>
 
+                <!-- Content -->
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span
+                            class="text-xs bg-indigo-500/15 text-indigo-400 px-2.5 py-1 rounded-full font-medium">Article</span>
+                    </div>
+                    <h2
+                        class="text-base font-semibold text-white mb-2 leading-snug flex-grow group-hover:text-indigo-300 transition-colors">
+                        <a href="#">Sample Blog Post Title #{{ forloop.counter }}</a>
+                    </h2>
+                    <p class="text-slate-500 mb-4 text-sm leading-relaxed">
+                        This is a short summary of blog post number {{ forloop.counter }}. It provides an engaging
+                        preview to encourage reading more.
+                    </p>
+                    <div class="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
+                        <time datetime="2025-08-{{ forloop.counter }}" class="text-slate-600 text-xs">
+                            Aug {{ forloop.counter }}, 2025
+                        </time>
+                        <a href="#"
+                            class="text-indigo-400 hover:text-indigo-300 font-medium text-xs flex items-center gap-1 transition-colors">
+                            Read More
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
             </article>
             {% endfor %}
-
         </div>
     </div>
 </section>
-
-
 
 {% endblock %}

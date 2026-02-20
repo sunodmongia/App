@@ -1,121 +1,292 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="p-6 bg-gray-100">
+<div class="min-h-screen bg-slate-950 p-6 pt-8">
 
-<h1 class="text-3xl font-bold mb-4">SaaS Control Panel</h1>
-
-<!-- DATE FILTER -->
-<form method="get" class="flex gap-3 mb-6">
-    <select name="days" class="border px-3 py-2 rounded">
-        <option value="7"  {% if days == 7 %}selected{% endif %}>Last 7 days</option>
-        <option value="30" {% if days == 30 %}selected{% endif %}>Last 30 days</option>
-        <option value="90" {% if days == 90 %}selected{% endif %}>Last 90 days</option>
-        <option value="365" {% if days == 365 %}selected{% endif %}>Last 1 year</option>
-    </select>
-    <button class="bg-black text-white px-4 py-2 rounded">Apply</button>
-</form>
-
-<!-- KPI GRID -->
-<div class="grid grid-cols-6 gap-4 mb-8">
-
-    <div class="bg-white p-4 rounded shadow">
-        <p class="text-gray-500">Active Orgs</p>
-        <p class="text-2xl font-bold">{{ active_orgs }}</p>
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-extrabold text-white mb-1">Dashboard</h1>
+        <p class="text-slate-500">Monitor your SaaS metrics and performance</p>
     </div>
 
-    <div class="bg-white p-4 rounded shadow">
-        <p class="text-gray-500">Revenue</p>
-        <p class="text-2xl font-bold">₹{{ total_revenue }}</p>
+    <!-- Date Filter -->
+    <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-4 mb-8">
+        <form method="get" class="flex items-center gap-4">
+            <label class="text-sm font-medium text-slate-400">Time Period:</label>
+            <select name="days"
+                class="bg-slate-800 text-slate-200 border border-white/10 px-4 py-2 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition">
+                <option value="7" {% if days == 7 %}selected{% endif %}>Last 7 days</option>
+                <option value="30" {% if days == 30 %}selected{% endif %}>Last 30 days</option>
+                <option value="90" {% if days == 90 %}selected{% endif %}>Last 90 days</option>
+                <option value="365" {% if days == 365 %}selected{% endif %}>Last year</option>
+            </select>
+            <button
+                class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-indigo-600/20">
+                Apply
+            </button>
+        </form>
     </div>
 
-    <div class="bg-white p-4 rounded shadow">
-        <p class="text-gray-500">API Calls</p>
-        <p class="text-2xl font-bold">{{ total_api }}</p>
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+
+        <!-- Active Orgs -->
+        <div
+            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-blue-500/20 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Active Organizations
+                    </p>
+                    <p class="text-3xl font-extrabold text-white">{{ active_orgs }}</p>
+                    <p class="text-xs text-slate-600 mt-1.5">of {{ total_orgs }} total</p>
+                </div>
+                <div class="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue -->
+        <div
+            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-emerald-500/20 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Total Revenue</p>
+                    <p class="text-3xl font-extrabold text-white">₹{{ total_revenue|floatformat:0 }}</p>
+                    {% if revenue_growth %}
+                    <p
+                        class="text-xs mt-1.5 {% if revenue_growth >= 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
+                        {% if revenue_growth >= 0 %}↑{% else %}↓{% endif %} {{ revenue_growth|floatformat:1 }}% vs
+                        previous period
+                    </p>
+                    {% endif %}
+                </div>
+                <div class="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Calls -->
+        <div
+            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-purple-500/20 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">API Calls</p>
+                    <p class="text-3xl font-extrabold text-white">{{ total_api|floatformat:0 }}</p>
+                    {% if api_growth %}
+                    <p class="text-xs mt-1.5 {% if api_growth >= 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
+                        {% if api_growth >= 0 %}↑{% else %}↓{% endif %} {{ api_growth|floatformat:1 }}% vs previous
+                        period
+                    </p>
+                    {% endif %}
+                </div>
+                <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Automations -->
+        <div
+            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-orange-500/20 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Active Automations</p>
+                    <p class="text-3xl font-extrabold text-white">{{ total_automations }}</p>
+                </div>
+                <div class="w-12 h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports -->
+        <div
+            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-pink-500/20 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Reports Generated</p>
+                    <p class="text-3xl font-extrabold text-white">{{ total_reports }}</p>
+                </div>
+                <div class="w-12 h-12 bg-pink-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Storage -->
+        <div
+            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-indigo-500/20 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Storage Used</p>
+                    <p class="text-3xl font-extrabold text-white">{{ total_storage|floatformat:0 }} <span
+                            class="text-lg font-normal text-slate-500">MB</span></p>
+                </div>
+                <div class="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="bg-white p-4 rounded shadow">
-        <p class="text-gray-500">Automations</p>
-        <p class="text-2xl font-bold">{{ total_automations }}</p>
+    <!-- Two Column -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+
+        <!-- Top Organizations -->
+        <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-6">
+            <h2 class="text-base font-bold text-white mb-5 flex items-center gap-3">
+                <span
+                    class="w-8 h-8 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                </span>
+                Top Organizations
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-white/5 text-left text-slate-500 text-xs">
+                            <th class="pb-3 font-semibold uppercase tracking-wider">Organization</th>
+                            <th class="pb-3 font-semibold text-right uppercase tracking-wider">Revenue</th>
+                            <th class="pb-3 font-semibold text-right uppercase tracking-wider">API Calls</th>
+                            <th class="pb-3 font-semibold text-right uppercase tracking-wider">Team</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        {% for org in top_orgs %}
+                        <tr class="border-b border-white/5 hover:bg-white/2 transition-colors">
+                            <td class="py-3 font-medium text-slate-200">{{ org.name }}</td>
+                            <td class="py-3 text-right text-emerald-400 font-semibold">₹{{ org.revenue|default:"0"|floatformat:0 }}</td>
+                            <td class="py-3 text-right text-slate-400">{{ org.api_calls|default:"0" }}</td>
+                            <td class="py-3 text-right text-slate-400">{{ org.team_size }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="py-10 text-center text-slate-600 text-sm">No data available</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Event Activity -->
+        <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-6">
+            <h2 class="text-base font-bold text-white mb-5 flex items-center gap-3">
+                <span
+                    class="w-8 h-8 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                    </svg>
+                </span>
+                Event Activity
+            </h2>
+            <div class="space-y-2">
+                {% for e in events %}
+                <div
+                    class="flex items-center justify-between px-4 py-3 bg-slate-800/60 rounded-xl hover:bg-slate-800 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 bg-indigo-400 rounded-full flex-shrink-0"></div>
+                        <span class="font-medium text-slate-300 capitalize text-sm">{{ e.type }}</span>
+                    </div>
+                    <span class="bg-indigo-500/15 text-indigo-400 px-2.5 py-1 rounded-lg text-xs font-semibold">{{
+                        e.count }}</span>
+                </div>
+                {% empty %}
+                <p class="text-center text-slate-600 py-10 text-sm">No events recorded</p>
+                {% endfor %}
+            </div>
+        </div>
+
     </div>
 
-    <div class="bg-white p-4 rounded shadow">
-        <p class="text-gray-500">Reports</p>
-        <p class="text-2xl font-bold">{{ total_reports }}</p>
+    <!-- Automation Health & Churn -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Automation Health -->
+        <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-6">
+            <h2 class="text-base font-bold text-white mb-5 flex items-center gap-3">
+                <span
+                    class="w-8 h-8 bg-gradient-to-br from-orange-600 to-red-600 rounded-xl flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </span>
+                Automation Health
+            </h2>
+            <div class="space-y-4">
+                {% for a in automation_stats %}
+                <div class="bg-slate-800/60 rounded-xl p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium text-slate-300 text-sm">{{ a.org__name }}</span>
+                        <span class="text-xs text-slate-500">{{ a.enabled }}/{{ a.total }} active</span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-1.5">
+                        <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-1.5 rounded-full transition-all"
+                            style="width: {% widthratio a.enabled a.total 100 %}%"></div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-slate-600 py-10 text-sm">No automation data</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Churn Risk -->
+        <div class="bg-slate-900/70 border border-red-500/10 rounded-2xl p-6">
+            <h2 class="text-base font-bold text-red-400 mb-5 flex items-center gap-3">
+                <span class="w-8 h-8 bg-red-500/15 rounded-xl flex items-center justify-center">
+                    <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </span>
+                Churn Risk
+            </h2>
+            <div class="space-y-2">
+                {% for org in inactive_orgs %}
+                <div
+                    class="flex justify-between items-center px-4 py-3 bg-red-900/10 border border-red-500/10 rounded-xl hover:bg-red-900/20 transition-colors">
+                    <span class="font-medium text-slate-300 text-sm">{{ org.name }}</span>
+                    <span class="text-xs text-slate-500">{% if org.last_event %}{{ org.last_event|date:"M d, Y" }}{%
+                        else %}Never active{% endif %}</span>
+                </div>
+                {% empty %}
+                <div class="text-center py-10">
+                    <p class="text-emerald-400 font-semibold text-sm">✓ All organizations are active!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
     </div>
-
-    <div class="bg-white p-4 rounded shadow">
-        <p class="text-gray-500">Storage (MB)</p>
-        <p class="text-2xl font-bold">{{ total_storage }}</p>
-    </div>
-
-</div>
-
-<!-- TOP ORGS -->
-<div class="bg-white p-6 rounded shadow mb-8">
-    <h2 class="text-xl font-bold mb-4">Top Organizations</h2>
-    <table class="w-full text-left">
-        <tr class="border-b">
-            <th>Org</th>
-            <th>Revenue</th>
-            <th>API Calls</th>
-            <th>Team</th>
-            <th>Automations</th>
-        </tr>
-        {% for org in top_orgs %}
-        <tr class="border-b">
-            <td>{{ org.name }}</td>
-            <td>₹{{ org.revenue|default:"0" }}</td>
-            <td>{{ org.api_calls|default:"0" }}</td>
-            <td>{{ org.team_size }}</td>
-            <td>{{ org.automations }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-
-<!-- EVENTS -->
-<div class="bg-white p-6 rounded shadow mb-8">
-    <h2 class="text-xl font-bold mb-4">Events (Last {{ days }} Days)</h2>
-    <table class="w-full">
-        <tr><th>Type</th><th>Count</th></tr>
-        {% for e in events %}
-        <tr>
-            <td>{{ e.type }}</td>
-            <td>{{ e.count }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-
-<!-- AUTOMATION HEALTH -->
-<div class="bg-white p-6 rounded shadow mb-8">
-    <h2 class="text-xl font-bold mb-4">Automation Health</h2>
-    <table class="w-full">
-        <tr><th>Org</th><th>Total</th><th>Enabled</th></tr>
-        {% for a in automation_stats %}
-        <tr>
-            <td>{{ a.org__name }}</td>
-            <td>{{ a.total }}</td>
-            <td>{{ a.enabled }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-
-<!-- INACTIVE ORGS (CHURN RISK) -->
-<div class="bg-white p-6 rounded shadow">
-    <h2 class="text-xl font-bold mb-4 text-red-600">Inactive Organizations</h2>
-    <table class="w-full">
-        <tr><th>Org</th><th>Last Activity</th></tr>
-        {% for org in inactive_orgs %}
-        <tr>
-            <td>{{ org.name }}</td>
-            <td>{{ org.last_event|date:"Y-m-d" }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
 
 </div>
 {% endblock %}

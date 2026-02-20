@@ -4,9 +4,9 @@ Company Name: Wire
 Industry: Cloud Computing, Web Infrastructure, and AI Services
 Founded: 2024
 Headquarters: India
-Support Email: support@wiretech.com
-Support Phone: +91-800-555-0199
-Office Hours: 10:00 AM - 7:00 PM IST (Monday to Saturday)
+Support Email: sunodmongia200@gmail.com
+Support Phone: +91 9416872136
+Office Hours: 9:30 AM - 6:30 PM IST (Monday to Saturday)
 Emergency Support: 24/7 for Enterprise customers
 
 ---------------------------------------------------
@@ -73,7 +73,8 @@ Account & Security
 ---------------------------------------------------
 Support & Troubleshooting
 ---------------------------------------------------
-- Email support: support@wiretech.com
+- Email support: sunodmongia2003@gmail.com
+- Contact us page: http://127.0.0.1:8000/contact/
 - Typical response time: 2-4 hours during office hours
 - Technical issues are prioritized
 - Users can request ticket escalation if the problem is urgent
@@ -86,7 +87,7 @@ Service Limitations
 - Accounts violating terms may be suspended
 
 ---------------------------------------------------
-If a question is not covered above, politely ask the user to contact support@wiretech.com
+If a question is not covered above, politely ask the user to contact sunodmongia2003@gmail.com
 """
 
 

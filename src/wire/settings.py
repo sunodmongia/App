@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "chatbot",
     "channels",
     # Third-party
+    "rest_framework",
     "crispy_forms",
     "crispy_tailwind",
     "widget_tweaks",

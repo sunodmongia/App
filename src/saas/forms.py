@@ -8,11 +8,11 @@ from crispy_forms.layout import Layout, Field, Submit, Div
 # Shared Tailwind styles
 # ------------------------
 BASE_INPUT = (
-    "w-full px-4 py-3 rounded-lg border border-gray-300 "
+    "w-full px-4 py-3 rounded-lg bg-slate-900 text-slate-200 border border-white/10 "
     "focus:outline-none focus:ring-2 focus:ring-indigo-500 "
-    "focus:border-indigo-500 transition"
+    "focus:border-indigo-500 transition-colors"
 )
-CHECKBOX = "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+CHECKBOX = "h-4 w-4 text-indigo-600 bg-slate-900 border-white/20 rounded focus:ring-indigo-500"
 TEXTAREA = f"{BASE_INPUT} resize-none"
 
 

@@ -4,119 +4,131 @@
 {% block title %}Edit Profile{% endblock %}
 
 {% block content %}
-<style>
-  .card {
-    background-color: #ffffff;
-    border-radius: 1rem;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    transition: all 0.25s ease;
-  }
-
-  .card:hover {
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
-    transform: translateY(-3px);
-  }
-
-  .avatar {
-    width: 110px;
-    height: 110px;
-    border-radius: 9999px;
-    border: 4px solid #e5e7eb;
-    object-fit: cover;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-  }
-
-  .avatar-placeholder {
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
-    color: white;
-    font-weight: 700;
-    font-size: 2rem;
-  }
-
-  input[type="file"]::-webkit-file-upload-button {
-    background-color: #111827;
-    color: white;
-    border: none;
-    padding: 0.45rem 1.1rem;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  input[type="file"]::-webkit-file-upload-button:hover {
-    background-color: #1f2937;
-  }
-
-  .section-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #111827;
-    border-left: 4px solid #4f46e5;
-    padding-left: 0.75rem;
-    margin-bottom: 1rem;
-  }
-</style>
-
-<section class="pt-28 pb-20 bg-gray-50 min-h-screen text-gray-900">
-  <div class="max-w-4xl mx-auto px-6">
+<section class="min-h-screen bg-slate-950 py-10 px-6">
+  <div class="max-w-4xl mx-auto">
 
     <!-- Header -->
-    <div class="flex items-center justify-between mb-10 border-b border-gray-200 pb-4">
+    <div class="flex items-center justify-between mb-8 pb-5 border-b border-white/5">
       <div>
-        <h1 class="text-4xl font-extrabold text-gray-900">Edit Profile</h1>
-        <p class="text-gray-600 mt-1 text-sm font-medium">
-          Manage your account information and personal details.
-        </p>
+        <h1 class="text-3xl font-extrabold text-white">Edit Profile</h1>
+        <p class="text-slate-500 text-sm mt-1">Manage your account information and personal details.</p>
       </div>
-      <a href="{% url 'profile-home' %}" class="text-sm font-semibold text-gray-700 hover:text-indigo-700 transition">
-        ← Back
+      <a href="{% url 'profile-home' %}"
+        class="inline-flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back
       </a>
     </div>
 
     <!-- Card -->
-    <div class="card p-10">
+    <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-8 md:p-10">
       <form method="POST" enctype="multipart/form-data" class="space-y-10">
         {% csrf_token %}
 
-        <!-- Profile Image -->
-        <div class="flex flex-col sm:flex-row items-center gap-8">
-          {% if user_obj.userprofile.profile_image %}
-          <div class="relative">
-            <img src="{{ user_obj.userprofile.profile_image.url }}" alt="Profile Picture" class="avatar">
-            <button type="submit" name="remove_image"
-              class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-xs px-3 py-1 rounded-full shadow hover:bg-red-700 transition">
-               Remove
-            </button>
-          </div>
-          {% else %}
-          <div class="avatar avatar-placeholder flex items-center justify-center">
-            {{ user_obj.username|slice:":1"|upper }}
-          </div>
-          {% endif %}
+        <style>
+          /* Dark theme for crispy forms */
+          .form-group label,
+          label {
+            color: #94a3b8 !important;
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem !important;
+          }
 
-          <div class="w-full sm:w-auto">
-            <label for="profile_image" class="block text-gray-800 text-sm uppercase tracking-wide font-semibold mb-2">
-              Profile Photo
-            </label>
-            <input type="file" name="profile_image" id="profile_image"
-              class="block w-full text-sm text-gray-800 border border-gray-300 rounded-lg bg-white cursor-pointer focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" />
-            <p class="text-xs text-gray-500 mt-1">Accepted formats: JPG, PNG — Max size: 2MB</p>
+          .form-group input,
+          .form-group textarea,
+          .form-group select,
+          input[type=text],
+          input[type=email],
+          input[type=tel],
+          textarea,
+          select {
+            background-color: #0f172a !important;
+            color: #e2e8f0 !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-radius: 0.75rem !important;
+            padding: 0.65rem 0.9rem !important;
+            font-size: 0.875rem !important;
+            width: 100% !important;
+            outline: none !important;
+            transition: border-color 0.2s, box-shadow 0.2s !important;
+          }
+
+          input:focus,
+          textarea:focus,
+          select:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+          }
+
+          .helptext,
+          .asteriskField {
+            color: #475569 !important;
+            font-size: 0.78rem !important;
+          }
+
+          .errorlist {
+            color: #f87171 !important;
+            font-size: 0.8rem !important;
+            list-style: none;
+            padding: 0;
+          }
+        </style>
+
+        <!-- Profile Image -->
+        <div>
+          <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5 pl-0.5 flex items-center gap-2">
+            <span class="w-1 h-4 bg-indigo-500 rounded-full inline-block"></span>
+            Profile Photo
+          </h2>
+          <div class="flex flex-col sm:flex-row items-center gap-8">
+            <!-- Avatar -->
+            {% if user_obj.userprofile.profile_image %}
+            <div class="relative flex-shrink-0">
+              <img src="{{ user_obj.userprofile.profile_image.url }}" alt="Profile Picture"
+                class="w-24 h-24 rounded-2xl object-cover ring-2 ring-white/10">
+              <button type="submit" name="remove_image"
+                class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-red-600 hover:bg-red-500 text-white text-xs px-3 py-1 rounded-full shadow-lg transition-colors whitespace-nowrap">
+                Remove
+              </button>
+            </div>
+            {% else %}
+            <div
+              class="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-3xl font-bold text-white ring-2 ring-white/10 flex-shrink-0">
+              {{ user_obj.username|slice:":1"|upper }}
+            </div>
+            {% endif %}
+
+            <div class="w-full">
+              <label for="profile_image"
+                class="block text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">Upload New
+                Photo</label>
+              <input type="file" name="profile_image" id="profile_image"
+                class="block w-full text-sm text-slate-400 bg-slate-950 border border-white/8 rounded-xl cursor-pointer focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition file:bg-indigo-600 file:hover:bg-indigo-500 file:text-white file:border-0 file:rounded-lg file:px-4 file:py-2 file:mr-3 file:font-semibold file:text-sm" />
+              <p class="text-xs text-slate-600 mt-2">Accepted: JPG, PNG — Max: 2MB</p>
+            </div>
           </div>
         </div>
-        <hr class="border-gray-200">
+
+        <div class="border-t border-white/5"></div>
 
         <!-- Account Info -->
         <div>
-          <h2 class="section-title">Account Information</h2>
+          <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5 flex items-center gap-2">
+            <span class="w-1 h-4 bg-indigo-500 rounded-full inline-block"></span>
+            Account Information
+          </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {{ user_form.username|as_crispy_field }}
             {{ user_form.email|as_crispy_field }}
             {{ user_form.first_name|as_crispy_field }}
             {{ user_form.last_name|as_crispy_field }}
           </div>
-          <hr class="border-gray-200">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="mt-6">
             {{ profile_form.phone|as_crispy_field }}
           </div>
           <div class="mt-6">
@@ -124,11 +136,13 @@
           </div>
         </div>
 
-
-        <div class="flex justify-end items-center gap-3 pt-8 border-t border-gray-200">
+        <div class="border-t border-white/5 pt-6 flex justify-end">
           <button type="submit"
-            class="px-6 py-2.5 text-sm font-bold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 shadow-md hover:shadow-lg transition">
-            💾 Save Changes
+            class="inline-flex items-center gap-2 px-7 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-indigo-600/20">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Save Changes
           </button>
         </div>
       </form>

@@ -210,43 +210,88 @@ class DashboardView(TemplateView):
 
     def get_queryset_scope(self):
         user = self.request.user
-
         if user.is_staff or user.is_superuser:
             return Organization.objects.all()
-
-        # Normal user → only their org
         return Organization.objects.filter(owner=user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         days = self.get_days()
         start_date = now() - timedelta(days=days)
-
         orgs = self.get_queryset_scope()
 
-        context["active_orgs"] = (
-            orgs.filter(event__created_at__gte=start_date).distinct().count()
-        )
-
+        # Active organizations
+        context["active_orgs"] = orgs.filter(event__created_at__gte=start_date).distinct().count()
         context["total_orgs"] = orgs.count()
 
-        context["events"] = (
-            Event.objects.filter(org__in=orgs, created_at__gte=start_date)
-            .values("type")
-            .annotate(count=Count("id"))
-        )
+        # Revenue calculation
+        context["total_revenue"] = Event.objects.filter(
+            org__in=orgs, type="revenue", created_at__gte=start_date
+        ).aggregate(total=Sum(Cast("data__amount", FloatField())))["total"] or 0
 
+        # API calls
+        context["total_api"] = Event.objects.filter(
+            org__in=orgs, type="api_call", created_at__gte=start_date
+        ).count()
+
+        # Automations
+        context["total_automations"] = Automation.objects.filter(org__in=orgs, enabled=True).count()
+
+        # Reports
+        context["total_reports"] = Event.objects.filter(
+            org__in=orgs, type="report_generated", created_at__gte=start_date
+        ).count()
+
+        # Storage
+        context["total_storage"] = Usage.objects.filter(
+            user__organization__in=orgs
+        ).aggregate(total=Sum("storage_mb"))["total"] or 0
+
+        # Events breakdown
+        context["events"] = Event.objects.filter(
+            org__in=orgs, created_at__gte=start_date
+        ).values("type").annotate(count=Count("id")).order_by("-count")[:10]
+
+        # Top organizations
         context["top_orgs"] = orgs.annotate(
-            revenue=Sum(
-                Cast("event__data__amount", FloatField()),
-                filter=Q(event__type="revenue"),
-            ),
-            api_calls=Count("event", filter=Q(event__type="api_call")),
+            revenue=Sum(Cast("event__data__amount", FloatField()), filter=Q(event__type="revenue", event__created_at__gte=start_date)),
+            api_calls=Count("event", filter=Q(event__type="api_call", event__created_at__gte=start_date)),
             team_size=Count("teammember"),
-            automations=Count("automation"),
-        ).order_by("-revenue")
+            automations=Count("automation", filter=Q(automation__enabled=True)),
+        ).order_by("-revenue")[:10]
 
+        # Automation health
+        context["automation_stats"] = orgs.annotate(
+            total=Count("automation"),
+            enabled=Count("automation", filter=Q(automation__enabled=True))
+        ).filter(total__gt=0).order_by("-total")[:10]
+
+        # Inactive organizations (no events in last 7 days)
+        inactive_threshold = now() - timedelta(days=7)
+        context["inactive_orgs"] = orgs.annotate(
+            last_event=models.Max("event__created_at")
+        ).filter(Q(last_event__lt=inactive_threshold) | Q(last_event__isnull=True))[:10]
+
+        # Growth metrics
+        prev_start = start_date - timedelta(days=days)
+        prev_revenue = Event.objects.filter(
+            org__in=orgs, type="revenue", created_at__gte=prev_start, created_at__lt=start_date
+        ).aggregate(total=Sum(Cast("data__amount", FloatField())))["total"] or 0
+        
+        context["revenue_growth"] = self.calculate_growth(prev_revenue, context["total_revenue"])
+        
+        prev_api = Event.objects.filter(
+            org__in=orgs, type="api_call", created_at__gte=prev_start, created_at__lt=start_date
+        ).count()
+        context["api_growth"] = self.calculate_growth(prev_api, context["total_api"])
+
+        context["days"] = days
         return context
+
+    def calculate_growth(self, old_value, new_value):
+        if old_value == 0:
+            return 100 if new_value > 0 else 0
+        return round(((new_value - old_value) / old_value) * 100, 1)
 
 
 def some_api_view(request):

@@ -3,180 +3,39 @@
 {% load tailwind_field %}
 {% load widget_tweaks %}
 {% block content %}
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-    /* ===== DESIGN TOKENS ===== */
-    :root {
-        --brand: #667eea;
-        --brand-dark: #5a67d8;
-        --accent: #764ba2;
-        --bg: #f5f7fb;
-        --text: #1f2937;
-        --muted: #6b7280;
-        --card: #ffffff;
-        --radius: 14px;
-        --shadow-sm: 0 4px 10px rgba(0, 0, 0, .04);
-        --shadow-md: 0 10px 30px rgba(0, 0, 0, .08);
-        --shadow-lg: 0 20px 50px rgba(0, 0, 0, .12);
-    }
-
-    /* ===== GLOBAL ===== */
-    body {
-        background: var(--bg);
-        color: var(--text);
-    }
-
-    /* ===== HERO ===== */
-    .gradient-bg {
-        background:
-            linear-gradient(135deg, var(--brand), var(--accent));
-    }
-
-    /* ===== CARDS ===== */
-    .bg-white {
-        border-radius: var(--radius);
-        box-shadow: var(--shadow-md);
-        border: 1px solid rgba(0, 0, 0, .03);
-        transition: all .35s ease;
-    }
-
-    .bg-white:hover {
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-lg);
-    }
-
-    /* ===== FORM ===== */
-    .form-input,
-    input,
-    select,
-    textarea {
-        width: 100%;
-        border-radius: 10px;
-        border: 1px solid #e5e7eb;
-        padding: 12px 14px;
-        background: #fff;
-        transition: all .25s ease;
-    }
-
-    .form-input:focus,
-    input:focus,
-    select:focus,
-    textarea:focus {
-        border-color: var(--brand);
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, .18);
-    }
-
-    /* ===== BUTTON ===== */
-    button,
-    a.bg-black {
-        color: #fff !important;
-        border-radius: 12px;
-        box-shadow: 0 12px 30px rgba(102, 126, 234, .4);
-        transition: all .3s ease;
-    }
-
-    button:hover,
-    a.bg-black:hover {
-        transform: translateY(-2px) scale(1.01);
-        box-shadow: 0 18px 45px rgba(102, 126, 234, .5);
-    }
-
-    /* ===== ICON BUBBLES ===== */
-    .bg-purple-100,
-    .bg-blue-100,
-    .bg-green-100,
-    .bg-orange-100 {
-        background: linear-gradient(135deg, rgba(102, 126, 234, .15), rgba(118, 75, 162, .15));
-    }
-
-    /* ===== FAQ ===== */
-    .shadow-md {
-        box-shadow: var(--shadow-sm);
-        border: 1px solid rgba(0, 0, 0, .03);
-    }
-
-    /* ===== TESTIMONIAL ===== */
-    blockquote {
-        font-size: 1.05rem;
-        line-height: 1.6;
-        position: relative;
-        padding-left: 20px;
-    }
-
-    blockquote:before {
-        content: "“";
-        position: absolute;
-        left: 0;
-        top: -10px;
-        font-size: 3rem;
-        color: var(--brand);
-        opacity: .3;
-    }
-
-    /* ===== TIME SLOTS ===== */
-    .time-slot {
-        border-radius: 10px;
-        border: 1px solid #e5e7eb;
-        padding: 12px;
-        cursor: pointer;
-        background: #fff;
-        box-shadow: var(--shadow-sm);
-        transition: all .25s ease;
-    }
-
-    .time-slot:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-    }
-
-    .time-slot.selected {
-        background: linear-gradient(135deg, var(--brand), var(--accent));
-        color: white;
-        border: none;
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-        background: linear-gradient(180deg, #0f172a, #020617);
-    }
-
-    footer a {
-        transition: color .2s ease;
-    }
-
-    footer a:hover {
-        color: var(--brand);
-    }
-</style>
-
-</head>
-
-<div class="bg-gray-50 min-h-screen">
+<div class="bg-slate-950 min-h-screen text-slate-100 font-sans antialiased">
 
     <!-- Hero Section -->
-    <section class="pt-28 pb-16 gradient-bg">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
-                📞 Schedule Your Demo Call
+    <section
+        class="relative pt-32 pb-20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08),transparent_60%)]">
+        </div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6">
+                📞 Schedule Your <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Demo
+                    Call</span>
             </h1>
-            <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            <p class="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
                 Get a personalized walkthrough of SaaSApp with one of our product experts. Learn how our platform can
                 solve your specific business challenges.
             </p>
 
             <!-- Benefits -->
-            <div class="grid md:grid-cols-3 gap-6 text-white/90 mb-8">
-                <div class="flex items-center justify-center">
-                    <span class="text-2xl mr-2">🎯</span>
+            <div class="grid md:grid-cols-3 gap-6 text-slate-300 mb-8 font-medium">
+                <div
+                    class="flex items-center justify-center bg-slate-900/50 rounded-xl py-3 border border-white/5 shadow-inner">
+                    <span class="text-2xl mr-3">🎯</span>
                     <span>Personalized demo</span>
                 </div>
-                <div class="flex items-center justify-center">
-                    <span class="text-2xl mr-2">💬</span>
+                <div
+                    class="flex items-center justify-center bg-slate-900/50 rounded-xl py-3 border border-white/5 shadow-inner">
+                    <span class="text-2xl mr-3">💬</span>
                     <span>Q&A with expert</span>
                 </div>
-                <div class="flex items-center justify-center">
-                    <span class="text-2xl mr-2">⚡</span>
+                <div
+                    class="flex items-center justify-center bg-slate-900/50 rounded-xl py-3 border border-white/5 shadow-inner">
+                    <span class="text-2xl mr-3">⚡</span>
                     <span>30-minute session</span>
                 </div>
             </div>
@@ -190,76 +49,99 @@
             <div class="grid lg:grid-cols-2 gap-12">
 
                 <!-- Demo Booking Form -->
-                <div class="bg-white rounded-2xl shadow-xl p-8">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Book Your Demo</h2>
+                <div class="bg-slate-900 rounded-2xl shadow-xl p-8 border border-white/10 relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none">
+                    </div>
+                    <h2 class="text-2xl font-bold text-white mb-6">Book Your Demo</h2>
+
+                    <!-- Crispy Form Overrides for Dark Theme -->
+                    <style>
+                        .bg-slate-900 input,
+                        .bg-slate-900 select,
+                        .bg-slate-900 textarea {
+                            background-color: #0f172a;
+                            /* slate-950 */
+                            border-color: #334155;
+                            /* slate-700 */
+                            color: #f8fafc;
+                            /* slate-50 */
+                        }
+
+                        .bg-slate-900 label {
+                            color: #cbd5e1;
+                            /* slate-300 */
+                            font-weight: 500;
+                        }
+                    </style>
 
                     <form method="post" class="space-y-6">
                         {% csrf_token %}
                         {{ form|crispy }}
                         <div class="mt-6">
                             <button type="submit"
-                                class="w-full py-4 text-black font-medium text-lg rounded-lg hover:from-purple-700 hover:to-blue-700 duration-300">
+                                class="w-full py-4 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-lg shadow-indigo-600/30 hover:bg-indigo-500 hover:-translate-y-0.5 transition-all duration-200">
                                 📞 Schedule My Demo
                             </button>
                         </div>
                     </form>
 
-                    <p class="text-center text-sm text-gray-500 mt-6">
+                    <p class="text-center text-sm text-slate-400 mt-6">
                         Need to reschedule? Contact us at <a href="mailto:sunodmongia2003@gmail.com"
-                            class="text-purple-600 hover:underline">sunodmongia2003@gmail.com</a>
+                            class="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">sunodmongia2003@gmail.com</a>
                     </p>
                 </div>
 
                 <!-- Demo Information -->
                 <div class="space-y-8">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900 mb-6">What to Expect</h2>
+                        <h2 class="text-2xl font-bold text-white mb-6">What to Expect</h2>
 
                         <div class="space-y-6">
-                            <div class="flex items-start">
+                            <div class="flex items-start group">
                                 <div
-                                    class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-                                    <span class="text-purple-600 font-bold text-xl">👋</span>
+                                    class="flex-shrink-0 w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center mr-4 border border-indigo-500/20 group-hover:bg-indigo-500/20 transition-colors">
+                                    <span class="text-indigo-400 font-bold text-xl">👋</span>
                                 </div>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900 mb-2">Personal Introduction</h3>
-                                    <p class="text-gray-600">Meet your dedicated product expert who will guide you
+                                    <h3 class="font-semibold text-white mb-1">Personal Introduction</h3>
+                                    <p class="text-slate-400">Meet your dedicated product expert who will guide you
                                         through the demo</p>
                                 </div>
                             </div>
 
-                            <div class="flex items-start">
+                            <div class="flex items-start group">
                                 <div
-                                    class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                                    <span class="text-blue-600 font-bold text-xl">🎯</span>
+                                    class="flex-shrink-0 w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mr-4 border border-purple-500/20 group-hover:bg-purple-500/20 transition-colors">
+                                    <span class="text-purple-400 font-bold text-xl">🎯</span>
                                 </div>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900 mb-2">Tailored Walkthrough</h3>
-                                    <p class="text-gray-600">See features and workflows relevant to your specific
+                                    <h3 class="font-semibold text-white mb-1">Tailored Walkthrough</h3>
+                                    <p class="text-slate-400">See features and workflows relevant to your specific
                                         business needs</p>
                                 </div>
                             </div>
 
-                            <div class="flex items-start">
+                            <div class="flex items-start group">
                                 <div
-                                    class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                                    <span class="text-green-600 font-bold text-xl">💡</span>
+                                    class="flex-shrink-0 w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mr-4 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-colors">
+                                    <span class="text-emerald-400 font-bold text-xl">💡</span>
                                 </div>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900 mb-2">Implementation Strategy</h3>
-                                    <p class="text-gray-600">Learn how to get started and best practices for your team
+                                    <h3 class="font-semibold text-white mb-1">Implementation Strategy</h3>
+                                    <p class="text-slate-400">Learn how to get started and best practices for your team
                                     </p>
                                 </div>
                             </div>
 
-                            <div class="flex items-start">
+                            <div class="flex items-start group">
                                 <div
-                                    class="flex-shrink-0 w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-                                    <span class="text-orange-600 font-bold text-xl">❓</span>
+                                    class="flex-shrink-0 w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center mr-4 border border-amber-500/20 group-hover:bg-amber-500/20 transition-colors">
+                                    <span class="text-amber-400 font-bold text-xl">❓</span>
                                 </div>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900 mb-2">Q&A Session</h3>
-                                    <p class="text-gray-600">Get answers to all your questions about features, pricing,
+                                    <h3 class="font-semibold text-white mb-1">Q&A Session</h3>
+                                    <p class="text-slate-400">Get answers to all your questions about features, pricing,
                                         and setup</p>
                                 </div>
                             </div>
@@ -267,45 +149,54 @@
                     </div>
 
                     <!-- Testimonial -->
-                    <div class="bg-white rounded-2xl shadow-lg p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="flex text-yellow-400 mr-3">
+                    <div class="bg-slate-900 rounded-2xl shadow-lg p-6 border border-white/10 relative">
+                        <div class="absolute top-4 right-6 text-6xl text-slate-800 font-serif leading-none">"</div>
+                        <div class="flex items-center mb-4 relative z-10">
+                            <div class="flex text-amber-400 mr-3 text-sm">
                                 ★★★★★
                             </div>
                         </div>
-                        <blockquote class="text-gray-700 mb-4">
+                        <blockquote class="text-slate-300 mb-6 relative z-10 italic leading-relaxed">
                             "The demo was incredibly helpful! The team showed exactly how SaaSApp could solve our
                             workflow challenges. We signed up the same day."
                         </blockquote>
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+                        <div class="flex items-center relative z-10">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mr-4 flex items-center justify-center text-white font-bold opacity-80">
+                                JM</div>
                             <div>
-                                <p class="font-semibold">Jennifer Martinez</p>
-                                <p class="text-sm text-gray-600">Operations Director, FastGrow Inc.</p>
+                                <p class="font-bold text-white">Jennifer Martinez</p>
+                                <p class="text-sm text-slate-400">Operations Director, FastGrow Inc.</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- FAQ -->
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+                        <h2 class="text-2xl font-bold text-white mb-6">Frequently Asked Questions</h2>
 
                         <div class="space-y-4">
-                            <div class="bg-white rounded-lg p-6 shadow-md">
-                                <h3 class="font-semibold text-gray-900 mb-2">How long is the demo?</h3>
-                                <p class="text-gray-600">Demos typically last 30 minutes, but we can extend if you have
+                            <div
+                                class="bg-slate-900 rounded-xl p-6 border border-white/5 hover:border-white/10 transition-colors">
+                                <h3 class="font-semibold text-white mb-2">How long is the demo?</h3>
+                                <p class="text-slate-400 text-sm">Demos typically last 30 minutes, but we can extend if
+                                    you have
                                     additional questions.</p>
                             </div>
 
-                            <div class="bg-white rounded-lg p-6 shadow-md">
-                                <h3 class="font-semibold text-gray-900 mb-2">Do I need to prepare anything?</h3>
-                                <p class="text-gray-600">Just bring your questions! It's helpful to think about your
+                            <div
+                                class="bg-slate-900 rounded-xl p-6 border border-white/5 hover:border-white/10 transition-colors">
+                                <h3 class="font-semibold text-white mb-2">Do I need to prepare anything?</h3>
+                                <p class="text-slate-400 text-sm">Just bring your questions! It's helpful to think about
+                                    your
                                     current challenges and goals.</p>
                             </div>
 
-                            <div class="bg-white rounded-lg p-6 shadow-md">
-                                <h3 class="font-semibold text-gray-900 mb-2">Can I invite team members?</h3>
-                                <p class="text-gray-600">Absolutely! We encourage key stakeholders to join the demo
+                            <div
+                                class="bg-slate-900 rounded-xl p-6 border border-white/5 hover:border-white/10 transition-colors">
+                                <h3 class="font-semibold text-white mb-2">Can I invite team members?</h3>
+                                <p class="text-slate-400 text-sm">Absolutely! We encourage key stakeholders to join the
+                                    demo
                                     call.</p>
                             </div>
                         </div>
@@ -316,45 +207,32 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-16 bg-gray-100">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold text-gray-900 mb-6">
+    <section class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-slate-900 border-t border-b border-white/5"></div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-white mb-6">
                 Ready to Get Started Right Away?
             </h2>
-            <p class="text-xl text-gray-600 mb-8">
+            <p class="text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
                 Don't want to wait for a demo? Start your free trial now and explore SaaSApp on your own.
             </p>
 
             <a href="{% url 'pricing' %}"
-                class="inline-flex items-center px-8 py-4 bg-black text-white font-bold text-lg rounded-lg hover:bg-gray-800 transition-colors">
-                🚀 Start Free Trial Instead
+                class="inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 hover:-translate-y-0.5 transition-all duration-200 gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                Start Free Trial Instead
             </a>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-400 mb-4">&copy; 2025 SaaSApp. All rights reserved.</p>
-            <div class="flex justify-center space-x-6 text-sm">
-                <a href="{% url 'terms-and-condtion' %}" class="text-gray-400 hover:text-white">Terms & Conditions</a>
-                <a href="{% url 'privacy-policy' %}" class="text-gray-400 hover:text-white">Privacy Policy</a>
-                <a href="{% url 'contact-us' %}" class="text-gray-400 hover:text-white">Contact Support</a>
-            </div>
-        </div>
-    </footer>
-
     <!-- JavaScript -->
     <script>
-        // Handle time slot selection
-        document.querySelectorAll('.time-slot').forEach(slot => {
-            slot.addEventListener('click', function () {
-                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                this.classList.add('selected');
-                document.getElementById("selected_time").value = this.innerText;
-            });
-        });
-
+        // Handle time slot selection - Updating for the new dark theme UI styles 
+        // Note: I left the selectors general here in case the schedule custom time slot fields have dynamic classes
+        // but removed the overrides since CSS token classes were deleted.
         document.addEventListener('DOMContentLoaded', function () {
             const dateField = document.getElementById('preferred_date');
             if (dateField) {
@@ -364,5 +242,4 @@
         });
     </script>
 </div>
-
 {% endblock %}

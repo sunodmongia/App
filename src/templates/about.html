@@ -1,134 +1,159 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% load tailwind_field %}
-{% load widget_tweaks %}
 {% load static %}
 {% block content %}
 
-<body class="bg-white text-gray-900 antialiased">
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-28">
+<!-- Hero -->
+<section class="relative py-28 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden">
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.07),transparent_60%)]"></div>
+  <div class="relative max-w-6xl mx-auto px-6 text-center">
+    <p class="text-indigo-400 text-sm font-semibold uppercase tracking-widest mb-4">Our Story</p>
+    <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-white mb-6">
+      About <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">WireTech</span>
+    </h1>
+    <p class="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+      Our mission is simple — empower modern teams to collaborate effortlessly, automate workflows, and grow with
+      confidence.
+    </p>
+  </div>
+</section>
 
-    <!-- Hero / Intro -->
-    <section class="text-center space-y-6">
-      <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900">
-        About <span class="text-blue-600">SaaSApp</span>
-      </h1>
-      <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-        Our mission is simple — empower modern teams to collaborate effortlessly, automate workflows, and grow with confidence.
-      </p>
-    </section>
+<!-- Mission / Vision / Values -->
+<section class="py-20 bg-slate-950">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-3 gap-8">
 
-    <!-- Mission / Vision / Values -->
-    <section class="grid md:grid-cols-3 gap-12 text-center">
       <!-- Mission -->
-      <div class="space-y-4 p-6 rounded-2xl shadow-sm hover:shadow-md transition bg-gray-50">
-        <div class="flex items-center justify-center w-16 h-16 mx-auto bg-purple-100 rounded-full">
-          <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div
+        class="group bg-slate-900/60 border border-white/5 rounded-2xl p-8 text-center hover:border-indigo-500/30 hover:-translate-y-1 transition-all duration-300">
+        <div
+          class="w-16 h-16 mx-auto rounded-2xl bg-purple-600/20 flex items-center justify-center mb-6 group-hover:bg-purple-600/30 transition-colors">
+          <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M12 8c.464-1.084 2-1.084 2.464 0l1.695 3.965 4.303.06c1.167.017 1.644 1.512.802 2.23l-3.2 2.773.952 4.282c.278 1.25-1.094 2.196-2.22 1.606L12 18.347l-3.796 2.57c-1.126.59-2.498-.356-2.22-1.606l.952-4.282-3.2-2.773c-.842-.718-.365-2.213.802-2.23l4.303-.06L12 8z" />
           </svg>
         </div>
-        <h3 class="text-xl font-semibold text-gray-900">Our Mission</h3>
-        <p class="text-gray-600 leading-relaxed">
-          Deliver an all-in-one platform that makes collaboration effortless, data-driven decisions actionable, and growth unstoppable.
+        <h3 class="text-xl font-bold text-white mb-3">Our Mission</h3>
+        <p class="text-slate-400 leading-relaxed text-sm">
+          Deliver an all-in-one platform that makes collaboration effortless, data-driven decisions actionable, and
+          growth unstoppable.
         </p>
       </div>
 
       <!-- Vision -->
-      <div class="space-y-4 p-6 rounded-2xl shadow-sm hover:shadow-md transition bg-gray-50">
-        <div class="flex items-center justify-center w-16 h-16 mx-auto bg-blue-100 rounded-full">
-          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div
+        class="group bg-slate-900/60 border border-white/5 rounded-2xl p-8 text-center hover:border-blue-500/30 hover:-translate-y-1 transition-all duration-300">
+        <div
+          class="w-16 h-16 mx-auto rounded-2xl bg-blue-600/20 flex items-center justify-center mb-6 group-hover:bg-blue-600/30 transition-colors">
+          <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h3 class="text-xl font-semibold text-gray-900">Our Vision</h3>
-        <p class="text-gray-600 leading-relaxed">
-          Become the world’s most trusted platform for modern business operations — where teams thrive and companies scale fearlessly.
+        <h3 class="text-xl font-bold text-white mb-3">Our Vision</h3>
+        <p class="text-slate-400 leading-relaxed text-sm">
+          Become the world's most trusted platform for modern business operations — where teams thrive and companies
+          scale fearlessly.
         </p>
       </div>
 
       <!-- Values -->
-      <div class="space-y-4 p-6 rounded-2xl shadow-sm hover:shadow-md transition bg-gray-50">
-        <div class="flex items-center justify-center w-16 h-16 mx-auto bg-green-100 rounded-full">
-          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div
+        class="group bg-slate-900/60 border border-white/5 rounded-2xl p-8 text-center hover:border-emerald-500/30 hover:-translate-y-1 transition-all duration-300">
+        <div
+          class="w-16 h-16 mx-auto rounded-2xl bg-emerald-600/20 flex items-center justify-center mb-6 group-hover:bg-emerald-600/30 transition-colors">
+          <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 class="text-xl font-semibold text-gray-900">Our Values</h3>
-        <p class="text-gray-600 leading-relaxed">
+        <h3 class="text-xl font-bold text-white mb-3">Our Values</h3>
+        <p class="text-slate-400 leading-relaxed text-sm">
           Integrity, innovation, and customer obsession guide every decision we make — from design to delivery.
         </p>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <!-- Story -->
-    <section class="text-center max-w-4xl mx-auto space-y-6">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Our Story</h2>
-      <p class="text-gray-700 leading-relaxed text-lg">
-        Founded in 2020 by engineers and business innovators, SaaSApp was built to unify fragmented business tools. 
-        What began as a small startup quickly evolved into a global platform helping thousands of organizations boost productivity and collaboration. 
-        We exist to make business operations simple, scalable, and human again.
-      </p>
-    </section>
+<!-- Story -->
+<section class="py-20 bg-slate-900/40 border-y border-white/5">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Our Story</h2>
+    <p class="text-slate-400 leading-relaxed text-lg">
+      Founded in 2020 by engineers and business innovators, WireTech was built to unify fragmented business tools.
+      What began as a small startup quickly evolved into a global platform helping thousands of organizations boost
+      productivity and collaboration.
+      We exist to make business operations simple, scalable, and human again.
+    </p>
+  </div>
+</section>
 
-    <!-- Team -->
-    <section class="space-y-10">
-      <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900">Meet the Team</h2>
-      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10">
-        {% for member in team %}
-        <div class="text-center hover:scale-105 transition-transform">
-          <img src="{{ member.image.url }}" alt="{{ member.name }}"
-            class="mx-auto w-32 h-32 rounded-full mb-4 object-cover shadow-sm">
-          <h4 class="font-semibold text-gray-900">{{ member.name }}</h4>
-          <p class="text-sm text-gray-500">{{ member.role }}</p>
-        </div>
-        {% empty %}
-        <!-- Static Fallback -->
-        <div class="text-center">
-          <img src="{% static 'images/team/alex.jpg' %}" alt="Alex King"
-            class="mx-auto w-32 h-32 rounded-full mb-4 object-cover shadow-sm" />
-          <h4 class="font-semibold text-gray-900">Alex King</h4>
-          <p class="text-sm text-gray-500">CEO & Co-Founder</p>
-        </div>
-        <div class="text-center">
-          <img src="{% static 'images/team/sara.jpg' %}" alt="Sara Lee"
-            class="mx-auto w-32 h-32 rounded-full mb-4 object-cover shadow-sm" />
-          <h4 class="font-semibold text-gray-900">Sara Lee</h4>
-          <p class="text-sm text-gray-500">CTO & Co-Founder</p>
-        </div>
-        <div class="text-center">
-          <img src="{% static 'images/team/john.jpg' %}" alt="John Doe"
-            class="mx-auto w-32 h-32 rounded-full mb-4 object-cover shadow-sm" />
-          <h4 class="font-semibold text-gray-900">John Doe</h4>
-          <p class="text-sm text-gray-500">Head of Product</p>
-        </div>
-        <div class="text-center">
-          <img src="{% static 'images/team/emma.jpg' %}" alt="Emma Smith"
-            class="mx-auto w-32 h-32 rounded-full mb-4 object-cover shadow-sm" />
-          <h4 class="font-semibold text-gray-900">Emma Smith</h4>
-          <p class="text-sm text-gray-500">Head of Marketing</p>
-        </div>
-        {% endfor %}
+<!-- Team -->
+<section class="py-20 bg-slate-950">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl md:text-4xl font-bold text-white">Meet the Team</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8">
+      {% for member in team %}
+      <div
+        class="group text-center bg-slate-900/60 border border-white/5 rounded-2xl p-6 hover:border-indigo-500/30 hover:-translate-y-1 transition-all duration-300">
+        <img src="{{ member.image.url }}" alt="{{ member.name }}"
+          class="mx-auto w-24 h-24 rounded-full mb-4 object-cover ring-2 ring-white/10 group-hover:ring-indigo-500/40 transition-all">
+        <h4 class="font-semibold text-white">{{ member.name }}</h4>
+        <p class="text-sm text-slate-500">{{ member.role }}</p>
       </div>
-    </section>
+      {% empty %}
+      <!-- Static Fallback -->
+      <div
+        class="group text-center bg-slate-900/60 border border-white/5 rounded-2xl p-6 hover:border-indigo-500/30 hover:-translate-y-1 transition-all duration-300">
+        <div
+          class="mx-auto w-24 h-24 rounded-full mb-4 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-bold text-white ring-2 ring-white/10">
+          AK</div>
+        <h4 class="font-semibold text-white">Alex King</h4>
+        <p class="text-sm text-slate-500">CEO & Co-Founder</p>
+      </div>
+      <div
+        class="group text-center bg-slate-900/60 border border-white/5 rounded-2xl p-6 hover:border-purple-500/30 hover:-translate-y-1 transition-all duration-300">
+        <div
+          class="mx-auto w-24 h-24 rounded-full mb-4 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-2xl font-bold text-white ring-2 ring-white/10">
+          SL</div>
+        <h4 class="font-semibold text-white">Sara Lee</h4>
+        <p class="text-sm text-slate-500">CTO & Co-Founder</p>
+      </div>
+      <div
+        class="group text-center bg-slate-900/60 border border-white/5 rounded-2xl p-6 hover:border-blue-500/30 hover:-translate-y-1 transition-all duration-300">
+        <div
+          class="mx-auto w-24 h-24 rounded-full mb-4 bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-2xl font-bold text-white ring-2 ring-white/10">
+          JD</div>
+        <h4 class="font-semibold text-white">John Doe</h4>
+        <p class="text-sm text-slate-500">Head of Product</p>
+      </div>
+      <div
+        class="group text-center bg-slate-900/60 border border-white/5 rounded-2xl p-6 hover:border-emerald-500/30 hover:-translate-y-1 transition-all duration-300">
+        <div
+          class="mx-auto w-24 h-24 rounded-full mb-4 bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-2xl font-bold text-white ring-2 ring-white/10">
+          ES</div>
+        <h4 class="font-semibold text-white">Emma Smith</h4>
+        <p class="text-sm text-slate-500">Head of Marketing</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
-    <!-- CTA -->
-    <section class="text-center bg-gray-50 py-16 rounded-3xl shadow-inner">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Join Us?</h2>
-      <p class="text-gray-600 mb-8 max-w-xl mx-auto text-lg">
-        Experience the all-in-one platform transforming teams across the globe.
-      </p>
-      <a href="{% url 'pricing' %}">
-        <button
-          class="px-8 py-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-black">
-          Start Your Free Trial
-        </button>
-      </a>
-    </section>
-  </main>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-</body>
+<!-- CTA -->
+<section class="py-24 bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-t border-white/5">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Join Us?</h2>
+    <p class="text-slate-400 mb-10 text-lg">Experience the all-in-one platform transforming teams across the globe.</p>
+    <a href="{% url 'pricing' %}"
+      class="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all duration-200 hover:-translate-y-0.5 shadow-2xl shadow-indigo-600/30">
+      Start Your Free Trial
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </a>
+  </div>
+</section>
 
 {% endblock %}

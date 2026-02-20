@@ -3,11 +3,6 @@
 {% block content %}
 
 <style>
-  /* --- Base Visual System --- */
-  .gradient-bg {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  }
-
   .section-fade {
     opacity: 0;
     transform: translateY(24px);
@@ -19,42 +14,23 @@
     transform: translateY(0);
   }
 
-  .toc-link.active {
-    background-color: #eef2ff;
-    color: #4338ca;
+  .toc-link.active,
+  .mobile-toc-link.active {
+    background-color: rgb(79 70 229 / 0.1);
+    /* hover:bg-indigo-500/10 */
+    color: #818cf8;
+    /* text-indigo-400 */
     font-weight: 600;
-  }
-
-  .toc-link:hover {
-    background-color: #eef2ff;
-  }
-
-  article h2 {
-    margin-top: 3rem;
-    font-weight: 700;
-    color: #111827;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  article h3 {
-    margin-top: 1.5rem;
-    font-weight: 600;
-    color: #1f2937;
-  }
-
-  article p,
-  article li {
-    color: #4b5563;
   }
 </style>
 
 <!-- HERO -->
-<section class="relative gradient-bg py-24 text-white overflow-hidden">
-  <div class="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-12">
+<section class="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-24 text-white overflow-hidden">
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08),transparent_60%)]"></div>
+  <div class="relative max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-12">
     <div class="lg:w-2/3 space-y-5 text-center lg:text-left">
-      <span class="inline-block bg-white/20 px-3 py-1 text-xs uppercase tracking-wide rounded-full font-semibold">
+      <span
+        class="inline-block bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-3 py-1 text-xs uppercase tracking-wide rounded-full font-semibold">
         Legal & Compliance
       </span>
       <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
@@ -74,7 +50,7 @@
         class="rounded-2xl shadow-2xl w-full max-w-sm object-contain">
     </div>
   </div>
-  <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-gray-50/70 to-transparent"></div>
+  <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950 to-transparent"></div>
 </section>
 
 <!-- MOBILE TOC BUTTON -->
@@ -89,18 +65,18 @@
 </div>
 
 <!-- MAIN CONTENT -->
-<section class="relative py-20 bg-gray-50">
+<section class="relative py-20 bg-slate-950">
   <div class="max-w-6xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row gap-12">
 
     <!-- CONTENT -->
     <main id="policy-content"
-      class="section-fade prose prose-indigo lg:prose-lg bg-white shadow-xl rounded-3xl p-10 md:p-16 max-w-none z-10 border border-gray-100"
+      class="section-fade prose prose-invert prose-indigo lg:prose-lg bg-slate-900 shadow-xl rounded-3xl p-10 md:p-16 max-w-none z-10 border border-white/5"
       tabindex="-1" style="scroll-margin-top:4rem;">
       <article>
 
         <p
-          class="text-lg leading-relaxed font-medium mb-10 border-l-4 border-indigo-400 text-gray-900 bg-indigo-50 p-5 rounded-lg shadow-sm">
-          At <strong>SaaSApp</strong>, privacy isn’t a legal checkbox — it’s a product feature.  
+          class="text-lg leading-relaxed font-medium mb-10 border-l-4 border-indigo-500 text-indigo-100 bg-indigo-500/10 p-5 rounded-lg shadow-sm">
+          At <strong>SaaSApp</strong>, privacy isn’t a legal checkbox — it’s a product feature.
           This policy explains how we protect your data across our apps, APIs, and services.
         </p>
 
@@ -129,10 +105,12 @@
         </ul>
 
         <h2 id="legal-bases">🛡️ Legal Bases</h2>
-        <p>Our processing relies on your consent, contract fulfillment, legitimate interests, or legal obligation — depending on your location.</p>
+        <p>Our processing relies on your consent, contract fulfillment, legitimate interests, or legal obligation —
+          depending on your location.</p>
 
         <h2 id="cookies">🍪 Cookies</h2>
-        <p>We use minimal cookies — essential for functionality, analytics for improvement, and marketing only with explicit consent.</p>
+        <p>We use minimal cookies — essential for functionality, analytics for improvement, and marketing only with
+          explicit consent.</p>
 
         <h2 id="sharing">🔗 Sharing & Disclosure</h2>
         <ul>
@@ -178,18 +156,27 @@
     <!-- TOC (DESKTOP) -->
     <aside class="hidden lg:block lg:w-80 sticky top-28 self-start">
       <nav
-        class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 max-h-[calc(100vh-7rem)] overflow-y-auto space-y-3">
-        <h3 class="text-lg font-semibold text-indigo-700 mb-4">On this page</h3>
-        <ul class="space-y-2 text-gray-700 font-medium text-sm">
-          <li><a href="#scope" class="toc-link block rounded px-3 py-2">🔍 Scope</a></li>
-          <li><a href="#info-we-collect" class="toc-link block rounded px-3 py-2">📊 Data We Collect</a></li>
-          <li><a href="#how-we-use" class="toc-link block rounded px-3 py-2">⚡ How We Use</a></li>
-          <li><a href="#legal-bases" class="toc-link block rounded px-3 py-2">🛡️ Legal Bases</a></li>
-          <li><a href="#cookies" class="toc-link block rounded px-3 py-2">🍪 Cookies</a></li>
-          <li><a href="#sharing" class="toc-link block rounded px-3 py-2">🔗 Sharing</a></li>
-          <li><a href="#security" class="toc-link block rounded px-3 py-2">🔒 Security</a></li>
-          <li><a href="#your-rights" class="toc-link block rounded px-3 py-2">📝 Your Rights</a></li>
-          <li><a href="#contact" class="toc-link block rounded px-3 py-2">📬 Contact</a></li>
+        class="bg-slate-900 rounded-2xl shadow-xl border border-white/5 p-6 max-h-[calc(100vh-7rem)] overflow-y-auto space-y-3">
+        <h3 class="text-lg font-semibold text-indigo-400 mb-4">On this page</h3>
+        <ul class="space-y-2 text-slate-300 font-medium text-sm">
+          <li><a href="#scope" class="toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">🔍
+              Scope</a></li>
+          <li><a href="#info-we-collect"
+              class="toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">📊 Data We Collect</a></li>
+          <li><a href="#how-we-use" class="toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">⚡ How
+              We Use</a></li>
+          <li><a href="#legal-bases" class="toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">🛡️
+              Legal Bases</a></li>
+          <li><a href="#cookies" class="toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">🍪
+              Cookies</a></li>
+          <li><a href="#sharing" class="toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">🔗
+              Sharing</a></li>
+          <li><a href="#security" class="toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">🔒
+              Security</a></li>
+          <li><a href="#your-rights" class="toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">📝
+              Your Rights</a></li>
+          <li><a href="#contact" class="toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">📬
+              Contact</a></li>
         </ul>
       </nav>
     </aside>
@@ -198,26 +185,35 @@
 </section>
 
 <!-- MOBILE TOC MODAL -->
-<div id="mobileToc"
-  class="fixed inset-0 z-50 hidden bg-black bg-opacity-70 backdrop-blur-sm flex items-center justify-center">
-  <div class="w-11/12 max-w-md bg-white rounded-3xl shadow-2xl p-6 overflow-auto max-h-[70vh]">
-    <h3 class="text-xl font-semibold text-indigo-700 mb-4">Jump to Section</h3>
-    <ul class="space-y-3 text-gray-800 text-sm">
-      <li><a href="#scope" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">🔍 Scope</a></li>
-      <li><a href="#info-we-collect" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">📊 Data We
+<div id="mobileToc" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center">
+  <div
+    class="w-11/12 max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl p-6 overflow-auto max-h-[70vh]">
+    <h3 class="text-xl font-semibold text-indigo-400 mb-4">Jump to Section</h3>
+    <ul class="space-y-3 text-slate-300 text-sm">
+      <li><a href="#scope" class="mobile-toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">🔍
+          Scope</a></li>
+      <li><a href="#info-we-collect"
+          class="mobile-toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">📊 Data We
           Collect</a></li>
-      <li><a href="#how-we-use" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">⚡ How We Use</a></li>
-      <li><a href="#legal-bases" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">🛡️ Legal Bases</a>
+      <li><a href="#how-we-use" class="mobile-toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">⚡
+          How We Use</a></li>
+      <li><a href="#legal-bases"
+          class="mobile-toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">🛡️ Legal Bases</a>
       </li>
-      <li><a href="#cookies" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">🍪 Cookies</a></li>
-      <li><a href="#sharing" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">🔗 Sharing</a></li>
-      <li><a href="#security" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">🔒 Security</a></li>
-      <li><a href="#your-rights" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">📝 Your Rights</a>
+      <li><a href="#cookies" class="mobile-toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">🍪
+          Cookies</a></li>
+      <li><a href="#sharing" class="mobile-toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">🔗
+          Sharing</a></li>
+      <li><a href="#security" class="mobile-toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">🔒
+          Security</a></li>
+      <li><a href="#your-rights" class="mobile-toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">📝
+          Your Rights</a>
       </li>
-      <li><a href="#contact" class="mobile-toc-link block rounded px-3 py-2 hover:bg-indigo-100">📬 Contact</a></li>
+      <li><a href="#contact" class="mobile-toc-link block rounded px-3 py-2 hover:bg-slate-800 transition-colors">📬
+          Contact</a></li>
     </ul>
     <button id="closeTocBtn"
-      class="mt-6 w-full rounded-3xl bg-indigo-700 text-white py-3 font-semibold shadow-lg hover:bg-indigo-800 transition">
+      class="mt-6 w-full rounded-xl bg-slate-800 text-white border border-white/10 hover:bg-slate-700 py-3 font-semibold shadow-lg transition-colors">
       Close
     </button>
   </div>

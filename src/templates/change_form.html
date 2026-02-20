@@ -2,10 +2,13 @@
 {% load i18n %}
 
 {% block after_related_objects %}
-<h2>Previous Emails Sent</h2>
-<pre style="font-size:12px; padding: auto; color: #fff;">
-    {{ original.email_history|default:"No emails sent yet." }}
+<div style="margin-top: 20px;">
+  <h2 style="color: #cbd5e1; margin-bottom: 10px; font-weight: 600;">Previous Emails Sent</h2>
+  <pre
+    style="font-size: 13px; padding: 16px; background-color: #0f172a; color: #f8fafc; border: 1px solid #1e293b; border-radius: 8px; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">
+{{ original.email_history|default:"No emails sent yet." }}
   </pre>
+</div>
 {% endblock %}
 
 {% block submit_buttons_bottom %}

@@ -5,93 +5,103 @@
 {% block content %}
 
 <!-- Hero Section -->
-<section class="relative text-white text-center">
+<section
+  class="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-24 text-white overflow-hidden text-center">
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08),transparent_60%)]"></div>
   <!-- Hero Content -->
-  <div class="relative max-w-4xl mx-auto px-4 py-24">
-    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg text-black">
+  <div class="relative max-w-4xl mx-auto px-4">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg text-white">
       Wire Success Story
     </h1>
-    <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-black opacity-90">
+    <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-slate-300">
       How TechCorp increased productivity by 40% using SaaSApp's workflow automation.
     </p>
-    <a href="/" 
-       class="inline-block bg-yellow-900 hover:bg-yellow-700 text-white font-semibold rounded-full px-6 py-3 transition">
+    <a href="/"
+      class="inline-block bg-slate-800 hover:bg-slate-700 border border-white/10 text-white font-semibold rounded-full px-6 py-3 transition-colors shadow-lg">
       ← Back to Home
     </a>
   </div>
 </section>
 
 <!-- Case Study Content -->
-<section class="max-w-5xl mx-auto px-4 py-10 space-y-20">
+<section class="max-w-5xl mx-auto px-4 py-16 space-y-20">
 
   <!-- Featured Image -->
-  <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1170&q=80"
-    alt="TechCorp Office Scene" class="rounded-xl shadow-xl w-full object-cover max-h-96" />
+  <div class="relative group">
+    <div
+      class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200">
+    </div>
+    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1170&q=80"
+      alt="TechCorp Office Scene"
+      class="relative rounded-xl shadow-2xl w-full object-cover max-h-96 border border-white/10" />
+  </div>
 
   <!-- About TechCorp -->
-  <div>
-    <h2 class="text-3xl font-bold mb-6 text-gray-900 border-l-4 border-yellow-400 pl-4">About TechCorp</h2>
-    <p class="text-gray-700 leading-relaxed">
+  <div class="bg-slate-900 p-8 rounded-2xl shadow-xl border border-white/5">
+    <h2 class="text-3xl font-bold mb-6 text-white border-l-4 border-indigo-500 pl-4">About TechCorp</h2>
+    <p class="text-slate-300 leading-relaxed text-lg">
       TechCorp is a leading software company specializing in cloud-based enterprise solutions. With over 500 employees
       globally, they focus on delivering innovation and agility to their clients.
     </p>
   </div>
 
   <!-- Challenges -->
-  <div>
-    <h2 class="text-3xl font-bold mb-6 text-gray-900 border-l-4 border-yellow-400 pl-4">Challenges</h2>
-    <p class="text-gray-700 leading-relaxed mb-4">
+  <div class="bg-slate-900 p-8 rounded-2xl shadow-xl border border-white/5">
+    <h2 class="text-3xl font-bold mb-6 text-white border-l-4 border-indigo-500 pl-4">Challenges</h2>
+    <p class="text-slate-300 leading-relaxed mb-4 text-lg">
       TechCorp struggled with inefficient project tracking and siloed communication across teams, which led to missed
       deadlines and inconsistent reporting.
     </p>
-    <p class="text-gray-700 leading-relaxed">
+    <p class="text-slate-300 leading-relaxed text-lg">
       Their legacy tools did not support the integrated workflows needed for their expanding product portfolio and
       global team collaboration.
     </p>
   </div>
 
   <!-- Solution -->
-  <div>
-    <h2 class="text-3xl font-bold mb-6 text-gray-900 border-l-4 border-yellow-400 pl-4">Solution</h2>
-    <p class="text-gray-700 leading-relaxed mb-4">
+  <div class="bg-slate-900 p-8 rounded-2xl shadow-xl border border-white/5">
+    <h2 class="text-3xl font-bold mb-6 text-white border-l-4 border-indigo-500 pl-4">Solution</h2>
+    <p class="text-slate-300 leading-relaxed mb-4 text-lg">
       Implementing SaaSApp's unified platform allowed TechCorp to centralize project management with real-time
       dashboards, automate task assignments, and facilitate seamless communication.
     </p>
-    <p class="text-gray-700 leading-relaxed">
+    <p class="text-slate-300 leading-relaxed text-lg">
       Training sessions and integration with existing tools ensured rapid adoption across all departments.
     </p>
   </div>
 
   <!-- Results -->
-  <div>
-    <h2 class="text-3xl font-bold mb-6 text-gray-900 border-l-4 border-yellow-400 pl-4">Results</h2>
-    <ul class="space-y-3 text-gray-700">
+  <div class="bg-slate-900 p-8 rounded-2xl shadow-xl border border-white/5">
+    <h2 class="text-3xl font-bold mb-6 text-white border-l-4 border-indigo-500 pl-4">Results</h2>
+    <ul class="space-y-4 text-slate-300 text-lg">
       <li class="flex items-start">
-        <span class="text-yellow-500 text-xl mr-2">✔</span>
+        <span class="text-emerald-400 text-xl mr-3 font-bold">✓</span>
         40% increase in overall team productivity within 6 months
       </li>
       <li class="flex items-start">
-        <span class="text-yellow-500 text-xl mr-2">✔</span>
+        <span class="text-emerald-400 text-xl mr-3 font-bold">✓</span>
         75% reduction in missed deadlines across projects
       </li>
       <li class="flex items-start">
-        <span class="text-yellow-500 text-xl mr-2">✔</span>
+        <span class="text-emerald-400 text-xl mr-3 font-bold">✓</span>
         Real-time visibility improved decision-making and stakeholder satisfaction
       </li>
       <li class="flex items-start">
-        <span class="text-yellow-500 text-xl mr-2">✔</span>
+        <span class="text-emerald-400 text-xl mr-3 font-bold">✓</span>
         Enhanced inter-team collaboration led to innovative solutions being delivered faster
       </li>
     </ul>
   </div>
 
   <!-- Testimonial -->
-  <blockquote class="bg-yellow-50 rounded-xl p-8 shadow-md border border-yellow-200 text-center">
-    <p class="text-lg italic text-yellow-900 mb-4">
+  <blockquote
+    class="bg-indigo-900/20 rounded-2xl p-10 shadow-lg border border-indigo-500/20 text-center relative overflow-hidden">
+    <div class="absolute top-4 right-6 text-6xl text-indigo-500/10 font-serif leading-none">"</div>
+    <p class="text-xl italic text-slate-300 mb-6 relative z-10">
       “SaaSApp revolutionized how we manage projects and collaborate. The platform’s flexibility and real-time insights
       helped us deliver projects on time and improve our customer satisfaction dramatically.”
     </p>
-    <footer class="font-semibold text-yellow-900">
+    <footer class="font-bold text-indigo-300 relative z-10 text-lg">
       — Sarah Johnson, COO, TechCorp
     </footer>
   </blockquote>
@@ -99,13 +109,19 @@
 </section>
 
 <!-- Call to Action -->
-<section class="bg-yellow-400 text-yellow-900 py-12 text-center">
-  <h2 class="text-2xl md:text-3xl font-bold mb-4">Ready to Transform Your Workflow?</h2>
-  <p class="mb-6 text-lg">Discover how SaaSApp can drive productivity and efficiency for your business.</p>
-  <a href="{% url 'schedule_demo' %}"
-    class="inline-block bg-yellow-900 text-white px-8 py-4 rounded-lg font-bold hover:bg-yellow-800 transition">
-    Contact Sales to Learn More
-  </a>
+<section
+  class="bg-gradient-to-r from-indigo-900 to-slate-900 border-t border-b border-white/10 text-white py-16 text-center relative overflow-hidden">
+  <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-50">
+  </div>
+  <div class="relative z-10 max-w-4xl mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Transform Your Workflow?</h2>
+    <p class="mb-8 text-xl text-slate-300">Discover how SaaSApp can drive productivity and efficiency for your business.
+    </p>
+    <a href="{% url 'schedule_demo' %}"
+      class="inline-block bg-indigo-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-indigo-500 shadow-lg shadow-indigo-500/20 transition-all hover:-translate-y-0.5">
+      Contact Sales to Learn More
+    </a>
+  </div>
 </section>
 
 {% endblock %}
