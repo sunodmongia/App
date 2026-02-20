@@ -1,17 +1,45 @@
-{% extends "account/request_login_code.html" %}
+{% extends "base.html" %}
 {% load i18n %}
-{% load allauth_ui %}
 {% load widget_tweaks %}
+
 {% block content %}
-    {% trans "Mail me a sign-in code" as heading %}
-    {% #container heading=heading  %}
-    <div class="py-3">
-        {% blocktranslate %}You will receive an email containing a special code for a password-free sign-in.{% endblocktranslate %}
+<div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-white mb-2">{% trans "Mail me a sign-in code" %}</h2>
+            <p class="text-slate-400">Password-free sign in</p>
+        </div>
+
+        <div class="bg-slate-900 rounded-2xl shadow-xl border border-white/5 p-8">
+            <p class="text-slate-300 text-sm mb-6">
+                {% trans "You will receive an email containing a special code for a password-free sign-in." %}
+            </p>
+
+            <form method="post" action="{% url 'account_request_login_code' %}" class="space-y-4">
+                {% csrf_token %}
+                {{ redirect_field }}
+                
+                {% for field in form %}
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">{{ field.label }}</label>
+                    {% render_field field class="w-full px-4 py-3 bg-slate-950 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" %}
+                    {% if field.errors %}
+                        <p class="mt-1 text-sm text-red-400">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                    {% trans "Send Code" %}
+                </button>
+            </form>
+
+            <div class="mt-6 text-center">
+                <a href="{% url 'account_login' %}" class="text-sm text-indigo-400 hover:text-indigo-300">
+                    ← {% trans "Back to sign in" %}
+                </a>
+            </div>
+        </div>
     </div>
-    {% url 'account_request_login_code' as action_url %}
-    {% #form form=form url=action_url button_text=heading %}
-    {{ redirect_field }}
-    {% csrf_token %}
-    {% /form %}
-    {% /container %}
+</div>
 {% endblock content %}

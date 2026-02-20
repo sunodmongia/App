@@ -1,23 +1,30 @@
-{% extends "account/base_reauthenticate.html" %}
+{% extends "base.html" %}
 {% load i18n %}
-{% load allauth_ui %}
+
 {% block content %}
-    {% trans "Confirm Access" as heading %}
-    {% blocktranslate asvar subheading %}
-    Please reauthenticate to safeguard your account.
-    {% endblocktranslate %}
-    {% #container heading=heading subheading=subheading %}
-    {% block reauthenticate_content %}{% endblock %}
-    {% if reauthentication_alternatives %}
-        <div class="divider divider-neutral"></div>
-        <h2 class="text-lg my-3">{% translate "Alternative options" %}</h2>
-        <ul>
-            {% for alt in reauthentication_alternatives %}
-                <li>
-                    <a class="link" href="{{ alt.url }}">{{ alt.description }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% /container %}
+<div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-white mb-2">{% trans "Confirm Access" %}</h2>
+            <p class="text-slate-400">{% trans "Please reauthenticate to safeguard your account." %}</p>
+        </div>
+
+        <div class="bg-slate-900 rounded-2xl shadow-xl border border-white/5 p-8">
+            {% block reauthenticate_content %}{% endblock %}
+
+            {% if reauthentication_alternatives %}
+            <div class="mt-6 pt-6 border-t border-white/10">
+                <h3 class="text-sm font-semibold text-slate-300 mb-3">{% trans "Alternative options" %}</h3>
+                <ul class="space-y-2">
+                    {% for alt in reauthentication_alternatives %}
+                    <li>
+                        <a href="{{ alt.url }}" class="text-sm text-indigo-400 hover:text-indigo-300">{{ alt.description }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock content %}

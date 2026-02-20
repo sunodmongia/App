@@ -1,33 +1,66 @@
-{% extends "account/email_confirm.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 {% load account %}
-{% load allauth_ui %}
-{% load widget_tweaks %}
+
 {% block content %}
-    {% trans "Confirm Email Address" as heading %}
-    {% #container heading=heading  %}
-    {% if confirmation %}
-        {% user_display confirmation.email_address.user as user_display %}
-        {% if can_confirm %}
-            <div>
-                {% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an email address for user {{ user_display }}.{% endblocktrans %}
-            </div>
-            {% url 'account_confirm_email' confirmation.key as action_url %}
-            {% trans 'Confirm' as button_text %}
-            {% #form form=form url=action_url button_text=button_text %}
-            {% csrf_token %}
-            {{ redirect_field }}
-            {% /form %}
-        {% else %}
-            <div>
-                {% blocktrans %}Unable to confirm {{ email }} because it is already confirmed by a different account.{% endblocktrans %}
-            </div>
-        {% endif %}
-    {% else %}
-        {% url 'account_email' as email_url %}
-        <div>
-            {% blocktrans %}This email confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new email confirmation request</a>.{% endblocktrans %}
+<div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-white mb-2">{% trans "Confirm Email" %}</h2>
         </div>
-    {% endif %}
-    {% /container %}
+
+        <div class="bg-slate-900 rounded-2xl shadow-xl border border-white/5 p-8">
+            {% if confirmation %}
+                {% user_display confirmation.email_address.user as user_display %}
+                {% if can_confirm %}
+                    <div class="text-center mb-6">
+                        <div class="mx-auto w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-slate-300 mb-4">
+                            {% with confirmation.email_address.email as email %}
+                            Please confirm that <span class="text-indigo-400">{{ email }}</span> is an email address for user <span class="font-semibold">{{ user_display }}</span>.
+                            {% endwith %}
+                        </p>
+                    </div>
+
+                    <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                        {% csrf_token %}
+                        {{ redirect_field }}
+                        <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                            {% trans "Confirm" %}
+                        </button>
+                    </form>
+                {% else %}
+                    <div class="text-center">
+                        <div class="mx-auto w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-slate-300">
+                            {% with confirmation.email_address.email as email %}
+                            Unable to confirm {{ email }} because it is already confirmed by a different account.
+                            {% endwith %}
+                        </p>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="text-center">
+                    <div class="mx-auto w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-slate-300 mb-6">
+                        {% url 'account_email' as email_url %}
+                        This email confirmation link expired or is invalid. Please <a href="{{ email_url }}" class="text-indigo-400 hover:text-indigo-300">issue a new email confirmation request</a>.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock content %}

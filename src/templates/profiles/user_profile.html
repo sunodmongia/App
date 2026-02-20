@@ -28,7 +28,7 @@
             <h1 class="text-3xl font-extrabold text-white">{{ request.user.username }}</h1>
             <p class="text-indigo-200 mt-1">{{ request.user.email }}</p>
             {% if request.user.userprofile.phone %}
-            <p class="text-indigo-200 mt-1 text-sm">📞 {{ request.user.userprofile.phone }}</p>
+            <p class="text-indigo-200 mt-1 text-sm">📞{{ request.user.userprofile.phone }}</p>
             {% endif %}
           </div>
         </div>
@@ -37,6 +37,10 @@
           <a href="{% url 'profile-edit' request.user.id %}"
             class="px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl backdrop-blur text-sm transition-all border border-white/20">
             ✏️ Edit Profile
+          </a>
+          <a href="{% url 'account_email' %}"
+            class="px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl backdrop-blur text-sm transition-all border border-white/20">
+            📧 Manage Emails
           </a>
           <a href="{% url 'account_change_password' %}"
             class="px-5 py-2.5 bg-indigo-950/60 hover:bg-indigo-950/80 text-white font-semibold rounded-xl text-sm transition-all border border-white/10">

@@ -1,6 +1,4 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% load tailwind_field %}
 {% load widget_tweaks %}
 {% block content %}
 <title>Start Your Free Trial - SaaSApp</title>
@@ -163,8 +161,26 @@
                                 border-color: #6366f1 !important;
                                 box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
                             }
+                            
+                            .errorlist {
+                                color: #ef4444;
+                                font-size: 0.75rem;
+                                margin-top: 0.25rem;
+                                list-style: none;
+                                padding: 0;
+                            }
                         </style>
-                        {{ form|crispy }}
+                        
+                        {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                                {{ field.errors }}
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        
                         <div class="mt-8">
                             <button type="submit"
                                 class="w-full py-4 px-8 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-lg shadow-indigo-500/25 transition-all duration-300 hover:scale-[1.02]">
