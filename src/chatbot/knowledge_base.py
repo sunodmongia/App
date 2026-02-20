@@ -1,3 +1,4 @@
+
 def get_company_context():
     return """
 Company Name: Wire
@@ -9,15 +10,15 @@ Support Phone: +91 9416872136
 Office Hours: 9:30 AM - 6:30 PM IST (Monday to Saturday)
 Emergency Support: 24/7 for Enterprise customers
 
----------------------------------------------------
-About Wire
----------------------------------------------------
+from langchain_chroma import Chroma
+from langchain_huggingface import HuggingFaceEmbeddings
 
----------------------------------------------------
-About Wire
----------------------------------------------------
-Wire provides modern cloud and AI infrastructure for startups, businesses, and developers. 
-Our goal is to make hosting, storage, and AI deployment simple, fast, and affordable.
+embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
+db = Chroma(
+    persist_directory='kb',
+    embedding_function=embeddings
+)
 
 ---------------------------------------------------
 Core Services
@@ -90,4 +91,13 @@ Service Limitations
 If a question is not covered above, politely ask the user to contact sunodmongia2003@gmail.com
 """
 
+def get_company_context(query, k=4):
+    docs = db.similarity_search(query, k=k)
+    return "\n\n".join(d.page_content for d in docs)
 
+
+
+
+    # python manage.py shell
+    # from chatbot.knowledge_base import get_company_context()
+    # print(get_company_context("refund policy"))

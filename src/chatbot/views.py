@@ -4,6 +4,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .groq_client import ask_groq
 from .knowledge_base import get_company_context
 
+
 @api_view(["POST"])
 @ensure_csrf_cookie
 def chatbot(request):
@@ -11,8 +12,10 @@ def chatbot(request):
 
     if not user_message:
         return Response({"error": "Message required"}, status=400)
-    
-    context = get_company_context()
+
+    context = get_company_context(user_message)
+
+
     reply = ask_groq(user_message, context)
 
-    return Response({"user": user_message, "bot": reply})
+    return Response({"user": user_message, "context_used": context, "bot": reply})
