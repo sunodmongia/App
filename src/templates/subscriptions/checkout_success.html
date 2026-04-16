@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="flex min-h-[70vh] items-center justify-center bg-slate-950 px-6 py-20">
+    <div class="text-center max-w-lg">
+        <div class="mb-6 flex justify-center">
+            <span class="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-400/15 ring-1 ring-emerald-400/30">
+                <svg class="h-10 w-10 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </span>
+        </div>
+        <h1 class="mb-3 text-3xl font-extrabold text-white">Payment successful!</h1>
+        <p class="mb-2 text-slate-400">
+            {% if current_subscription %}
+                Your organisation is now on the <span class="font-semibold text-white">{{ current_subscription.name }}</span> plan.
+            {% else %}
+                Your subscription has been activated.
+            {% endif %}
+        </p>
+        <p class="mb-8 text-sm text-slate-500">A confirmation email will be sent shortly by Stripe.</p>
+        <a href="{% url 'pricing' %}"
+            class="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-indigo-500">
+            Back to pricing
+        </a>
+    </div>
+</section>
+{% endblock %}

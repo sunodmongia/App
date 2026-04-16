@@ -2,6 +2,7 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from subscriptions.services import get_user_organization
 
 
 class DashboardConsumer(WebsocketConsumer):
@@ -12,7 +13,12 @@ class DashboardConsumer(WebsocketConsumer):
             self.close()
             return
 
-        self.org_group = f"org_{user.organization.id}"
+        organization = get_user_organization(user)
+        if not organization:
+            self.close()
+            return
+
+        self.org_group = f"org_{organization.id}"
 
         async_to_sync(self.channel_layer.group_add)(self.org_group, self.channel_name)
 

@@ -8,6 +8,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from .models import *
+from .consumers import broadcast
+from subscriptions.services import get_default_subscription
 
 
 @receiver(user_logged_in)
@@ -110,7 +112,8 @@ def create_org_and_usage(sender, instance, created, **kwargs):
     # Create organization
     org = Organization.objects.create(
         name=instance.username,
-        owner=instance
+        owner=instance,
+        subscription=get_default_subscription(),
     )
 
     # Create usage (Usage belongs to USER, not ORG)

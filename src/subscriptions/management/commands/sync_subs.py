@@ -1,14 +1,12 @@
 from typing import Any
 from django.core.management.base import BaseCommand
-from subscriptions.models import Subscription
+from subscriptions.services import ensure_default_subscriptions, sync_subscription_permissions
 
 
 class Command(BaseCommand):
+     help = "Ensure default subscriptions exist and sync their permissions to linked groups."
+
      def handle(self, *args: Any, **options:Any):
-          qs = Subscription.objects.filter(active=True)
-          for obj in qs:
-               print(obj.groups.all())
-               for group in obj.groups.all():
-                    for per in obj.permissions.all():
-                         group.permissions.add(per)
-               print(obj.permission.all())
+          ensure_default_subscriptions()
+          sync_subscription_permissions()
+          self.stdout.write(self.style.SUCCESS("Subscriptions synced successfully."))

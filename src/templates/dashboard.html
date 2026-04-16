@@ -1,30 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-<div class="min-h-screen bg-slate-950 p-6 pt-8">
+<div class="min-h-screen bg-slate-950 p-4 md:p-8 pt-8">
 
     <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-extrabold text-white mb-1">Dashboard</h1>
-        <p class="text-slate-500">Monitor your SaaS metrics and performance</p>
-    </div>
-
-    <!-- Date Filter -->
-    <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-4 mb-8">
-        <form method="get" class="flex items-center gap-4">
-            <label class="text-sm font-medium text-slate-400">Time Period:</label>
-            <select name="days"
-                class="bg-slate-800 text-slate-200 border border-white/10 px-4 py-2 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition">
-                <option value="7" {% if days == 7 %}selected{% endif %}>Last 7 days</option>
-                <option value="30" {% if days == 30 %}selected{% endif %}>Last 30 days</option>
-                <option value="90" {% if days == 90 %}selected{% endif %}>Last 90 days</option>
-                <option value="365" {% if days == 365 %}selected{% endif %}>Last year</option>
-            </select>
-            <button
-                class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-indigo-600/20">
-                Apply
-            </button>
-        </form>
+    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-extrabold text-white mb-1">Dashboard</h1>
+            <p class="text-slate-500">Monitor your Cloud SaaS metrics and performance</p>
+        </div>
+        
+        <!-- Date Filter -->
+        <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-2 px-4 shadow-lg backdrop-blur-md">
+            <form method="get" class="flex items-center gap-4">
+                <label class="text-xs font-semibold text-slate-500 uppercase tracking-tighter">Period:</label>
+                <select name="days"
+                    class="bg-transparent text-slate-200 border-none px-2 py-1 rounded-xl text-sm focus:ring-0 focus:outline-none transition cursor-pointer font-bold">
+                    <option value="7" {% if days == 7 %}selected{% endif %}>Last 7 days</option>
+                    <option value="30" {% if days == 30 %}selected{% endif %}>Last 30 days</option>
+                    <option value="90" {% if days == 90 %}selected{% endif %}>Last 90 days</option>
+                    <option value="365" {% if days == 365 %}selected{% endif %}>Last year</option>
+                </select>
+                <button
+                    class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-indigo-600/20 active:scale-95">
+                    Apply
+                </button>
+            </form>
+        </div>
     </div>
 
     <!-- KPI Cards -->
@@ -32,15 +35,15 @@
 
         <!-- Active Orgs -->
         <div
-            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-blue-500/20 transition-all duration-200">
+            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-blue-500/20 transition-all duration-300 group shadow-xl">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Active Organizations
                     </p>
-                    <p class="text-3xl font-extrabold text-white">{{ active_orgs }}</p>
+                    <p class="text-3xl font-extrabold text-white group-hover:text-blue-400 transition-colors">{{ active_orgs }}</p>
                     <p class="text-xs text-slate-600 mt-1.5">of {{ total_orgs }} total</p>
                 </div>
-                <div class="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-blue-500/20 transition-all">
                     <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -51,11 +54,11 @@
 
         <!-- Revenue -->
         <div
-            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-emerald-500/20 transition-all duration-200">
+            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-emerald-500/20 transition-all duration-300 group shadow-xl">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Total Revenue</p>
-                    <p class="text-3xl font-extrabold text-white">₹{{ total_revenue|floatformat:0 }}</p>
+                    <p class="text-3xl font-extrabold text-white group-hover:text-emerald-400 transition-colors">₹{{ total_revenue|floatformat:0 }}</p>
                     {% if revenue_growth %}
                     <p
                         class="text-xs mt-1.5 {% if revenue_growth >= 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
@@ -64,7 +67,7 @@
                     </p>
                     {% endif %}
                 </div>
-                <div class="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-500/20 transition-all">
                     <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -75,11 +78,11 @@
 
         <!-- API Calls -->
         <div
-            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-purple-500/20 transition-all duration-200">
+            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-purple-500/20 transition-all duration-300 group shadow-xl">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">API Calls</p>
-                    <p class="text-3xl font-extrabold text-white">{{ total_api|floatformat:0 }}</p>
+                    <p class="text-3xl font-extrabold text-white group-hover:text-purple-400 transition-colors">{{ total_api|floatformat:0 }}</p>
                     {% if api_growth %}
                     <p class="text-xs mt-1.5 {% if api_growth >= 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
                         {% if api_growth >= 0 %}↑{% else %}↓{% endif %} {{ api_growth|floatformat:1 }}% vs previous
@@ -87,7 +90,7 @@
                     </p>
                     {% endif %}
                 </div>
-                <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-purple-500/20 transition-all">
                     <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -96,98 +99,80 @@
             </div>
         </div>
 
-        <!-- Automations -->
-        <div
-            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-orange-500/20 transition-all duration-200">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Active Automations</p>
-                    <p class="text-3xl font-extrabold text-white">{{ total_automations }}</p>
-                </div>
-                <div class="w-12 h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- Reports -->
-        <div
-            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-pink-500/20 transition-all duration-200">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Reports Generated</p>
-                    <p class="text-3xl font-extrabold text-white">{{ total_reports }}</p>
-                </div>
-                <div class="w-12 h-12 bg-pink-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- Storage -->
-        <div
-            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-indigo-500/20 transition-all duration-200">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Storage Used</p>
-                    <p class="text-3xl font-extrabold text-white">{{ total_storage|floatformat:0 }} <span
-                            class="text-lg font-normal text-slate-500">MB</span></p>
-                </div>
-                <div class="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <!-- Two Column -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Revenue Trend Chart -->
+        <div class="lg:col-span-2 bg-slate-900/70 border border-white/5 rounded-3xl p-8 shadow-2xl backdrop-blur-sm relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h3 class="text-xl font-bold text-white tracking-tight">Revenue Trend</h3>
+                        <p class="text-xs text-slate-500 font-medium">Daily income performance across all organizations</p>
+                    </div>
+                </div>
+                <div class="h-72">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+            <!-- Background Decoration -->
+            <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl"></div>
+        </div>
+
+        <!-- API Distribution -->
+        <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-8 shadow-2xl backdrop-blur-sm relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 class="text-xl font-bold text-white mb-2 tracking-tight">Service Distribution</h3>
+                <p class="text-xs text-slate-500 mb-8 font-medium">Activity breakdown by service type</p>
+                <div class="h-64 flex items-center justify-center">
+                    <canvas id="apiChart"></canvas>
+                </div>
+            </div>
+            <div class="absolute -left-20 -top-20 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl"></div>
+        </div>
+    </div>
+
+    <!-- Tables & Feed -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 
         <!-- Top Organizations -->
-        <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-6">
-            <h2 class="text-base font-bold text-white mb-5 flex items-center gap-3">
+        <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-8 shadow-2xl backdrop-blur-sm">
+            <h2 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
                 <span
-                    class="w-8 h-8 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="w-10 h-10 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
                 </span>
-                Top Organizations
+                Leading Organizations
             </h2>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead>
-                        <tr class="border-b border-white/5 text-left text-slate-500 text-xs">
-                            <th class="pb-3 font-semibold uppercase tracking-wider">Organization</th>
-                            <th class="pb-3 font-semibold text-right uppercase tracking-wider">Revenue</th>
-                            <th class="pb-3 font-semibold text-right uppercase tracking-wider">API Calls</th>
-                            <th class="pb-3 font-semibold text-right uppercase tracking-wider">Team</th>
+                        <tr class="border-b border-white/5 text-left text-slate-500 text-[10px] uppercase tracking-widest font-bold">
+                            <th class="pb-4">Organization</th>
+                            <th class="pb-4 text-right">Revenue</th>
+                            <th class="pb-4 text-right">API Traffic</th>
+                            <th class="pb-4 text-right">Team</th>
                         </tr>
                     </thead>
                     <tbody class="text-sm">
                         {% for org in top_orgs %}
-                        <tr class="border-b border-white/5 hover:bg-white/2 transition-colors">
-                            <td class="py-3 font-medium text-slate-200">{{ org.name }}</td>
-                            <td class="py-3 text-right text-emerald-400 font-semibold">₹{{ org.revenue|default:"0"|floatformat:0 }}</td>
-                            <td class="py-3 text-right text-slate-400">{{ org.api_calls|default:"0" }}</td>
-                            <td class="py-3 text-right text-slate-400">{{ org.team_size }}</td>
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
+                            <td class="py-4 font-bold text-slate-200 group-hover:text-indigo-400 transition-colors">{{ org.name }}</td>
+                            <td class="py-4 text-right text-emerald-400 font-mono font-bold">₹{{ org.revenue|default:"0"|floatformat:0 }}</td>
+                            <td class="py-4 text-right text-slate-400 font-mono">{{ org.api_calls|default:"0" }}</td>
+                            <td class="py-4 text-right text-slate-500">
+                                <div class="flex items-center justify-end gap-1">
+                                    <span class="w-5 h-5 bg-slate-800 rounded-full flex items-center justify-center text-[10px]">{{ org.team_size }}</span>
+                                </div>
+                            </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="4" class="py-10 text-center text-slate-600 text-sm">No data available</td>
+                            <td colspan="4" class="py-10 text-center text-slate-600 text-sm italic">No data records found</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -195,90 +180,116 @@
             </div>
         </div>
 
-        <!-- Event Activity -->
-        <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-6">
-            <h2 class="text-base font-bold text-white mb-5 flex items-center gap-3">
-                <span
-                    class="w-8 h-8 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-                    </svg>
-                </span>
-                Event Activity
-            </h2>
-            <div class="space-y-2">
+        <!-- Live Activity -->
+        <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-8 shadow-2xl backdrop-blur-sm">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-lg font-bold text-white flex items-center gap-3">
+                    <span class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-600/20">
+                        <span class="w-2.5 h-2.5 bg-white rounded-full animate-pulse shadow-white/50 shadow-lg"></span>
+                    </span>
+                    Live Network Feed
+                </h2>
+                <div class="flex items-center gap-2">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                    </span>
+                    <span class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Live</span>
+                </div>
+            </div>
+            <div id="live-feed" class="space-y-3 max-h-[400px] overflow-y-auto pr-3 custom-scrollbar">
                 {% for e in events %}
-                <div
-                    class="flex items-center justify-between px-4 py-3 bg-slate-800/60 rounded-xl hover:bg-slate-800 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 bg-indigo-400 rounded-full flex-shrink-0"></div>
-                        <span class="font-medium text-slate-300 capitalize text-sm">{{ e.type }}</span>
+                <div class="flex items-center justify-between px-5 py-4 bg-slate-800/20 border border-white/5 rounded-2xl hover:bg-slate-800/40 transition-all group border-l-4 {% if e.type == 'revenue' %}border-l-emerald-500{% elif e.type == 'api_call' %}border-l-blue-500{% else %}border-l-slate-700{% endif %}">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-slate-900/50 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                            {% if e.type == 'revenue' %}
+                                <span class="text-emerald-400 text-xs font-bold">₹</span>
+                            {% elif e.type == 'api_call' %}
+                                <span class="text-blue-400 text-xs">⚡</span>
+                            {% else %}
+                                <span class="text-slate-500 text-xs">⚙️</span>
+                            {% endif %}
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-bold text-slate-100 text-sm">{{ e.type|capfirst|truncatechars:20 }}</span>
+                            <span class="text-[10px] text-slate-500 font-medium group-hover:text-slate-400 transition-colors italic">{{ e.org.name }}</span>
+                        </div>
                     </div>
-                    <span class="bg-indigo-500/15 text-indigo-400 px-2.5 py-1 rounded-lg text-xs font-semibold">{{ e.count }}</span>
+                    <span class="text-[10px] text-slate-600 font-mono font-bold">{{ e.created_at|date:"H:i:s" }}</span>
                 </div>
                 {% empty %}
-                <p class="text-center text-slate-600 py-10 text-sm">No events recorded</p>
+                <div id="no-events" class="flex flex-col items-center justify-center py-20 text-slate-600 gap-4">
+                    <svg class="w-12 h-12 text-slate-800 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p class="text-sm font-medium tracking-tight">Listening for real-time events...</p>
+                </div>
                 {% endfor %}
             </div>
         </div>
 
     </div>
 
-    <!-- Automation Health & Churn -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Bottom Metrics -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-24">
 
         <!-- Automation Health -->
-        <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-6">
-            <h2 class="text-base font-bold text-white mb-5 flex items-center gap-3">
+        <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-8 shadow-xl">
+            <h2 class="text-lg font-bold text-white mb-8 flex items-center gap-3">
                 <span
-                    class="w-8 h-8 bg-gradient-to-br from-orange-600 to-red-600 rounded-xl flex items-center justify-center">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="w-10 h-10 bg-gradient-to-br from-orange-600 to-red-600 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-600/20">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </span>
-                Automation Health
+                Automation Integrity
             </h2>
-            <div class="space-y-4">
+            <div class="space-y-6">
                 {% for a in automation_stats %}
-                <div class="bg-slate-800/60 rounded-xl p-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="font-medium text-slate-300 text-sm">{{ a.org__name }}</span>
-                        <span class="text-xs text-slate-500">{{ a.enabled }}/{{ a.total }} active</span>
+                <div class="group">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="font-bold text-slate-300 text-sm group-hover:text-white transition-colors">{{ a.org__name }}</span>
+                        <span class="text-[10px] font-bold text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">{{ a.enabled }}/{{ a.total }} Active</span>
                     </div>
-                    <div class="w-full bg-slate-700 rounded-full h-1.5">
-                        <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-1.5 rounded-full transition-all"
+                    <div class="w-full bg-slate-800/50 rounded-full h-2 overflow-hidden border border-white/5 p-[1px]">
+                        <div class="bg-gradient-to-r from-emerald-500 to-indigo-500 h-full rounded-full shadow-lg shadow-emerald-500/20 transition-all duration-1000"
                             style="width: {% widthratio a.enabled a.total 100 %}%"></div>
                     </div>
                 </div>
                 {% empty %}
-                <p class="text-center text-slate-600 py-10 text-sm">No automation data</p>
+                <p class="text-center text-slate-600 py-10 text-sm">No automation metrics available</p>
                 {% endfor %}
             </div>
         </div>
 
         <!-- Churn Risk -->
-        <div class="bg-slate-900/70 border border-red-500/10 rounded-2xl p-6">
-            <h2 class="text-base font-bold text-red-400 mb-5 flex items-center gap-3">
-                <span class="w-8 h-8 bg-red-500/15 rounded-xl flex items-center justify-center">
-                    <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-red-950/20 border border-red-500/10 rounded-3xl p-8 shadow-xl backdrop-blur-sm">
+            <h2 class="text-lg font-bold text-red-400 mb-8 flex items-center gap-3">
+                <span class="w-10 h-10 bg-red-500/20 rounded-2xl flex items-center justify-center border border-red-500/20">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                 </span>
-                Churn Risk
+                Churn Vigilance
             </h2>
-            <div class="space-y-2">
+            <div class="space-y-3">
                 {% for org in inactive_orgs %}
                 <div
-                    class="flex justify-between items-center px-4 py-3 bg-red-900/10 border border-red-500/10 rounded-xl hover:bg-red-900/20 transition-colors">
-                    <span class="font-medium text-slate-300 text-sm">{{ org.name }}</span>
-                    <span class="text-xs text-slate-500">{% if org.last_event %}{{ org.last_event|date:"M d, Y" }}{% else %}Never active{% endif %}</span>
+                    class="flex justify-between items-center px-5 py-4 bg-red-900/10 border border-red-500/20 rounded-2xl hover:bg-red-900/30 transition-all group">
+                    <div class="flex flex-col">
+                        <span class="font-bold text-slate-200 text-sm group-hover:text-red-400 transition-colors">{{ org.name }}</span>
+                        <span class="text-[10px] text-red-500/60 font-medium tracking-tight">Critical inactivity detected</span>
+                    </div>
+                    <span class="text-[10px] text-slate-500 font-mono font-bold bg-slate-900/50 px-2.5 py-1 rounded-lg">
+                        {% if org.last_event %}{{ org.last_event|date:"M d" }}{% else %}DEAD{% endif %}
+                    </span>
                 </div>
                 {% empty %}
-                <div class="text-center py-10">
-                    <p class="text-emerald-400 font-semibold text-sm">✓ All organizations are active!</p>
+                <div class="flex flex-col items-center justify-center py-10 gap-3 text-emerald-400">
+                    <div class="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center text-xl">✓</div>
+                    <p class="font-bold text-sm tracking-tight text-center">Cloud Pulse Healthy<br><span class="text-[10px] font-medium text-slate-500">All nodes reporting activity within threshold</span></p>
                 </div>
                 {% endfor %}
             </div>
@@ -287,4 +298,128 @@
     </div>
 
 </div>
+
+<script>
+    // --- Charts Logic ---
+    const ctxRevenue = document.getElementById('revenueChart');
+    const ctxApi = document.getElementById('apiChart');
+
+    if (ctxRevenue) {
+        new Chart(ctxRevenue, {
+            type: 'line',
+            data: {
+                labels: [{% for t in revenue_trends %}'{{ t.date|date:"M d" }}',{% endfor %}],
+                datasets: [{
+                    label: 'Revenue (₹)',
+                    data: [{% for t in revenue_trends %}{{ t.amount }},{% endfor %}],
+                    borderColor: '#10b981',
+                    borderWidth: 3,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    pointHoverBorderWidth: 4,
+                    pointHoverBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#10b981',
+                    backgroundColor: (context) => {
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+                        if (!chartArea) return null;
+                        const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+                        gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+                        return gradient;
+                    },
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+                interaction: { intersect: false, mode: 'index' },
+                scales: {
+                    y: { border: { display:false }, grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b', font: { size: 10, weight: '600' } } },
+                    x: { border: { display:false }, grid: { display: false }, ticks: { color: '#64748b', font: { size: 10, weight: '600' } } }
+                }
+            }
+        });
+    }
+
+    if (ctxApi) {
+        const eventCounts = {};
+        {% for e in events %}
+            eventCounts['{{ e.type }}'] = (eventCounts['{{ e.type }}'] || 0) + 1;
+        {% endfor %}
+
+        new Chart(ctxApi, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(eventCounts).map(t => t.replace('_', ' ').toUpperCase()),
+                datasets: [{
+                    data: Object.values(eventCounts),
+                    backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'],
+                    borderWidth: 0,
+                    hoverOffset: 15,
+                    spacing: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: { 
+                    legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 10, font: { size: 10, weight: '700' }, padding: 20 } } 
+                }
+            }
+        });
+    }
+
+    // --- WebSocket Real-time Feed ---
+    const feed = document.getElementById('live-feed');
+    const noEvents = document.getElementById('no-events');
+    const wsPrefix = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const socket = new WebSocket(`${wsPrefix}://${window.location.host}/ws/dashboard/`);
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        if (noEvents) noEvents.remove();
+
+        const item = document.createElement('div');
+        const borderColor = data.type === 'revenue' ? 'border-l-emerald-500' : (data.type === 'api_call' ? 'border-l-blue-500' : 'border-l-slate-700');
+        const iconColor = data.type === 'revenue' ? 'text-emerald-400' : (data.type === 'api_call' ? 'text-blue-400' : 'text-slate-500');
+        const iconText = data.type === 'revenue' ? '₹' : (data.type === 'api_call' ? '⚡' : '⚙️');
+        
+        item.className = `flex items-center justify-between px-5 py-4 bg-slate-800/40 border border-white/10 rounded-2xl shadow-xl animate-in fade-in slide-in-from-right-8 duration-700 group border-l-4 ${borderColor}`;
+        
+        item.innerHTML = `
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-slate-900/80 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <span class="${iconColor} text-xs font-bold">${iconText}</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-slate-100 text-sm">${data.type.replace('_', ' ').toUpperCase()}</span>
+                    <span class="text-[10px] text-slate-500 font-medium italic">${data.org_name || 'System'}</span>
+                </div>
+            </div>
+            <span class="text-[10px] text-slate-400 font-mono font-bold">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}</span>
+        `;
+        
+        feed.prepend(item);
+        if (feed.children.length > 30) feed.lastElementChild.remove();
+    };
+
+    socket.onclose = function() {
+        console.warn('Dashboard WebSocket connection interrupted');
+    };
+</script>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #334155; }
+    
+    .animate-spin-slow { animation: spin 8s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
 {% endblock %}

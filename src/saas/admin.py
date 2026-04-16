@@ -131,8 +131,9 @@ class FeatureAdmin(admin.ModelAdmin):
 
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ("name", "owner", "created_at")
-    search_fields = ("name", "owner__username")
+    list_display = ("name", "owner", "subscription", "created_at")
+    list_filter = ("subscription", "created_at")
+    search_fields = ("name", "owner__username", "subscription__name")
 
 
 @admin.register(Event)
@@ -155,3 +156,10 @@ class TeamMemberAdmin(admin.ModelAdmin):
 @admin.register(Automation)
 class AutomationAdmin(admin.ModelAdmin):
     list_display = ("org", "name", "trigger", "enabled")
+
+
+@admin.register(UsageEvent)
+class UsageEventAdmin(admin.ModelAdmin):
+    list_display = ("user", "event_type", "value", "created_at")
+    list_filter = ("event_type", "created_at")
+    search_fields = ("user__username", "event_type")

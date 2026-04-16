@@ -23,6 +23,7 @@
                 {{ redirect_field }}
                 
                 {% for field in form %}
+                {% if field.name != "remember" %}
                 <div>
                     <label class="block text-sm font-medium text-slate-300 mb-2">{{ field.label }}</label>
                     {% render_field field class="w-full px-4 py-3 bg-slate-950 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" %}
@@ -30,6 +31,7 @@
                         <p class="mt-1 text-sm text-red-400">{{ field.errors.0 }}</p>
                     {% endif %}
                 </div>
+                {% endif %}
                 {% endfor %}
 
                 {% if form.remember %}

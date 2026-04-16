@@ -25,6 +25,7 @@ urlpatterns = [
     path("", include("saas.urls")),
     path("accounts/", include("allauth.urls")),
     path("profiles/", include('profiles.urls')),
+    path("subscriptions/", include("subscriptions.urls")),
     path("admin/", admin.site.urls),
     path("help-center/", include("helpcenter.urls")),
     path("", include("chatbot.urls")),

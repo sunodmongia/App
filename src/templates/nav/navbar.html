@@ -29,8 +29,10 @@
 
       <!-- Desktop Nav -->
       <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+        {% if request.user.is_authenticated %}
         <a href="{% url 'dashboard' %}"
           class="relative nav-link-line hover:text-white transition-colors duration-200">Dashboard</a>
+        {% endif %}
         <a href="{% url 'features' %}"
           class="relative nav-link-line hover:text-white transition-colors duration-200">Features</a>
         <a href="{% url 'pricing' %}"
@@ -81,16 +83,9 @@
         {% endif %}
       </div>
 
-      <!-- Mobile Nav -->
-      <div class="md:hidden flex items-center gap-3">
-        {% if not request.user.is_authenticated %}
-        <a href="{% url 'account_login' %}"
-          class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Sign in</a>
-        <a href="{% url 'signup-trial' %}"
-          class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-colors">
-          Start trial
-        </a>
-        {% else %}
+      <!-- Mobile View (Hamburger & Profile only) -->
+      <div class="md:hidden flex items-center gap-2">
+        {% if request.user.is_authenticated %}
         <div class="relative">
           <button id="profile-menu-button-mobile"
             class="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-white/5">
@@ -116,9 +111,9 @@
         </div>
         {% endif %}
 
-        <button id="mobile-menu-button" class="p-2 rounded-lg hover:bg-white/5">
-          <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        <button id="mobile-menu-button" class="p-2 rounded-lg hover:bg-white/5 text-slate-400">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16M4 6h16M4 18h16" />
           </svg>
         </button>
       </div>
@@ -127,16 +122,33 @@
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden bg-slate-950/95 backdrop-blur-md border-t border-white/5">
-    <div class="px-6 py-4 space-y-4">
-      <a href="{% url 'dashboard' %}"
-        class="block text-sm font-medium text-slate-400 hover:text-white transition-colors">Dashboard</a>
-      <a href="{% url 'features' %}"
-        class="block text-sm font-medium text-slate-400 hover:text-white transition-colors">Features</a>
-      <a href="{% url 'pricing' %}"
-        class="block text-sm font-medium text-slate-400 hover:text-white transition-colors">Pricing</a>
-      <a href="{% url 'about' %}"
-        class="block text-sm font-medium text-slate-400 hover:text-white transition-colors">About</a>
+  <div id="mobile-menu" class="hidden md:hidden bg-slate-950/95 backdrop-blur-md border-t border-white/5 pb-6">
+    <div class="px-6 py-6 space-y-6">
+      <div class="space-y-4">
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'dashboard' %}"
+          class="block text-base font-medium text-slate-300 hover:text-white transition-colors">Dashboard</a>
+        {% endif %}
+        <a href="{% url 'features' %}"
+          class="block text-base font-medium text-slate-300 hover:text-white transition-colors">Features</a>
+        <a href="{% url 'pricing' %}"
+          class="block text-base font-medium text-slate-300 hover:text-white transition-colors">Pricing</a>
+        <a href="{% url 'about' %}"
+          class="block text-base font-medium text-slate-300 hover:text-white transition-colors">About</a>
+      </div>
+
+      {% if not request.user.is_authenticated %}
+      <div class="pt-6 border-t border-white/5 space-y-4">
+        <a href="{% url 'account_login' %}"
+          class="block w-full text-center py-3 rounded-lg text-slate-300 font-medium hover:bg-white/5 transition-colors">
+          Sign in
+        </a>
+        <a href="{% url 'signup-trial' %}"
+          class="block w-full text-center py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-600/20">
+          Start free trial
+        </a>
+      </div>
+      {% endif %}
     </div>
   </div>
 </nav>

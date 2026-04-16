@@ -99,7 +99,7 @@ TEMPLATES = [
 
 ROOT_URLCONF = "wire.urls"
 WSGI_APPLICATION = "wire.wsgi.application"
-ASGI_APPLICATION = "project.asgi.application"
+ASGI_APPLICATION = "wire.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
@@ -162,7 +162,7 @@ AUTHENTICATION_BACKENDS = [
 
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "[wire]"
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
@@ -190,6 +190,11 @@ REST_FRAMEWORK = {
 
 GROQ_API_KEY = config("GROQ_API_KEY")
 
+# Stripe
+STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY", default="")
+STRIPE_PUBLISHABLE_KEY = config("STRIPE_PUBLISHABLE_KEY", default="")
+STRIPE_WEBHOOK_SECRET = config("STRIPE_WEBHOOK_SECRET", default="")
+
 
 # ---------------------------------------------------------------------
 # Crispy Forms
@@ -201,12 +206,15 @@ CRISPY_TEMPLATE_PACK = "tailwind"
 # ---------------------------------------------------------------------
 # Email (Gmail SMTP)
 # ---------------------------------------------------------------------
+
+# Email Configuration
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS") == "True"
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = config("EMAIL_FROM_ID")
 
 
 # ---------------------------------------------------------------------

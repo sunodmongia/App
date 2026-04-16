@@ -3,24 +3,27 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, FormView
-from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.contrib import messages
 from django.conf import settings
-from django.shortcuts import render
 from django.utils.timezone import now
 from datetime import timedelta
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count, Q, Max, FloatField
+from django.db.models.functions import Cast, TruncDate
 from django.http import JsonResponse
-from django.db.models.functions import Cast
-from django.db.models import FloatField
 
-from .models import *
-from .forms import *
-from .consumers import *
+from .models import (
+    Organization, Event, Usage, Automation, Feature,
+)
+from .forms import TrialSignupForm, DemoScheduleCallForm, ContactForm
 from saas.events import log_event
+from subscriptions.services import (
+    ensure_default_subscriptions,
+    get_default_subscription,
+    get_user_organization,
+    user_can_manage_subscription,
+)
 
 
 class HomeView(TemplateView):
@@ -29,6 +32,61 @@ class HomeView(TemplateView):
 
 class AboutView(TemplateView):
     template_name = "about.html"
+
+
+class BlogView(TemplateView):
+    template_name = "blog.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Blogs"
+        return context
+
+
+class CaseStudyView(TemplateView):
+    template_name = "case_study.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Case Study"
+        return context
+
+
+class FeaturesView(TemplateView):
+    template_name = "features.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Features"
+        context["features"] = Feature.objects.filter(active=True)
+        return context
+
+
+class PrivacyPolicyView(TemplateView):
+    template_name = "privacy_policy.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Privacy Policy"
+        return context
+
+
+class TermsAndConditionsView(TemplateView):
+    template_name = "terms_and_condition.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Terms and Conditions"
+        return context
+
+
+class SaasAPIView(TemplateView):
+    template_name = "api.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "API"
+        return context
 
 
 class UserDemoView(TemplateView):
@@ -48,9 +106,7 @@ class StartTrialView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         instance = form.save()
-
         messages.success(self.request, "Your free trial signup has been saved.")
-
         send_mail(
             subject="Your Free Trial Has Started",
             message=(
@@ -63,7 +119,6 @@ class StartTrialView(LoginRequiredMixin, FormView):
             recipient_list=[instance.email],
             fail_silently=False,
         )
-
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -79,8 +134,6 @@ class ScheduleDemoView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         instance = form.save()
-
-        # Send email to user
         send_mail(
             subject="Your Demo Has Been Scheduled",
             message=(
@@ -93,7 +146,6 @@ class ScheduleDemoView(LoginRequiredMixin, FormView):
             recipient_list=[instance.email],
             fail_silently=False,
         )
-
         messages.success(
             self.request,
             "Your demo scheduling request has been saved and a confirmation email has been sent.",
@@ -121,71 +173,27 @@ class PricingView(TemplateView):
     template_name = "pricing.html"
 
     def get_context_data(self, **kwargs):
+        from subscriptions.models import StripeSubscription
         context = super().get_context_data(**kwargs)
         context["title"] = "Pricing"
-        return context
+        context["plans"] = ensure_default_subscriptions()
+        context["organization"] = get_user_organization(self.request.user)
+        context["current_subscription"] = None
+        context["has_stripe_subscription"] = False
+        context["stripe_publishable_key"] = settings.STRIPE_PUBLISHABLE_KEY
 
+        if context["organization"]:
+            context["current_subscription"] = context["organization"].subscription
+            try:
+                ss = context["organization"].stripe_subscription
+                context["has_stripe_subscription"] = ss.status in ("active", "trialing", "past_due")
+            except StripeSubscription.DoesNotExist:
+                pass
 
-class BlogView(TemplateView):
-    template_name = "blog.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = "Blogs"
-        return context
-
-
-class CaseStudyView(TemplateView):
-    template_name = "case_study.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = "Case Study"
-        return context
-
-
-class APIView(TemplateView):
-    template_name = "api.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = "API"
-        return context
-
-
-class FeaturesView(TemplateView):
-    template_name = "features.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = "Features"
-        return context
-
-
-class PrivacyPolicyView(TemplateView):
-    template_name = "privacy_policy.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = "Privacy Policy"
-        return context
-
-
-class TermsAndConditionsView(TemplateView):
-    template_name = "terms_and_condition.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = "Terms and Conditions"
-        return context
-
-
-class FeaturesView(TemplateView):
-    template_name = "features.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["features"] = Feature.objects.filter(active=True)
+        context["default_subscription"] = get_default_subscription()
+        context["can_manage_subscription"] = user_can_manage_subscription(
+            self.request.user, context["organization"]
+        )
         return context
 
 
@@ -201,14 +209,13 @@ class CustomerAPI(APIView):
 class DashboardView(TemplateView):
     template_name = "dashboard.html"
 
-    def get_days(self):
+    def _get_days(self):
         try:
-            days = int(self.request.GET.get("days", 30))
-            return max(1, min(days, 365))
-        except:
+            return max(1, min(int(self.request.GET.get("days", 30)), 365))
+        except (TypeError, ValueError):
             return 30
 
-    def get_queryset_scope(self):
+    def _get_orgs(self):
         user = self.request.user
         if user.is_staff or user.is_superuser:
             return Organization.objects.all()
@@ -216,86 +223,103 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        days = self.get_days()
+        days = self._get_days()
         start_date = now() - timedelta(days=days)
-        orgs = self.get_queryset_scope()
+        orgs = self._get_orgs()
 
-        # Active organizations
         context["active_orgs"] = orgs.filter(event__created_at__gte=start_date).distinct().count()
         context["total_orgs"] = orgs.count()
 
-        # Revenue calculation
         context["total_revenue"] = Event.objects.filter(
             org__in=orgs, type="revenue", created_at__gte=start_date
         ).aggregate(total=Sum(Cast("data__amount", FloatField())))["total"] or 0
 
-        # API calls
         context["total_api"] = Event.objects.filter(
             org__in=orgs, type="api_call", created_at__gte=start_date
         ).count()
 
-        # Automations
         context["total_automations"] = Automation.objects.filter(org__in=orgs, enabled=True).count()
 
-        # Reports
         context["total_reports"] = Event.objects.filter(
             org__in=orgs, type="report_generated", created_at__gte=start_date
         ).count()
 
-        # Storage
         context["total_storage"] = Usage.objects.filter(
-            user__organization__in=orgs
+            user__in=orgs.values_list("owner_id", flat=True)
         ).aggregate(total=Sum("storage_mb"))["total"] or 0
 
-        # Events breakdown
-        context["events"] = Event.objects.filter(
-            org__in=orgs, created_at__gte=start_date
-        ).values("type").annotate(count=Count("id")).order_by("-count")[:10]
+        context["events"] = (
+            Event.objects.filter(org__in=orgs, created_at__gte=start_date)
+            .values("type")
+            .annotate(count=Count("id"))
+            .order_by("-count")[:10]
+        )
 
-        # Top organizations
         context["top_orgs"] = orgs.annotate(
-            revenue=Sum(Cast("event__data__amount", FloatField()), filter=Q(event__type="revenue", event__created_at__gte=start_date)),
+            revenue=Sum(
+                Cast("event__data__amount", FloatField()),
+                filter=Q(event__type="revenue", event__created_at__gte=start_date),
+            ),
             api_calls=Count("event", filter=Q(event__type="api_call", event__created_at__gte=start_date)),
             team_size=Count("teammember"),
             automations=Count("automation", filter=Q(automation__enabled=True)),
         ).order_by("-revenue")[:10]
 
-        # Automation health
-        context["automation_stats"] = orgs.annotate(
-            total=Count("automation"),
-            enabled=Count("automation", filter=Q(automation__enabled=True))
-        ).filter(total__gt=0).order_by("-total")[:10]
+        context["automation_stats"] = (
+            orgs.annotate(
+                total=Count("automation"),
+                enabled=Count("automation", filter=Q(automation__enabled=True)),
+            )
+            .filter(total__gt=0)
+            .order_by("-total")[:10]
+        )
 
-        # Inactive organizations (no events in last 7 days)
         inactive_threshold = now() - timedelta(days=7)
         context["inactive_orgs"] = orgs.annotate(
-            last_event=models.Max("event__created_at")
+            last_event=Max("event__created_at")
         ).filter(Q(last_event__lt=inactive_threshold) | Q(last_event__isnull=True))[:10]
 
-        # Growth metrics
         prev_start = start_date - timedelta(days=days)
-        prev_revenue = Event.objects.filter(
-            org__in=orgs, type="revenue", created_at__gte=prev_start, created_at__lt=start_date
-        ).aggregate(total=Sum(Cast("data__amount", FloatField())))["total"] or 0
-        
-        context["revenue_growth"] = self.calculate_growth(prev_revenue, context["total_revenue"])
-        
-        prev_api = Event.objects.filter(
-            org__in=orgs, type="api_call", created_at__gte=prev_start, created_at__lt=start_date
-        ).count()
-        context["api_growth"] = self.calculate_growth(prev_api, context["total_api"])
+        prev_revenue = (
+            Event.objects.filter(
+                org__in=orgs, type="revenue",
+                created_at__gte=prev_start, created_at__lt=start_date,
+            ).aggregate(total=Sum(Cast("data__amount", FloatField())))["total"] or 0
+        )
+        context["revenue_growth"] = self._calc_growth(prev_revenue, context["total_revenue"])
 
+        prev_api = Event.objects.filter(
+            org__in=orgs, type="api_call",
+            created_at__gte=prev_start, created_at__lt=start_date,
+        ).count()
+        context["api_growth"] = self._calc_growth(prev_api, context["total_api"])
+
+        context["revenue_trends"] = list(
+            Event.objects.filter(org__in=orgs, type="revenue", created_at__gte=start_date)
+            .annotate(date=TruncDate("created_at"))
+            .values("date")
+            .annotate(amount=Sum(Cast("data__amount", FloatField())))
+            .order_by("date")
+        )
+        context["api_trends"] = list(
+            Event.objects.filter(org__in=orgs, type="api_call", created_at__gte=start_date)
+            .annotate(date=TruncDate("created_at"))
+            .values("date")
+            .annotate(count=Count("id"))
+            .order_by("date")
+        )
         context["days"] = days
         return context
 
-    def calculate_growth(self, old_value, new_value):
+    def _calc_growth(self, old_value, new_value):
         if old_value == 0:
             return 100 if new_value > 0 else 0
         return round(((new_value - old_value) / old_value) * 100, 1)
 
 
 def some_api_view(request):
-    org = request.user.organization
+    org = get_user_organization(request.user)
+    if not org:
+        return JsonResponse({"ok": False, "error": "Organization not found"}, status=404)
     log_event(org, "api_call")
-
     return JsonResponse({"ok": True})

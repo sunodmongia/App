@@ -84,16 +84,21 @@
     <div id="chatbot-button">
         <img src="{% static 'chatbot/robot.png' %}" alt="Chat">
     </div>
-
-    <div id="chatbot-window" class="bg-white">
+    <div id="chatbot-window">
         <div id="chatbot-header">
-            <span>💬 Customer Support</span>
+            <div class="chatbot-header-info">
+                <div class="chatbot-avatar">🤖</div>
+                <div class="chatbot-header-text">
+                    <div class="title">Customer Support</div>
+                    <div class="status"><span class="status-dot"></span> Online — replies instantly</div>
+                </div>
+            </div>
             <button id="chatbot-close">✕</button>
         </div>
         <div id="chatbot-body"></div>
         <div id="chatbot-input">
-            <input id="chat-input" placeholder="Type your message..." autocomplete="off" />
-            <button id="send-btn" type="button" onclick="sendMessage()">Send</button>
+            <input id="chat-input" placeholder="Ask us anything..." autocomplete="off">
+            <button id="send-btn" type="button">Send</button>
         </div>
     </div>
     <!-- =========================================== -->
