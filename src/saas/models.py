@@ -110,6 +110,29 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
+    def get_total_usage_mb(self):
+        """Unified storage calculation: Buckets + App Artifacts."""
+        from django.db.models import Sum
+        
+        # 1. Bucket Object Storage
+        bucket_usage = 0
+        for bucket in self.buckets.all():
+            bucket_usage += bucket.usage_mb
+            
+        # 2. Compute App Artifacts
+        app_usage_bytes = 0
+        for app in self.apps.all():
+            for dep in app.deployments.all():
+                if dep.artifact:
+                    try:
+                        app_usage_bytes += dep.artifact.size
+                    except Exception:
+                        pass
+            
+        app_usage_mb = app_usage_bytes / (1024 * 1024)
+        
+        return round(bucket_usage + app_usage_mb, 2)
+
 
 class Usage(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

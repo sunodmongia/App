@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="min-h-screen bg-slate-950 p-4 md:p-8 pt-20">
+
+    <!-- Header Section -->
+    <div class="max-w-7xl mx-auto mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+            <div class="flex items-center gap-3 mb-2">
+                <span class="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase tracking-widest border border-indigo-500/20 rounded">Service</span>
+            </div>
+            <h1 class="text-4xl font-black text-white tracking-tight mb-2">Cloud Object Storage</h1>
+            <p class="text-slate-500 max-w-xl font-medium">Scalable, secure, and lightning-fast storage for your business-critical data and media assets.</p>
+        </div>
+        
+        <button onclick="document.getElementById('create-bucket-modal').classList.remove('hidden')"
+            class="group relative px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl transition-all shadow-2xl shadow-indigo-600/30 overflow-hidden active:scale-95">
+            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+            <div class="relative flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span>Provision Bucket</span>
+            </div>
+        </button>
+    </div>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Sidebar Stats -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Usage Card -->
+            <div class="relative bg-slate-900 border border-white/10 rounded-[2.5rem] p-10 overflow-hidden shadow-2xl">
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Quota Utilization</h3>
+                        <span class="px-3 py-1 bg-indigo-500/10 text-[10px] font-black text-indigo-400 rounded-full border border-indigo-500/20 uppercase tracking-tighter">{{ plan_name }} Plan</span>
+                    </div>
+                    
+                    <div class="flex flex-col items-center justify-center my-10">
+                        <div class="relative w-48 h-48">
+                            <svg class="w-full h-full transform -rotate-90">
+                                <circle cx="96" cy="96" r="88" stroke="currentColor" stroke-width="12" fill="transparent" class="text-slate-950"/>
+                                <circle id="usage-circle-path" cx="96" cy="96" r="88" stroke="currentColor" stroke-width="12" fill="transparent" class="text-indigo-600"
+                                    stroke-dasharray="552.92"
+                                    stroke-dashoffset="552.92"
+                                    stroke-linecap="round"
+                                />
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-4xl font-black text-white">{{ allocation_percent }}%</span>
+                                <span class="text-[10px] font-bold text-slate-500 uppercase mt-1">Reserved</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Active Storage</span>
+                            <span class="text-sm font-black text-white">{{ active_usage_mb|floatformat:1 }} MB</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Total Reserved</span>
+                            <span class="text-sm font-black text-indigo-400">{% if total_allocated_mb >= 1024 %}{{ total_allocated_gb }} GB{% else %}{{ total_allocated_mb }} MB{% endif %}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Plan Limit</span>
+                            <span class="text-sm font-black text-slate-300">{{ storage_limit_display }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Deployment Center Widget -->
+                    <div class="mt-8 pt-8 border-t border-white/5">
+                        <h3 class="text-[10px] font-black text-white uppercase tracking-widest mb-6 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                            Deployment Center
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-slate-800/20 border border-white/5 rounded-2xl">
+                                <p class="text-[10px] font-bold text-slate-500 uppercase mb-1">Live Deployments</p>
+                                <p class="text-2xl font-black text-white">{{ total_live_deployments }} <span class="text-xs text-slate-600">Active Nodes</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Card -->
+            <div class="bg-emerald-500/5 border border-emerald-500/10 rounded-3xl p-6 backdrop-blur-sm">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Global Status</span>
+                </div>
+                <p class="text-sm font-bold text-slate-200">System Healthy</p>
+                <p class="text-[10px] text-slate-500 mt-1">All storage nodes operational in your primary region.</p>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="lg:col-span-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for bucket in buckets %}
+                <div class="group relative bg-slate-900/30 border border-white/5 rounded-3xl p-1 transition-all duration-500 hover:border-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/10">
+                    <a href="{% url 'buckets:detail' bucket.name %}" class="block p-7 bg-slate-900/60 rounded-[calc(1.5rem-1px)] h-full">
+                        <div class="flex items-start justify-between mb-8">
+                            <div class="w-14 h-14 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-2xl flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform duration-500">
+                                <svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                            </div>
+                            <div class="flex flex-col items-end">
+                                <span class="text-[10px] font-black text-slate-600 uppercase tracking-tighter">Created</span>
+                                <span class="text-xs font-bold text-slate-400">{{ bucket.created_at|date:"M d, Y" }}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 mb-2">
+                            <h3 class="text-xl font-black text-white group-hover:text-indigo-400 transition-colors">{{ bucket.name }}</h3>
+                            {% if bucket.is_live %}
+                            <span class="flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-emerald-500/50 shadow-sm"></span>
+                                <span class="text-[8px] font-black text-emerald-400 uppercase tracking-widest">Live</span>
+                            </span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="flex items-center justify-between mt-6">
+                            <div class="flex flex-col">
+                                <span class="text-[9px] font-bold text-slate-600 uppercase tracking-[0.1em]">Objects</span>
+                                <span class="text-sm font-black text-slate-300">{{ bucket.files.count }}</span>
+                            </div>
+                            <div class="flex flex-col items-end text-right">
+                                <span class="text-[9px] font-bold text-slate-600 uppercase tracking-[0.1em]">Allocation</span>
+                                <span class="text-sm font-black text-slate-300">{% if bucket.quota_mb >= 1024 %}{{ bucket.quota_gb|floatformat:1 }} GB{% else %}{{ bucket.quota_mb }} MB{% endif %}</span>
+                            </div>
+                        </div>
+
+                        <!-- Mini Allocation Bar -->
+                        <div class="mt-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Bucket Consumption</span>
+                                <span id="consumption-percent-{{ bucket.id }}" class="text-[8px] font-black text-indigo-400 uppercase tracking-widest">{{ bucket.usage_percent }}%</span>
+                            </div>
+                            <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                                <div id="consumption-bar-{{ bucket.id }}" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-1000" style="width: {{ bucket.usage_percent }}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-white/5">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-[9px] font-black text-slate-600 uppercase tracking-widest">Developer Access</span>
+                                <button type="button" onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('key-modal-{{ bucket.name }}').classList.remove('hidden')"
+                                    class="text-[9px] font-black text-indigo-400 uppercase hover:text-indigo-300 transition-colors">Manage Keys</button>
+                            </div>
+                            {% if bucket.api_keys.exists %}
+                            <div class="bg-black/20 rounded-xl px-3 py-2 flex items-center justify-between border border-white/5" onclick="event.stopPropagation();">
+                                <code class="text-[10px] text-slate-500 font-mono">{{ bucket.api_keys.first.api_key|truncatechars:18 }}</code>
+                                <button onclick="navigator.clipboard.writeText('{{ bucket.api_keys.first.api_key }}'); event.preventDefault(); event.stopPropagation();" class="text-slate-600 hover:text-white transition-colors">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                                    </svg>
+                                </button>
+                            </div>
+                            {% else %}
+                            <p class="text-[10px] text-slate-700 italic">No active service keys</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Edge Deployment Controls -->
+                        <div class="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+                            {% if bucket.is_live %}
+                            <div class="flex flex-col gap-1">
+                                <span class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Public Endpoint</span>
+                                <div class="flex items-center gap-2">
+                                    <code class="text-[10px] text-emerald-400 font-mono bg-slate-900 px-2 py-1 rounded border border-emerald-500/10 cursor-pointer hover:border-emerald-500/40 transition-colors" 
+                                          title="Copy Endpoint"
+                                          onclick="event.preventDefault(); event.stopPropagation(); navigator.clipboard.writeText(window.location.origin + '{{ bucket.get_deployment_url }}'); alert('Endpoint copied to clipboard!');">
+                                        /s/{{ bucket.name }}/
+                                    </code>
+                                </div>
+                            </div>
+                            <form method="POST" action="{% url 'buckets:deploy' bucket.name %}" onclick="event.stopPropagation();">
+                                {% csrf_token %}
+                                <button type="submit" class="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-widest rounded-lg border border-red-500/20 transition-all active:scale-95">
+                                    Offline
+                                </button>
+                            </form>
+                            {% else %}
+                            <div class="flex flex-col gap-1">
+                                <span class="text-[9px] font-bold text-slate-700 uppercase tracking-tighter">Status</span>
+                                <span class="text-[11px] text-slate-500 font-bold italic">Private</span>
+                            </div>
+                            <form method="POST" action="{% url 'buckets:deploy' bucket.name %}" onclick="event.stopPropagation();">
+                                {% csrf_token %}
+                                <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-indigo-600/20 transition-all active:scale-95">
+                                    Go Live 🚀
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+
+                        <div class="mt-6 flex items-center gap-2 text-indigo-400 text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                            Explore Files
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Dedicated Modal for this bucket's keys (Moved outside anchor to prevent navigation bugs) -->
+                <div id="key-modal-{{ bucket.name }}" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4">
+                    <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md" onclick="this.parentElement.classList.add('hidden')"></div>
+                    <div class="relative bg-slate-900 border border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg shadow-2xl">
+                        <h3 class="text-2xl font-black text-white mb-2">Service Access Keys</h3>
+                        <p class="text-sm text-slate-500 mb-8 font-medium">Use these keys to authenticate your programmatic storage requests.</p>
+                        
+                        <div class="space-y-4 mb-10 max-h-48 overflow-y-auto pr-2 custom-scrollbar text-left">
+                            {% for key in bucket.api_keys.all %}
+                            <div class="bg-slate-950 border border-white/5 rounded-2xl p-4 flex items-center justify-between">
+                                <div class="flex flex-col">
+                                    <span class="text-[9px] font-black text-slate-600 uppercase">{{ key.name }}</span>
+                                    <code class="text-xs text-indigo-400 font-mono mt-1">{{ key.api_key }}</code>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <form method="post" action="{% url 'buckets:create_key' bucket.name %}" class="bg-indigo-500/5 p-6 rounded-3xl border border-indigo-500/10 text-left">
+                            {% csrf_token %}
+                            <label class="block text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-4">New Access Key</label>
+                            <div class="flex gap-3">
+                                <input type="text" name="name" placeholder="Key Label (e.g. CI/CD)" 
+                                    class="flex-1 bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-indigo-500 outline-none">
+                                <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-600/20">Generate</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full py-32 bg-slate-900/20 border border-dashed border-white/10 rounded-[3rem] flex flex-col items-center justify-center text-center px-6">
+                    <div class="w-24 h-24 bg-indigo-500/5 rounded-full flex items-center justify-center mb-8 border border-indigo-500/10">
+                        <svg class="w-10 h-10 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M3 7a2 2 0 012-2h5l2 2h7a2 2 0 012 2m-16 0h16M12 11v4m2-2h-4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4">No active buckets</h3>
+                    <p class="text-slate-500 max-w-sm mb-10 font-medium">Provision your first storage container to start managing your data and media files securely.</p>
+                    <button onclick="document.getElementById('create-bucket-modal').classList.remove('hidden')"
+                        class="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl transition-all shadow-xl shadow-indigo-600/20">
+                        Get Started
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Bucket Modal -->
+<div id="create-bucket-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md" onclick="this.parentElement.classList.add('hidden')"></div>
+    <div class="relative bg-slate-900/80 border border-white/10 rounded-[2.5rem] p-10 w-full max-w-lg shadow-[0_0_100px_rgba(0,0,0,0.5)] backdrop-blur-2xl">
+        <div class="mb-10">
+            <h3 class="text-3xl font-black text-white mb-3 tracking-tight">Provision Bucket</h3>
+            <p class="text-slate-400 font-medium">Namespace for your cloud objects. Must be globally unique within your organization.</p>
+        </div>
+        
+        <form method="post" action="{% url 'buckets:create' %}">
+            {% csrf_token %}
+            <div class="mb-10">
+                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Bucket Identifier</label>
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl blur opacity-10 group-focus-within:opacity-25 transition-opacity"></div>
+                    <input type="text" name="name" placeholder="e.g. production-assets" required
+                        class="relative w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-slate-700 focus:border-indigo-500 focus:ring-0 transition-all outline-none font-bold">
+                </div>
+                <div class="mt-4 flex items-center gap-2 px-1">
+                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-[10px] text-slate-600 font-bold uppercase tracking-tighter">Lowercase, hyphens, and numbers only.</span>
+                </div>
+            </div>
+            
+            <div class="mb-10">
+                <div class="flex items-center justify-between mb-4">
+                    <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest">Storage Allocation</label>
+                    <span class="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Available: {{ remaining_storage_gb }} GB</span>
+                </div>
+                
+                {% if remaining_storage_mb > 0 %}
+                <div class="flex items-center gap-6">
+                    <input type="range" name="quota_mb" min="100" max="{{ remaining_storage_mb }}" step="100" 
+                        value="{% if remaining_storage_mb > 1024 %}1024{% else %}{{ remaining_storage_mb }}{% endif %}" 
+                        oninput="this.nextElementSibling.innerText = (this.value >= 1024 ? (this.value/1024).toFixed(1) + ' GB' : this.value + ' MB')"
+                        class="flex-1 accent-indigo-500 bg-slate-950 h-2 rounded-lg appearance-none cursor-pointer border border-white/5">
+                    <span class="w-20 text-right text-xs font-black text-white">{% if remaining_storage_mb >= 1024 %}1.0 GB{% else %}{{ remaining_storage_mb }} MB{% endif %}</span>
+                </div>
+                <p class="text-[9px] text-slate-600 mt-3 font-medium italic">Define a hard-limit for this bucket container. Unused capacity: {{ remaining_storage_gb }} GB</p>
+                {% else %}
+                <div class="p-6 bg-red-500/10 border border-red-500/20 rounded-2xl flex flex-col items-center gap-3 text-center">
+                    <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <p class="text-xs font-black text-red-400 uppercase tracking-widest leading-loose">Plan Content Limit Reached<br><span class="text-[9px] font-medium text-slate-500 uppercase">You have allocated 100% of your current plan.</span></p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="flex gap-4">
+                <button type="button" onclick="this.closest('#create-bucket-modal').classList.add('hidden')"
+                    class="flex-1 px-4 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-2xl transition-all border border-white/5">Cancel</button>
+                
+                {% if remaining_storage_mb > 0 %}
+                <button type="submit" class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-2xl transition-all shadow-2xl shadow-indigo-600/40 active:scale-[0.98]">
+                    Deploy Resource
+                </button>
+                {% else %}
+                <a href="{% url 'pricing' %}" class="flex-[2] py-4 bg-white text-black font-black rounded-2xl transition-all shadow-2xl shadow-white/20 active:scale-[0.98] text-center text-sm">
+                    Upgrade Plan
+                </a>
+                {% endif %}
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Global Stats Animation ---
+        const path = document.getElementById('usage-circle-path');
+        const percent = {{ allocation_percent|default:0 }};
+        const circumference = 552.92;
+        const offset = circumference - (percent / 100) * circumference;
+        
+        setTimeout(() => {
+            if(path) path.style.strokeDashoffset = offset;
+        }, 300);
+
+        // --- WebSocket Real-time Telemetry ---
+        const wsPrefix = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        const socket = new WebSocket(`${wsPrefix}://${window.location.host}/ws/dashboard/`);
+
+        socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            
+            if (data.storage_update) {
+                const s = data.storage_update;
+                const percentEl = document.getElementById(`consumption-percent-${s.bucket_id}`);
+                const barEl = document.getElementById(`consumption-bar-${s.bucket_id}`);
+                
+                if (percentEl && barEl) {
+                    percentEl.innerText = `${s.percent}%`;
+                    barEl.style.width = `${s.percent}%`;
+                    
+                    // Trigger a quick pulse animation to indicate update
+                    barEl.classList.add('brightness-150');
+                    setTimeout(() => barEl.classList.remove('brightness-150'), 500);
+                }
+            }
+        };
+
+        socket.onclose = function() {
+            console.warn('Real-time telemetry disconnected');
+        };
+    });
+</script>
+
+<style>
+    @font-face {
+        font-family: 'Space Grotesk';
+        src: url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+    }
+    
+    body {
+        font-family: 'Space Grotesk', sans-serif;
+    }
+</style>
+
+{% endblock %}

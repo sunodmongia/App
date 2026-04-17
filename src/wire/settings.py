@@ -1,8 +1,3 @@
-"""
-Django settings for wire project — Django 5.2.4
-Clean, production-ready version (Decouple + NeonDB + WhiteNoise + Crispy + Allauth)
-"""
-
 from pathlib import Path
 from decouple import config, Csv
 import dj_database_url
@@ -37,6 +32,7 @@ INSTALLED_APPS = [
     "subscriptions",
     "helpcenter",
     "chatbot",
+    "buckets",
     "channels",
     # Third-party
     "rest_framework",
@@ -103,8 +99,7 @@ ASGI_APPLICATION = "wire.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
     }
 }
 

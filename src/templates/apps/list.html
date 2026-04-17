@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="min-h-screen bg-slate-950 pt-24 pb-20">
+    <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+            <div class="space-y-2">
+                <div class="flex items-center gap-3">
+                     <div class="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" /></svg>
+                    </div>
+                    <h1 class="text-4xl font-black text-white tracking-tight">Compute <span class="text-indigo-500">Apps</span></h1>
+                </div>
+                <p class="text-slate-500 font-medium max-w-xl text-sm leading-relaxed">
+                    Deploy and manage high-performance web applications across the global edge network.
+                </p>
+            </div>
+            
+            <button onclick="document.getElementById('create-app-modal').classList.remove('hidden')"
+                class="group relative px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl transition-all shadow-[0_0_40px_rgba(79,70,229,0.3)] hover:-translate-y-1 active:scale-95">
+                <span class="relative z-10 flex items-center gap-3">
+                    Provision New App
+                    <svg class="w-4 h-4 transition-transform group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+                </span>
+            </button>
+        </div>
+
+        <!-- App Grid (Dynamic Grid) -->
+        <div id="app-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for app in apps %}
+            <div id="app-card-{{ app.id }}" class="group relative bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-8 hover:border-indigo-500/30 transition-all duration-500 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <!-- Hover Glow -->
+                <div class="absolute -right-20 -top-20 w-48 h-48 bg-indigo-500/5 rounded-full blur-3xl group-hover:bg-indigo-500/10 transition-all duration-700"></div>
+
+                <a href="{% url 'buckets:app_detail' app.id %}" class="relative block">
+                    <div class="flex items-start justify-between mb-8">
+                        <div class="w-14 h-14 bg-slate-950 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-indigo-500/50 transition-colors">
+                            <span class="text-xl font-black text-indigo-400 uppercase">{{ app.runtime|slice:":2" }}</span>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="text-[9px] font-black text-slate-600 uppercase tracking-tighter">Status</span>
+                            <span class="flex items-center gap-1.5 mt-1">
+                                {% if app.status == 'live' %}
+                                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-emerald-500/50 shadow-sm"></span>
+                                    <span class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Live</span>
+                                {% elif app.status == 'building' %}
+                                    <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-spin"></span>
+                                    <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Building</span>
+                                {% else %}
+                                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ app.status }}</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 mb-8">
+                        <h3 class="text-2xl font-black text-white group-hover:text-indigo-400 transition-colors">{{ app.name }}</h3>
+                        <p class="text-[10px] text-slate-500 uppercase font-black tracking-[0.2em]">{{ app.runtime }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 pt-6 border-t border-white/5">
+                        <div class="flex flex-col">
+                            <span class="text-[8px] font-black text-slate-600 uppercase tracking-widest">Created</span>
+                            <span class="text-[11px] font-bold text-slate-400">{{ app.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="text-[8px] font-black text-slate-600 uppercase tracking-widest">Edge ID</span>
+                            <code class="text-[9px] text-indigo-400 font-mono">{{ app.distribution_id }}</code>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <div id="no-apps-state" class="col-span-full py-32 bg-slate-900/20 border border-dashed border-white/10 rounded-[3rem] flex flex-col items-center justify-center text-center px-6">
+                <!-- No apps content -->
+                <h3 class="text-2xl font-black text-white mb-4">No Compute Apps provisioned</h3>
+                <button onclick="document.getElementById('create-app-modal').classList.remove('hidden')" class="px-8 py-4 bg-white text-black font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-slate-200 transition-all">Initiate First Project</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Create App Modal -->
+<div id="create-app-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-xl" onclick="this.parentElement.classList.add('hidden')"></div>
+    <div class="relative bg-slate-900 border border-white/10 rounded-[3rem] p-12 w-full max-w-2xl shadow-2xl">
+        <div id="modal-content">
+            <div class="flex items-center justify-between mb-10">
+                <h2 class="text-3xl font-black text-white">Project <span class="text-indigo-500">Provisioning</span></h2>
+                <button onclick="document.getElementById('create-app-modal').classList.add('hidden')" class="text-slate-500 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <form id="provision-form" class="space-y-8">
+                {% csrf_token %}
+                <div class="space-y-3">
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Application Identifier</label>
+                    <input type="text" name="name" id="app-name-input" placeholder="e.g. production-api" required
+                        class="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-5 text-white font-bold focus:border-indigo-500 outline-none transition-all">
+                </div>
+
+                <div class="space-y-3">
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Runtime Environment</label>
+                    <div class="relative">
+                        <input list="runtimes" name="runtime" id="app-runtime-input" placeholder="e.g. Django, Node, Go, Rust..." required
+                            class="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-5 text-white font-bold focus:border-indigo-500 outline-none transition-all">
+                        <datalist id="runtimes">
+                            <option value="Django">
+                            <option value="Node.js">
+                            <option value="React / Next.js">
+                            <option value="Go / Fiber">
+                            <option value="Rust / Axum">
+                            <option value="Ruby on Rails">
+                            <option value="Static Website">
+                        </datalist>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full py-6 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs uppercase tracking-[0.3em] rounded-2xl transition-all shadow-2xl shadow-indigo-600/30">
+                    Initialize Compute Instance
+                </button>
+            </form>
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loading-state" class="hidden flex flex-col items-center justify-center py-20">
+            <div class="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mb-6"></div>
+            <p class="text-xl font-black text-white">Provisioning Infrastructure...</p>
+            <p class="text-slate-500 text-xs mt-2 italic uppercase tracking-widest animate-pulse">Assigning Global Edge ID</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const appGrid = document.getElementById('app-grid');
+    const provisionForm = document.getElementById('provision-form');
+    const loadingState = document.getElementById('loading-state');
+    const modalContent = document.getElementById('modal-content');
+    const noAppsState = document.getElementById('no-apps-state');
+
+    const wsPrefix = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const socket = new WebSocket(`${wsPrefix}://${window.location.host}/ws/dashboard/`);
+
+    // --- Dynamic App Materialization ---
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        if (data.type === 'app_created') {
+            if (noAppsState) noAppsState.remove();
+            
+            // Check if card exists already (prevents doubles from browser reload sync)
+            if (document.getElementById(`app-card-${data.id}`)) return;
+
+            const card = document.createElement('div');
+            card.id = `app-card-${data.id}`;
+            card.className = "group relative bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-8 hover:border-indigo-500/30 transition-all duration-500 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700";
+            
+            card.innerHTML = `
+                <div class="absolute -right-20 -top-20 w-48 h-48 bg-indigo-500/5 rounded-full blur-3xl group-hover:bg-indigo-500/10 transition-all duration-700"></div>
+                <a href="/storage/compute/a/${data.id}/" class="relative block">
+                    <div class="flex items-start justify-between mb-8">
+                        <div class="w-14 h-14 bg-slate-950 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-indigo-500/50 transition-colors">
+                            <span class="text-xl font-black text-indigo-400 uppercase">${data.runtime.slice(0,2)}</span>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="text-[9px] font-black text-slate-600 uppercase tracking-tighter">Status</span>
+                            <span class="flex items-center gap-1.5 mt-1">
+                                <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Provisioned</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mb-8">
+                        <h3 class="text-2xl font-black text-white group-hover:text-indigo-400 transition-colors">${data.name}</h3>
+                        <p class="text-[10px] text-slate-500 uppercase font-black tracking-[0.2em]">${data.runtime}</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 pt-6 border-t border-white/5">
+                        <div class="flex flex-col">
+                            <span class="text-[8px] font-black text-slate-600 uppercase tracking-widest">Created</span>
+                            <span class="text-[11px] font-bold text-slate-400">Just now</span>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="text-[8px] font-black text-slate-600 uppercase tracking-widest">Edge ID</span>
+                            <code class="text-[9px] text-indigo-400 font-mono">Assigned</code>
+                        </div>
+                    </div>
+                </a>
+            `;
+            appGrid.prepend(card);
+        }
+    };
+
+    // --- AJAX Provisioning ---
+    provisionForm.onsubmit = async (e) => {
+        e.preventDefault();
+        modalContent.classList.add('hidden');
+        loadingState.classList.remove('hidden');
+
+        const formData = new FormData(provisionForm);
+        try {
+            const response = await fetch("{% url 'buckets:app_create' %}", {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                // Success - the card will be added by the WebSocket listener
+                setTimeout(() => {
+                    document.getElementById('create-app-modal').classList.add('hidden');
+                    loadingState.classList.add('hidden');
+                    modalContent.classList.remove('hidden');
+                    provisionForm.reset();
+                }, 1500);
+            }
+        } catch (err) {
+            console.error(err);
+            modalContent.classList.remove('hidden');
+            loadingState.classList.add('hidden');
+        }
+    };
+</script>
+
+<style>
+    @font-face {
+        font-family: 'Space Grotesk';
+        src: url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+    }
+    body { font-family: 'Space Grotesk', sans-serif; }
+</style>
+{% endblock %}

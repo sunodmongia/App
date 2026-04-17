@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wire Edge - Distribution Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'JetBrains Mono', monospace; }</style>
+</head>
+<body class="bg-[#0e1117] text-[#c9d1d9] min-h-screen flex items-center justify-center p-8">
+    <div class="w-full max-w-2xl border border-[#30363d] rounded-lg shadow-2xl bg-[#161b22] overflow-hidden">
+        <div class="px-6 py-4 bg-[#21262d] border-b border-[#30363d] flex items-center justify-between">
+            <span class="text-xs font-bold text-[#8b949e]">WIRE_EDGE_DISTRIBUTION_SYSTEM (v1.0.4)</span>
+            <span class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                <span class="text-[9px] font-bold text-emerald-500">SYSTEM_READY</span>
+            </span>
+        </div>
+        
+        <div class="p-8 space-y-10">
+            <div>
+                <h1 class="text-xl font-bold text-white mb-2">403_FORBIDDEN: DISTRIBUTION_READY_BUT_EMPTY</h1>
+                <p class="text-sm text-[#8b949e] leading-relaxed">The requested distribution has been successfully provisioned on the Wire Global Edge Network. However, no root object (index.html) was identified at the origin.</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-y-6 text-[11px] font-mono">
+                <div class="flex flex-col gap-1">
+                    <span class="text-[#8b949e] uppercase">Distribution_ID</span>
+                    <span class="text-indigo-400">{{ bucket.distribution_id }}</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="text-[#8b949e] uppercase">Edge_Node</span>
+                    <span class="text-white">US-EAST-VA-04</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="text-[#8b949e] uppercase">Protocol</span>
+                    <span class="text-white">HTTP/2_TLS_1.3</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="text-[#8b949e] uppercase">Timestamp</span>
+                    <span class="text-white">{{ now|date:"Y-m-d H:i:s" }} UTC</span>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-[#30363d]">
+                <p class="text-[10px] text-[#8b949e] mb-2 uppercase">Required Action</p>
+                <code class="block bg-black/40 p-4 rounded border border-[#30363d] text-xs text-indigo-300">
+                    $ wire-cli upload --dist {{ bucket.distribution_id }} ./index.html
+                </code>
+            </div>
+        </div>
+
+        <div class="px-6 py-3 bg-[#0d1117] text-[9px] text-[#484f58] text-center border-t border-[#30363d]">
+            Proprietary Infrastructure of Wire-Edge Systems. All requests are logged for security analytics.
+        </div>
+    </div>
+</body>
+</html>

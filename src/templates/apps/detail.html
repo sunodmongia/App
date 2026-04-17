@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<div class="min-h-screen bg-slate-950 pt-24 pb-20">
+    <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- App Header (Dynamic State) -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-12">
+            <div class="flex items-center gap-6">
+                <div id="app-icon" class="w-20 h-20 bg-indigo-600 rounded-[2rem] flex items-center justify-center shadow-2xl shadow-indigo-600/20 transition-all">
+                    <span class="text-3xl font-black text-white uppercase">{{ app.runtime|slice:":2" }}</span>
+                </div>
+                <div class="space-y-1">
+                    <div class="flex items-center gap-3">
+                        <h1 class="text-4xl font-black text-white tracking-tight">{{ app.name }}</h1>
+                        <span id="runtime-badge" class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ app.runtime }}</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-sm font-medium">
+                        <span class="flex items-center gap-1.5">
+                            <span id="status-dot" class="w-2 h-2 rounded-full {% if app.status == 'live' %}bg-emerald-500 animate-pulse{% elif app.status == 'building' %}bg-indigo-500 animate-spin{% else %}bg-slate-700{% endif %}"></span>
+                            <span id="status-text" class="text-slate-400 capitalize">{{ app.status }}</span>
+                        </span>
+                        <span class="text-slate-700">|</span>
+                        <span class="text-slate-500">Infrastructure ID: <code class="text-indigo-400">{{ app.distribution_id }}</code></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button onclick="triggerDeployment()" id="deploy-btn"
+                    {% if not app.deployments.first and not app.source_url %}disabled{% endif %}
+                    class="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-20 disabled:cursor-not-allowed text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl transition-all shadow-2xl shadow-indigo-600/30 flex items-center gap-3">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    Trigger Deployment
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- Ingestion Zone (Industrial Project Upload) -->
+                <div class="bg-slate-900 border border-white/10 rounded-[2.5rem] p-10 relative overflow-hidden">
+                    <h3 class="text-xl font-black text-white mb-2">Project Source</h3>
+                    <p class="text-sm text-slate-500 mb-10 font-medium italic">Ingest your project via local archive or repository connection.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Drag & Drop -->
+                        <div id="drop-zone" class="group relative border-2 border-dashed border-white/5 rounded-3xl p-8 flex flex-col items-center justify-center transition-all hover:border-indigo-500/50 hover:bg-white/[0.02] cursor-pointer" 
+                             onmouseover="this.classList.add('border-indigo-500')" onmouseout="this.classList.remove('border-indigo-500')">
+                            <input type="file" id="file-input" class="hidden" webkitdirectory directory multiple onchange="handleFolderUpload(this.files)">
+                            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" onclick="document.getElementById('file-input').click()">
+                                <svg class="w-6 h-6 text-slate-500 group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                            </div>
+                            <span class="text-sm font-bold text-slate-300">Drop Project Folder or Files</span>
+                            <span class="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1">Multi-file Ingestion</span>
+
+                            <!-- Progress Overlay -->
+                            <div id="upload-progress-container" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center p-8 rounded-3xl">
+                                <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden mb-4">
+                                    <div id="upload-progress-bar" class="w-0 h-full bg-indigo-500 transition-all duration-300"></div>
+                                </div>
+                                <span id="upload-percent" class="text-xl font-black text-white">0%</span>
+                                <span id="upload-label" class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-2">Bundling Project...</span>
+                            </div>
+                        </div>
+
+                        <!-- Git Connect -->
+                        <div class="border border-white/5 rounded-3xl p-8 bg-black/20 flex flex-col">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                                </div>
+                                <span class="text-sm font-bold text-white">GitHub Connection</span>
+                            </div>
+                            <input type="text" placeholder="https://github.com/user/project" class="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-xs text-white focus:border-indigo-500 outline-none mb-4">
+                            <button class="w-full py-3 bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-[10px] uppercase tracking-widest rounded-xl transition-all border border-white/5 mt-auto">Connect Repository</button>
+                        </div>
+                    </div>
+                    
+                    <div id="source-status-badge" class="mt-8 flex items-center justify-between px-6 py-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 {% if not app.deployments.first %}hidden{% endif %}">
+                         <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+                            <span class="text-xs font-bold text-indigo-400 capitalize">Source: {{ app.source_type|default:"None" }}</span>
+                         </div>
+                         <span class="text-[10px] font-mono text-slate-600">Revision: {{ app.deployments.first.deployment_id|default:"---" }}</span>
+                    </div>
+                </div>
+
+                <!-- Build Terminal -->
+                <div class="bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                    <div class="px-6 py-4 bg-slate-950/50 border-b border-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="flex gap-1.5">
+                                <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-amber-500/50"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500/50"></div>
+                            </div>
+                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-2">VIRTUAL CONSOLE — Wire-Edge-Engine</span>
+                        </div>
+                    </div>
+                    <div id="terminal-output" class="p-8 h-[400px] overflow-y-auto font-mono text-xs leading-relaxed custom-scrollbar bg-black/40">
+                         <div id="log-container" class="space-y-1">
+                            <div class="text-slate-600 italic">// Infrastructure standing by. Connection secure...</div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats & Environment -->
+            <div class="space-y-8">
+                <!-- Infrastructure Governance (Real-time Plan Sync) -->
+                <div class="bg-indigo-600/10 border border-indigo-500/20 rounded-[2.5rem] p-8">
+                    <h3 class="text-lg font-black text-indigo-400 mb-6 uppercase tracking-widest">Resource Governance</h3>
+                    <div class="space-y-6">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-black text-slate-400 uppercase">Storage Consumption</span>
+                                <span id="storage-load" class="text-xs font-black text-white">{% widthratio total_used_mb plan_limit_mb 100 %}%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                <div id="storage-bar" class="h-full bg-indigo-500 transition-all duration-700" style="width: {% widthratio total_used_mb plan_limit_mb 100 %}%"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-[10px] font-bold">
+                                <span class="text-slate-500">Used: <span id="used-mb-text" class="text-slate-300">{{ total_used_mb|floatformat:1 }} MB</span></span>
+                                <span class="text-slate-500">Limit: {{ plan_limit_mb|floatformat:0 }} MB</span>
+                            </div>
+                        </div>
+
+                        <div id="remaining-box" class="p-6 bg-slate-950/50 rounded-2xl border border-white/5 flex flex-col items-center justify-center text-center">
+                            <span class="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-1">Remaining in Plan</span>
+                            <span id="remaining-mb-text" class="text-2xl font-black text-white">{{ remaining_mb|floatformat:1 }} MB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Environment (AJAX) -->
+                <div class="bg-slate-900/50 border border-white/5 rounded-[2.5rem] p-10">
+                    <h3 class="text-xl font-black text-white mb-2">Secrets</h3>
+                    <div id="env-vars-container" class="space-y-3 mt-6 mb-8">
+                        {% for var in env_vars %}
+                        <div class="bg-black/20 border border-white/5 rounded-xl p-3 flex items-center justify-between px-4">
+                            <span class="font-mono text-indigo-400 text-[10px] font-bold">{{ var.key }}</span>
+                            <code class="text-slate-700 text-[8px]">MASKED</code>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <input type="text" id="env-key" placeholder="KEY" class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white focus:border-indigo-500 outline-none">
+                        <input type="text" id="env-val" placeholder="VALUE" class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white focus:border-indigo-500 outline-none">
+                        <button type="button" onclick="addEnvVar()" class="w-full py-3 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl border border-white/10 transition-all text-[10px] uppercase">Append Key</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const term = document.getElementById('log-container');
+    const termFrame = document.getElementById('terminal-output');
+    const deployBtn = document.getElementById('deploy-btn');
+    const uploadLabel = document.getElementById('upload-label');
+    const wsPrefix = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const socket = new WebSocket(`${wsPrefix}://${window.location.host}/ws/dashboard/`);
+
+    // --- WebSocket Logic ---
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        
+        // Build Logs
+        if (data.type === 'build_log' && data.app_id == '{{ app.id }}') {
+            const line = document.createElement('div');
+            line.innerHTML = `<span class="text-slate-800 pr-4">${new Date().toLocaleTimeString()}</span> ${data.message}`;
+            term.appendChild(line);
+            termFrame.scrollTop = termFrame.scrollHeight;
+            updateAppStatus('building');
+        }
+
+        // Deployment Live
+        if (data.type === 'app_live' && data.app_id == '{{ app.id }}') {
+             updateAppStatus('live');
+             deployBtn.disabled = false;
+             deployBtn.innerHTML = 'Deploy Successful';
+             setTimeout(() => window.location.reload(), 3000); 
+        }
+
+        // Source Update
+        if (data.type === 'app_source_updated' && data.app_id == '{{ app.id }}') {
+            document.getElementById('source-status-badge').classList.remove('hidden');
+            deployBtn.disabled = false;
+        }
+
+        // --- Infrastructure Governance Sync ---
+        if (data.type === 'usage_update') {
+            const used = data.total_used_mb;
+            const limit = data.plan_limit_mb;
+            const percent = Math.round((used / limit) * 100);
+            
+            document.getElementById('storage-load').innerText = percent + '%';
+            document.getElementById('storage-bar').style.width = percent + '%';
+            document.getElementById('used-mb-text').innerText = used.toFixed(1) + ' MB';
+            document.getElementById('remaining-mb-text').innerText = Math.max(0, limit - used).toFixed(1) + ' MB';
+            
+            if (percent > 90) {
+                document.getElementById('storage-bar').classList.remove('bg-indigo-500');
+                document.getElementById('storage-bar').classList.add('bg-red-500');
+            }
+        }
+    };
+
+    function updateAppStatus(status) {
+        const dot = document.getElementById('status-dot');
+        const text = document.getElementById('status-text');
+        text.innerText = status;
+        dot.className = 'w-2 h-2 rounded-full';
+        if (status === 'live') dot.classList.add('bg-emerald-500', 'animate-pulse');
+        else if (status === 'building') dot.classList.add('bg-indigo-500', 'animate-spin');
+        else dot.classList.add('bg-slate-700');
+    }
+
+    // --- Ingestion Logic (JSZip Folder Bundling) ---
+    async function handleFolderUpload(files) {
+        if (!files || files.length === 0) return;
+        
+        const container = document.getElementById('upload-progress-container');
+        const bar = document.getElementById('upload-progress-bar');
+        const percentText = document.getElementById('upload-percent');
+        
+        container.classList.remove('hidden');
+        uploadLabel.innerText = "Bundling " + files.length + " files...";
+        
+        const zip = new JSZip();
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const path = file.webkitRelativePath || file.name;
+            zip.file(path, file);
+        }
+        
+        const blob = await zip.generateAsync({type: "blob"}, (metadata) => {
+            percentText.innerText = Math.round(metadata.percent) + '%';
+            bar.style.width = metadata.percent + '%';
+        });
+
+        uploadLabel.innerText = "Uploading Project Artifact...";
+        const formData = new FormData();
+        formData.append('file', blob, 'project-source.zip');
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', "{% url 'buckets:app_source_upload' app.id %}", true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+                const percent = Math.round((e.loaded / e.total) * 100);
+                bar.style.width = percent + '%';
+                percentText.innerText = percent + '%';
+            }
+        };
+
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                container.classList.add('hidden');
+            } else {
+                alert('Ingestion failed: ' + JSON.parse(xhr.responseText).error);
+                container.classList.add('hidden');
+            }
+        };
+        xhr.send(formData);
+    }
+
+    // --- Drag & Drop Support ---
+    const dropZone = document.getElementById('drop-zone');
+    dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-500'); };
+    dropZone.ondragleave = () => { dropZone.classList.remove('border-indigo-500'); };
+    dropZone.ondrop = (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-indigo-500');
+        if (e.dataTransfer.files) handleFolderUpload(e.dataTransfer.files);
+    };
+
+    // --- Deployment Logic (AJAX) ---
+    async function triggerDeployment() {
+        deployBtn.disabled = true;
+        deployBtn.innerHTML = 'Initializing...';
+        term.innerHTML = `<div class="text-indigo-500 font-bold animate-pulse">Requesting build orchestration from Edge Control...</div>`;
+        
+        const response = await fetch("{% url 'buckets:app_deploy' app.id %}", {
+            method: 'POST',
+            headers: { 'X-CSRFToken': '{{ csrf_token }}', 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        
+        if (!response.ok) {
+            const data = await response.json();
+             term.innerHTML += `<div class="text-red-500 font-bold mt-2">[ERROR] ${data.error}</div>`;
+             deployBtn.disabled = false;
+             deployBtn.innerHTML = 'Retry Deployment';
+        }
+    }
+
+</script>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+    @font-face {
+        font-family: 'Space Grotesk';
+        src: url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+    }
+    body { font-family: 'Space Grotesk', sans-serif; }
+</style>
+{% endblock %}

@@ -94,6 +94,22 @@ class CheckoutView(LoginRequiredMixin, View):
         )
 
         if error:
+            # [Agile Bypass] Local Dev Mode: Direct upgrade if Price IDs are missing
+            if settings.DEBUG:
+                assign_subscription(organization, subscription)
+                StripeSubscription.objects.update_or_create(
+                    organization=organization,
+                    defaults={
+                        "subscription": subscription,
+                        "stripe_subscription_id": f"sim_sub_{subscription.slug}",
+                        "stripe_customer_id": f"sim_cus_{organization.id}",
+                        "billing_interval": billing_interval,
+                        "status": "active",
+                    },
+                )
+                messages.success(request, f"DEV MODE: Bypassing Stripe. {organization.name} is now on the {subscription.name} plan.")
+                return redirect("buckets:list") # Redirect to storage dashboard to see new limits
+            
             messages.error(request, error)
             return redirect("pricing")
 

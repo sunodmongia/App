@@ -16,6 +16,7 @@ from django.http import JsonResponse
 from .models import (
     Organization, Event, Usage, Automation, Feature,
 )
+from buckets.models import Bucket  # Added for storage syncing
 from .forms import TrialSignupForm, DemoScheduleCallForm, ContactForm
 from saas.events import log_event
 from subscriptions.services import (
@@ -244,15 +245,32 @@ class DashboardView(TemplateView):
             org__in=orgs, type="report_generated", created_at__gte=start_date
         ).count()
 
-        context["total_storage"] = Usage.objects.filter(
+        context["total_active_storage"] = Usage.objects.filter(
             user__in=orgs.values_list("owner_id", flat=True)
         ).aggregate(total=Sum("storage_mb"))["total"] or 0
+        
+        context["total_reserved_storage"] = Bucket.objects.filter(
+            organization__in=orgs
+        ).aggregate(total=Sum("quota_mb"))["total"] or 0
+        
+        context["total_reserved_storage_gb"] = round(context["total_reserved_storage"] / 1024, 1)
+        
+        context["total_live_deployments"] = Bucket.objects.filter(
+            organization__in=orgs, is_live=True
+        ).count()
 
+        # Latest events for the live feed
         context["events"] = (
+            Event.objects.filter(org__in=orgs, created_at__gte=start_date)
+            .order_by("-created_at")[:15]
+        )
+        
+        # Aggregate counts for the distribution chart
+        context["event_counts"] = list(
             Event.objects.filter(org__in=orgs, created_at__gte=start_date)
             .values("type")
             .annotate(count=Count("id"))
-            .order_by("-count")[:10]
+            .order_by("-count")
         )
 
         context["top_orgs"] = orgs.annotate(

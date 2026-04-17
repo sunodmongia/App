@@ -29,6 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("help-center/", include("helpcenter.urls")),
     path("", include("chatbot.urls")),
+    path("storage/", include("buckets.urls")),
 ]
 
 if settings.DEBUG:

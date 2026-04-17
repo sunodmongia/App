@@ -31,7 +31,7 @@
     </div>
 
     <!-- KPI Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
 
         <!-- Active Orgs -->
         <div
@@ -94,6 +94,30 @@
                     <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Storage -->
+        <div
+            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-indigo-500/20 transition-all duration-300 group shadow-xl">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Reserved Store</p>
+                    <p class="text-3xl font-extrabold text-white group-hover:text-indigo-400 transition-colors">
+                        {% if total_reserved_storage >= 1024 %}{{ total_reserved_storage_gb }} GB{% else %}{{ total_reserved_storage }} MB{% endif %}
+                    </p>
+                    <p class="text-xs text-slate-600 mt-1.5 flex items-center gap-2">
+                        <span id="total-active-storage" class="text-indigo-400">{{ total_active_storage|floatformat:1 }} MB</span> active files
+                        <span class="w-1 h-1 bg-slate-700 rounded-full"></span>
+                        <span class="{% if total_live_deployments > 0 %}text-emerald-400{% else %}text-slate-500{% endif %} font-bold">{{ total_live_deployments }} Live</span>
+                    </p>
+                </div>
+                <div class="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-500/20 transition-all">
+                    <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
                 </div>
             </div>
@@ -206,6 +230,16 @@
                                 <span class="text-emerald-400 text-xs font-bold">₹</span>
                             {% elif e.type == 'api_call' %}
                                 <span class="text-blue-400 text-xs">⚡</span>
+                            {% elif e.type == 'file_uploaded' %}
+                                <span class="text-indigo-400 text-xs">☁️</span>
+                            {% elif e.type == 'file_deleted' %}
+                                <span class="text-red-400 text-xs">🗑️</span>
+                            {% elif e.type == 'bucket_created' %}
+                                <span class="text-purple-400 text-xs">📦</span>
+                            {% elif e.type == 'bucket_deployed' %}
+                                <span class="text-emerald-400 text-xs shadow-emerald-500/50">🚀</span>
+                            {% elif e.type == 'bucket_deactivated' %}
+                                <span class="text-orange-400 text-xs">⏸️</span>
                             {% else %}
                                 <span class="text-slate-500 text-xs">⚙️</span>
                             {% endif %}
@@ -347,8 +381,8 @@
 
     if (ctxApi) {
         const eventCounts = {};
-        {% for e in events %}
-            eventCounts['{{ e.type }}'] = (eventCounts['{{ e.type }}'] || 0) + 1;
+        {% for ec in event_counts %}
+            eventCounts['{{ ec.type }}'] = {{ ec.count }};
         {% endfor %}
 
         new Chart(ctxApi, {
@@ -385,9 +419,26 @@
         if (noEvents) noEvents.remove();
 
         const item = document.createElement('div');
-        const borderColor = data.type === 'revenue' ? 'border-l-emerald-500' : (data.type === 'api_call' ? 'border-l-blue-500' : 'border-l-slate-700');
-        const iconColor = data.type === 'revenue' ? 'text-emerald-400' : (data.type === 'api_call' ? 'text-blue-400' : 'text-slate-500');
-        const iconText = data.type === 'revenue' ? '₹' : (data.type === 'api_call' ? '⚡' : '⚙️');
+        const borderColor = data.type === 'revenue' ? 'border-l-emerald-500' : 
+                          (data.type === 'api_call' ? 'border-l-blue-500' : 
+                          (data.type === 'file_uploaded' ? 'border-l-indigo-500' : 
+                          (data.type === 'bucket_created' ? 'border-l-purple-500' : 'border-l-slate-700')));
+        
+        const iconColor = data.type === 'revenue' ? 'text-emerald-400' : 
+                        (data.type === 'api_call' ? 'text-blue-400' : 
+                        (data.type === 'file_uploaded' ? 'text-indigo-400' : 
+                        (data.type === 'file_deleted' ? 'text-red-400' : 
+                        (data.type === 'bucket_created' ? 'text-purple-400' : 
+                        (data.type === 'bucket_deployed' ? 'text-emerald-400' : 
+                        (data.type === 'bucket_deactivated' ? 'text-orange-400' : 'text-slate-500'))))));
+        
+        const iconText = data.type === 'revenue' ? '₹' : 
+                       (data.type === 'api_call' ? '⚡' : 
+                       (data.type === 'file_uploaded' ? '☁️' : 
+                       (data.type === 'file_deleted' ? '🗑️' : 
+                       (data.type === 'bucket_created' ? '📦' : 
+                       (data.type === 'bucket_deployed' ? '🚀' : 
+                       (data.type === 'bucket_deactivated' ? '⏸️' : '⚙️'))))));
         
         item.className = `flex items-center justify-between px-5 py-4 bg-slate-800/40 border border-white/10 rounded-2xl shadow-xl animate-in fade-in slide-in-from-right-8 duration-700 group border-l-4 ${borderColor}`;
         
@@ -404,6 +455,14 @@
             <span class="text-[10px] text-slate-400 font-mono font-bold">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}</span>
         `;
         
+        if (data.storage_update) {
+            const s = data.storage_update;
+            const activeStorageEl = document.getElementById('total-active-storage');
+            if (activeStorageEl && s.total_org_usage_mb !== undefined) {
+                activeStorageEl.innerText = `${parseFloat(s.total_org_usage_mb).toFixed(1)} MB`;
+            }
+        }
+
         feed.prepend(item);
         if (feed.children.length > 30) feed.lastElementChild.remove();
     };
