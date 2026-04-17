@@ -25,7 +25,7 @@
       <form method="post">
         {% csrf_token %}
         <div class="flex flex-col sm:flex-row justify-center gap-3">
-          <a href="{% url 'profile-list' %}"
+          <a href="{% url 'profiles:profile-list' %}"
             class="px-6 py-3 border border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl font-semibold text-sm transition-all">
             Cancel
           </a>

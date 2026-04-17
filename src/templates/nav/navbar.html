@@ -30,7 +30,7 @@
       <!-- Desktop Nav -->
       <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
         {% if request.user.is_authenticated %}
-        <a href="{% url 'dashboard' %}"
+        <a href="{% url 'saas:dashboard' %}"
           class="relative nav-link-line hover:text-white transition-colors duration-200">Dashboard</a>
         
         <!-- Infrastructure Dropdown -->
@@ -61,11 +61,11 @@
           </div>
         </div>
         {% endif %}
-        <a href="{% url 'features' %}"
+        <a href="{% url 'saas:features' %}"
           class="relative nav-link-line hover:text-white transition-colors duration-200">Features</a>
-        <a href="{% url 'pricing' %}"
+        <a href="{% url 'saas:pricing' %}"
           class="relative nav-link-line hover:text-white transition-colors duration-200">Plan</a>
-        <a href="{% url 'about' %}"
+        <a href="{% url 'saas:about' %}"
           class="relative nav-link-line hover:text-white transition-colors duration-200">About</a>
       </div>
 
@@ -76,7 +76,7 @@
           class="text-sm font-medium text-slate-400 hover:text-white transition-colors duration-200">
           Sign in
         </a>
-        <a href="{% url 'signup-trial' %}"
+        <a href="{% url 'saas:signup-trial' %}"
           class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-colors duration-200 shadow-lg shadow-indigo-600/20">
           Start free trial
         </a>
@@ -101,9 +101,9 @@
 
           <div id="profile-dropdown"
             class="hidden absolute right-0 mt-3 w-52 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-            <a href="{% url 'profile-home' %}" class="block px-4 py-3 text-sm text-slate-300 hover:bg-white/5">My account</a>
+            <a href="{% url 'profiles:profile-home' %}" class="block px-4 py-3 text-sm text-slate-300 hover:bg-white/5">My account</a>
             {% if user.is_superuser %}
-            <a href="{% url 'profile-list' %}" class="block px-4 py-3 text-sm text-slate-300 hover:bg-white/5">Admin</a>
+            <a href="{% url 'profiles:profile-list' %}" class="block px-4 py-3 text-sm text-slate-300 hover:bg-white/5">Admin</a>
             {% endif %}
             <a href="{% url 'account_logout' %}" class="block px-4 py-3 text-sm text-red-400 hover:bg-red-500/10">Sign out</a>
           </div>
@@ -130,9 +130,9 @@
 
           <div id="profile-dropdown-mobile"
             class="hidden absolute right-0 mt-3 w-52 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-            <a href="{% url 'profile-home' %}" class="block px-4 py-3 text-sm text-slate-300 hover:bg-white/5">My account</a>
+            <a href="{% url 'profiles:profile-home' %}" class="block px-4 py-3 text-sm text-slate-300 hover:bg-white/5">My account</a>
             {% if user.is_superuser %}
-            <a href="{% url 'profile-list' %}" class="block px-4 py-3 text-sm text-slate-300 hover:bg-white/5">Admin</a>
+            <a href="{% url 'profiles:profile-list' %}" class="block px-4 py-3 text-sm text-slate-300 hover:bg-white/5">Admin</a>
             {% endif %}
             <a href="{% url 'account_logout' %}" class="block px-4 py-3 text-sm text-red-400 hover:bg-red-500/10">Sign out</a>
           </div>
@@ -154,7 +154,7 @@
     <div class="px-6 py-6 space-y-6">
       <div class="space-y-4">
         {% if request.user.is_authenticated %}
-        <a href="{% url 'dashboard' %}"
+        <a href="{% url 'saas:dashboard' %}"
           class="block text-base font-medium text-slate-300 hover:text-white transition-colors">Dashboard</a>
         
         <div class="space-y-3 pt-2">
@@ -165,11 +165,11 @@
             class="block pl-4 text-sm font-bold text-emerald-400 hover:text-white transition-colors">Object Storage</a>
         </div>
         {% endif %}
-        <a href="{% url 'features' %}"
+        <a href="{% url 'saas:features' %}"
           class="block text-base font-medium text-slate-300 hover:text-white transition-colors">Features</a>
-        <a href="{% url 'pricing' %}"
+        <a href="{% url 'saas:pricing' %}"
           class="block text-base font-medium text-slate-300 hover:text-white transition-colors">Plans</a>
-        <a href="{% url 'about' %}"
+        <a href="{% url 'saas:about' %}"
           class="block text-base font-medium text-slate-300 hover:text-white transition-colors">About</a>
       </div>
 
@@ -179,7 +179,7 @@
           class="block w-full text-center py-3 rounded-lg text-slate-300 font-medium hover:bg-white/5 transition-colors">
           Sign in
         </a>
-        <a href="{% url 'signup-trial' %}"
+        <a href="{% url 'saas:signup-trial' %}"
           class="block w-full text-center py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-600/20">
           Start free trial
         </a>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}My Profile{% endblock %}
+{% block title %}{{ profile_user.username }}'s Profile{% endblock %}
 {% load static %}
 {% block content %}
 
@@ -15,26 +15,27 @@
 
       <div class="relative flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="flex flex-col md:flex-row items-center gap-6">
-          {% if request.user.userprofile.profile_image %}
-          <img src="{{ request.user.userprofile.profile_image.url }}" alt="Profile Image"
+          {% if profile.profile_image %}
+          <img src="{{ profile.profile_image.url }}" alt="Profile Image"
             class="w-28 h-28 rounded-full object-cover border-4 border-white/20 shadow-xl">
           {% else %}
           <div
             class="w-28 h-28 rounded-full bg-white/20 backdrop-blur flex items-center justify-center font-extrabold text-4xl text-white shadow-xl border-4 border-white/10">
-            {{ request.user.username|slice:":1"|upper }}
+            {{ profile_user.username|slice:":1"|upper }}
           </div>
           {% endif %}
           <div class="text-center md:text-left">
-            <h1 class="text-3xl font-extrabold text-white">{{ request.user.username }}</h1>
-            <p class="text-indigo-200 mt-1">{{ request.user.email }}</p>
-            {% if request.user.userprofile.phone %}
-            <p class="text-indigo-200 mt-1 text-sm">📞{{ request.user.userprofile.phone }}</p>
+            <h1 class="text-3xl font-extrabold text-white">{{ profile_user.username }}</h1>
+            <p class="text-indigo-200 mt-1">{{ profile_user.email }}</p>
+            {% if profile.phone %}
+            <p class="text-indigo-200 mt-1 text-sm">📞{{ profile.phone }}</p>
             {% endif %}
           </div>
         </div>
 
+        {% if is_me %}
         <div class="flex flex-col sm:flex-row items-center gap-3">
-          <a href="{% url 'profile-edit' request.user.id %}"
+          <a href="{% url 'profiles:profile-edit' profile_user.id %}"
             class="px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl backdrop-blur text-sm transition-all border border-white/20">
             ✏️ Edit Profile
           </a>
@@ -47,6 +48,7 @@
             🔒 Change Password
           </a>
         </div>
+        {% endif %}
       </div>
     </div>
 
@@ -58,11 +60,11 @@
         <h2 class="text-base font-bold text-white mb-4 flex items-center gap-2">
           <span class="text-indigo-400">🧠</span> Bio
         </h2>
-        {% if request.user.userprofile.bio %}
-        <p class="text-slate-400 leading-relaxed text-sm">{{ request.user.userprofile.bio }}</p>
+        {% if profile.bio %}
+        <p class="text-slate-400 leading-relaxed text-sm">{{ profile.bio }}</p>
         {% else %}
-        <p class="text-slate-600 italic text-sm">No bio yet. <a href="{% url 'profile-edit' request.user.id %}"
-            class="text-indigo-400 hover:text-indigo-300 underline transition-colors">Edit Profile</a> to add one.</p>
+        <p class="text-slate-600 italic text-sm">No bio yet. {% if is_me %}<a href="{% url 'profiles:profile-edit' profile_user.id %}"
+            class="text-indigo-400 hover:text-indigo-300 underline transition-colors">Edit Profile</a> to add one.{% endif %}</p>
         {% endif %}
       </div>
 
@@ -75,15 +77,15 @@
         <ul class="space-y-3">
           <li class="flex justify-between items-center">
             <span class="text-slate-500 text-sm font-medium">Username</span>
-            <span class="text-slate-200 text-sm font-semibold">{{ request.user.username }}</span>
+            <span class="text-slate-200 text-sm font-semibold">{{ profile_user.username }}</span>
           </li>
           <li class="flex justify-between items-center">
             <span class="text-slate-500 text-sm font-medium">Email</span>
-            <span class="text-slate-200 text-sm">{{ request.user.email }}</span>
+            <span class="text-slate-200 text-sm">{{ profile_user.email }}</span>
           </li>
           <li class="flex justify-between items-center">
             <span class="text-slate-500 text-sm font-medium">Member since</span>
-            <span class="text-slate-200 text-sm">{{ request.user.date_joined|date:"F j, Y" }}</span>
+            <span class="text-slate-200 text-sm">{{ profile_user.date_joined|date:"F j, Y" }}</span>
           </li>
         </ul>
       </div>

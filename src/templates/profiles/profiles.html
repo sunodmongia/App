@@ -34,7 +34,7 @@
         </div>
 
         <div class="flex flex-col sm:flex-row items-center gap-3">
-          <a href="{% url 'profile-edit' request.user.id %}"
+          <a href="{% url 'profiles:profile-edit' request.user.id %}"
             class="px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl backdrop-blur text-sm transition-all border border-white/20">
             ✏️ Edit Profile
           </a>
@@ -59,7 +59,7 @@
         <p class="text-slate-400 leading-relaxed text-sm">{{ request.user.userprofile.bio }}</p>
         {% else %}
         <p class="text-slate-600 italic text-sm">You haven't added a bio yet. Click <a
-            href="{% url 'profile-edit' request.user.id %}"
+            href="{% url 'profiles:profile-edit' request.user.id %}"
             class="text-indigo-400 hover:text-indigo-300 underline transition-colors">Edit Profile</a> to add one.</p>
         {% endif %}
       </div>

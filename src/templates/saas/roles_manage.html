@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load saas_tags %}
+{% block content %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #050c1a; color: #e2e8f0; margin: 0; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Layout */
+  .cc-root { display: flex; min-height: 100vh; }
+  .cc-sidebar { width: 240px; flex-shrink: 0; background: #070f1e; border-right: 1px solid #0f1f3a; padding: 28px 0; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  .cc-main { flex: 1; overflow-x: hidden; padding: 28px 32px 60px; min-width: 0; }
+
+  /* Sidebar (Reused from dashboard) */
+  .cc-brand { padding: 0 20px 24px; border-bottom: 1px solid #0f1f3a; margin-bottom: 16px; }
+  .cc-brand-name { font-weight: 800; font-size: 14px; color: #f8fafc; letter-spacing: -0.3px; }
+  .cc-brand-tag { font-size: 10px; color: #3b82f6; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+  .cc-nav-section { font-size: 9px; font-weight: 700; color: #1e3a5f; text-transform: uppercase; letter-spacing: 0.15em; padding: 12px 20px 6px; }
+  .cc-nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 12px; font-weight: 500; color: #64748b; text-decoration: none; transition: all 0.15s; border-left: 2px solid transparent; }
+  .cc-nav-item:hover { color: #94a3b8; background: #0a1628; }
+  .cc-nav-item.active { color: #3b82f6; background: #0a1628; border-left-color: #3b82f6; }
+  .cc-nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; flex-shrink: 0; }
+
+  /* Header */
+  .cc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .cc-title { font-size: 22px; font-weight: 700; color: #f8fafc; }
+  
+  /* Role Grid */
+  .cc-role-card { background: #070f1e; border: 1px solid #0f1f3a; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+  .cc-role-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #0f1f3a; }
+  .cc-role-name { font-size: 16px; font-weight: 600; color: #3b82f6; }
+  .cc-role-badge { font-size: 9px; font-weight: 700; text-transform: uppercase; background: rgba(59,130,246,0.1); color: #3b82f6; padding: 3px 8px; border-radius: 4px; }
+  
+  /* Permission Matrix */
+  .cc-perm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .cc-perm-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #0a1628; border: 1px solid #0f1f3a; border-radius: 6px; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+  .cc-perm-item:hover { border-color: #3b82f6; }
+  .cc-perm-checkbox { width: 14px; height: 14px; border: 1px solid #1e3a5f; border-radius: 3px; background: #050c1a; appearance: none; cursor: pointer; position: relative; }
+  .cc-perm-checkbox:checked { background: #3b82f6; border-color: #3b82f6; }
+  .cc-perm-checkbox:checked::after { content: '✓'; position: absolute; color: #fff; font-size: 10px; left: 2px; top: -1px; }
+  .cc-perm-label { flex: 1; color: #94a3b8; }
+
+  /* Form */
+  .cc-add-role { display: flex; gap: 10px; margin-bottom: 30px; }
+  .cc-input { flex: 1; background: #0a1628; border: 1px solid #1e3a5f; border-radius: 6px; color: #e2e8f0; padding: 10px 15px; font-size: 13px; outline: none; transition: border-color 0.2s; }
+  .cc-input:focus { border-color: #3b82f6; }
+  .cc-btn { background: #3b82f6; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  
+  .cc-status-msg { font-size: 11px; color: #10b981; margin-top: 5px; opacity: 0; transition: opacity 0.3s; }
+  .cc-status-msg.show { opacity: 1; }
+</style>
+
+<div class="cc-root">
+  <!-- SIDEBAR (Dynamic Roles Integrated) -->
+  <nav class="cc-sidebar">
+    <div class="cc-brand">
+      <div class="cc-brand-name">Edge Control</div>
+      <div class="cc-brand-tag">PaaS · IaaS · SaaS</div>
+      {% get_user_role request.user organization as current_role %}
+      <div style="font-size: 9px; color: #10b981; font-weight: 700; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(16,185,129,0.08); padding: 2px 8px; border-radius: 4px; display: inline-block;">
+        {{ current_role }}
+      </div>
+    </div>
+
+    <div class="cc-nav-section">Monitoring</div>
+    <a href="{% url 'dashboard' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Overview</a>
+
+    <div class="cc-nav-section">Infrastructure</div>
+    <a href="{% url 'buckets:app_list' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Compute Fleet</a>
+    <a href="{% url 'buckets:list' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Storage Hubs</a>
+
+    <div class="cc-nav-section">Governance</div>
+    <a href="{% url 'saas:role_manage' %}" class="cc-nav-item active"><span class="cc-nav-dot"></span> Roles & Security</a>
+    <a href="{% url 'saas:member_manage' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Team Management</a>
+  </nav>
+
+  <main class="cc-main">
+    <div class="cc-header">
+      <h1 class="cc-title">Roles & Security Matrix</h1>
+      <div style="font-size: 11px; color: #475569;">Define technical capabilities for your organization roles</div>
+    </div>
+
+    <!-- Create Role -->
+    <form class="cc-add-role" method="POST">
+      {% csrf_token %}
+      <input type="text" name="name" class="cc-input" placeholder="New Role Name (e.g. Senior DevOps, Junior Developer)..." required>
+      <button type="submit" class="cc-btn">Create Role</button>
+    </form>
+
+    <!-- Role List -->
+    {% for role in roles %}
+    <div class="cc-role-card">
+      <div class="cc-role-header">
+        <div>
+          <span class="cc-role-name">{{ role.name }}</span>
+          {% if role.is_preset %}<span class="cc-role-badge">System Default</span>{% endif %}
+        </div>
+        <div id="status-{{ role.id }}" class="cc-status-msg">Changes saved locally</div>
+      </div>
+      
+      <div class="cc-perm-grid">
+        {% for perm_code, perm_label in available_permissions %}
+        <label class="cc-perm-item">
+          <input type="checkbox" 
+                 class="cc-perm-checkbox" 
+                 data-role="{{ role.id }}" 
+                 data-perm="{{ perm_code }}"
+                 {% for rp in role.permissions.all %}{% if rp.permission_codename == perm_code %}checked{% endif %}{% endfor %}
+                 onchange="updatePermission(this)">
+          <span class="cc-perm-label">{{ perm_label }}</span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </main>
+</div>
+
+<script>
+function updatePermission(checkbox) {
+    const roleId = checkbox.dataset.role;
+    const permCode = checkbox.dataset.perm;
+    const action = checkbox.checked ? 'add' : 'remove';
+    const statusDiv = document.getElementById(`status-${roleId}`);
+
+    const formData = new FormData();
+    formData.append('permission', permCode);
+    formData.append('action', action);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+    fetch(`/dashboard/roles/${roleId}/update/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            statusDiv.classList.add('show');
+            setTimeout(() => statusDiv.classList.remove('show'), 2000);
+        }
+    })
+    .catch(err => console.error('Error updating permission:', err));
+}
+</script>
+{% endblock %}

@@ -22,157 +22,43 @@ from subscriptions.models import (
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # ---------------------------------------------------------------------------
-# Default plan data (INR only)
+# Dynamic Subscription Engine
 # ---------------------------------------------------------------------------
 
-DEFAULT_SUBSCRIPTION_DATA = [
-    {
-        "name": "Free",
-        "slug": "free",
-        "description": "For individuals testing the platform",
-        "monthly_price": Decimal("0.00"),
-        "annual_price": Decimal("0.00"),
-        "is_default": True,
-        "is_featured": False,
-        "display_order": 0,
-        "features": [
-            "1 team member",
-            "1 GB storage",
-            "Basic support",
-            "1,000 API calls / month",
-            "1 automation",
-        ],
-        "limits": {
-            "api_calls": 1000,
-            "storage_mb": 1024,
-            "automations": 1,
-            "team_members": 1,
-        },
-        "permissions": [],
-    },
-    {
-        "name": "Starter",
-        "slug": "starter",
-        "description": "Small teams and early-stage startups",
-        "monthly_price": Decimal("2499.00"),
-        "annual_price": Decimal("23990.00"),
-        "is_default": False,
-        "is_featured": False,
-        "display_order": 10,
-        "features": [
-            "5 team members",
-            "10 GB storage",
-            "Email support",
-            "15,000 API calls / month",
-            "10 automations",
-            "Basic integrations",
-        ],
-        "limits": {
-            "api_calls": 15000,
-            "storage_mb": 10240,
-            "automations": 10,
-            "team_members": 5,
-        },
-        "permissions": ["starter"],
-    },
-    {
-        "name": "Professional",
-        "slug": "professional",
-        "description": "Growing companies that need more power",
-        "monthly_price": Decimal("6999.00"),
-        "annual_price": Decimal("67190.00"),
-        "is_default": False,
-        "is_featured": True,
-        "display_order": 20,
-        "features": [
-            "25 team members",
-            "100 GB storage",
-            "Priority support",
-            "100,000 API calls / month",
-            "50 automations",
-            "Advanced analytics",
-            "AI APIs",
-        ],
-        "limits": {
-            "api_calls": 100000,
-            "storage_mb": 102400,
-            "automations": 50,
-            "team_members": 25,
-        },
-        "permissions": ["professional"],
-    },
-    {
-        "name": "Enterprise",
-        "slug": "enterprise",
-        "description": "Large organisations with custom needs",
-        "monthly_price": Decimal("19999.00"),
-        "annual_price": Decimal("191990.00"),
-        "is_default": False,
-        "is_featured": False,
-        "display_order": 30,
-        "features": [
-            "Unlimited team members",
-            "1 TB storage",
-            "Dedicated account manager",
-            "500,000 API calls / month",
-            "500 automations",
-            "Custom AI & APIs",
-            "SLA + onboarding",
-        ],
-        "limits": {
-            "api_calls": 500000,
-            "storage_mb": 1048576,
-            "automations": 500,
-            "team_members": 100000,
-        },
-        "permissions": ["enterprise"],
-    },
-]
-
-VALID_SLUGS = {d["slug"] for d in DEFAULT_SUBSCRIPTION_DATA}
+# Valid slugs are now determined by what exists in the database
+def get_valid_plan_slugs():
+    return set(Subscription.objects.values_list("slug", flat=True))
 
 
 # ---------------------------------------------------------------------------
 # Plan bootstrap
 # ---------------------------------------------------------------------------
 
-def ensure_default_subscriptions():
+def get_active_subscriptions():
     """
-    Create or update the 4 canonical plans.
-    Also removes any stale duplicate plans that share a canonical name
-    but have a non-canonical slug (legacy garbage from earlier code).
+    Returns all active subscriptions with their limits.
+    Does NOT modify the database. This is the main runtime helper.
     """
-    # Remove stale duplicates: same canonical name, wrong slug
-    for plan_data in DEFAULT_SUBSCRIPTION_DATA:
-        Subscription.objects.filter(
-            name=plan_data["name"]
-        ).exclude(slug=plan_data["slug"]).delete()
-
-    for base_plan_data in DEFAULT_SUBSCRIPTION_DATA:
-        plan_data = {
-            k: v for k, v in base_plan_data.items()
-            if k not in ("limits", "permissions")
-        }
-        limits = dict(base_plan_data["limits"])
-        permission_codenames = list(base_plan_data["permissions"])
-
-        subscription, _ = Subscription.objects.update_or_create(
-            slug=plan_data["slug"],
-            defaults=plan_data,
-        )
-        PlanLimit.objects.update_or_create(
-            subscription=subscription, defaults=limits
-        )
-
-        permissions = Permission.objects.filter(
-            content_type__app_label="subscriptions",
-            codename__in=permission_codenames,
-        )
-        subscription.permissions.set(permissions)
-
     return Subscription.objects.filter(active=True).select_related("planlimit").order_by(
-        "display_order"
+        "display_order", "monthly_price", "id"
     )
+
+
+def ensure_default_subscriptions(force=False):
+    """
+    One-time bootstrap or forced sync for canonical plans.
+    If 'force' is False, it will NOT touch existing plans if any exist.
+    """
+    if not force and Subscription.objects.filter(active=True).exists():
+        return get_active_subscriptions()
+
+def ensure_default_subscriptions(force=False):
+    """
+    Returns active plans. 
+    Bootstrapping is now managed via management commands or manual admin entries
+    to prevent hardcoded overrides.
+    """
+    return get_active_subscriptions()
 
 
 def get_default_subscription():

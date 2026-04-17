@@ -1,484 +1,466 @@
 {% extends 'base.html' %}
+{% load saas_tags %}
 {% block content %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-<div class="min-h-screen bg-slate-950 p-4 md:p-8 pt-8">
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #050c1a; color: #e2e8f0; margin: 0; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Layout */
+  .cc-root { display: flex; min-height: 100vh; }
+  .cc-sidebar { width: 240px; flex-shrink: 0; background: #070f1e; border-right: 1px solid #0f1f3a; padding: 28px 0; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  .cc-main { flex: 1; overflow-x: hidden; padding: 28px 32px 60px; min-width: 0; }
+
+  /* Sidebar */
+  .cc-brand { padding: 0 20px 24px; border-bottom: 1px solid #0f1f3a; margin-bottom: 16px; }
+  .cc-brand-name { font-weight: 800; font-size: 14px; color: #f8fafc; letter-spacing: -0.3px; }
+  .cc-brand-tag { font-size: 10px; color: #3b82f6; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+  .cc-nav-section { font-size: 9px; font-weight: 700; color: #1e3a5f; text-transform: uppercase; letter-spacing: 0.15em; padding: 12px 20px 6px; }
+  .cc-nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 12px; font-weight: 500; color: #64748b; text-decoration: none; transition: all 0.15s; cursor: default; border-left: 2px solid transparent; }
+  .cc-nav-item:hover { color: #94a3b8; background: #0a1628; }
+  .cc-nav-item.active { color: #3b82f6; background: #0a1628; border-left-color: #3b82f6; }
+  .cc-nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; flex-shrink: 0; }
+  .cc-sidebar-footer { margin-top: auto; padding: 16px 20px 0; border-top: 1px solid #0f1f3a; }
+  .cc-hub-path { font-size: 9px; color: #1e3a5f; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .cc-hub-val { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #3b82f6; word-break: break-all; }
+
+  /* Header */
+  .cc-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; gap: 20px; flex-wrap: wrap; }
+  .cc-page-title { font-size: 22px; font-weight: 700; color: #f8fafc; letter-spacing: -0.4px; display: flex; align-items: center; gap: 10px; }
+  .cc-status-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #10b981; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); padding: 4px 10px; border-radius: 20px; }
+  .ping-dot { position: relative; display: inline-flex; height: 8px; width: 8px; }
+  .ping-dot span:first-child { animation: ping 1.2s cubic-bezier(0,0,0.2,1) infinite; position: absolute; inset: 0; border-radius: 50%; background: #10b981; opacity: 0.5; }
+  .ping-dot span:last-child { position: relative; display: inline-flex; border-radius: 50%; height: 8px; width: 8px; background: #10b981; }
+  @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+
+  /* Stat cards */
+  .cc-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  @media (max-width: 900px) { .cc-stats { grid-template-columns: repeat(2, 1fr); } }
+  .cc-stat { background: #070f1e; border: 1px solid #0f1f3a; border-radius: 10px; padding: 18px 20px; position: relative; overflow: hidden; transition: border-color 0.2s; }
+  .cc-stat:hover { border-color: #1e3a5f; }
+  .cc-stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #334155; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .cc-stat-val { font-size: 28px; font-weight: 700; letter-spacing: -1px; color: #f8fafc; line-height: 1; margin-bottom: 6px; }
+  .cc-stat-sub { font-size: 11px; color: #475569; font-weight: 500; }
+  .cc-stat-sub.up { color: #10b981; }
+  .cc-stat-sub.dim { color: #1e3a5f; }
+  .cc-stat-glow { position: absolute; right: -20px; bottom: -20px; width: 80px; height: 80px; border-radius: 50%; filter: blur(30px); pointer-events: none; }
+  .cc-stat.paas { border-color: rgba(59,130,246,0.2); background: linear-gradient(135deg, #070f1e 60%, rgba(15,28,65,0.4)); }
+  .cc-stat.paas .cc-stat-glow { background: rgba(59,130,246,0.15); }
+  .cc-stat.saas .cc-stat-glow { background: rgba(16,185,129,0.1); }
+  .cc-stat.iaas .cc-stat-glow { background: rgba(99,102,241,0.1); }
+
+  /* Section title */
+  .cc-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .cc-section-title { font-size: 13px; font-weight: 600; color: #94a3b8; letter-spacing: -0.1px; }
+  .cc-badge { font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .cc-badge.live { color: #3b82f6; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); }
+  .cc-badge.ok { color: #10b981; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); }
+
+  /* Fleet grid */
+  .cc-fleet { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .cc-node { background: #070f1e; border: 1px solid #0f1f3a; border-radius: 10px; padding: 16px; transition: border-color 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 12px; }
+  .cc-node:hover { border-color: #1e3a5f; box-shadow: 0 0 0 1px #0f1f3a; }
+  .cc-node.live { border-color: rgba(16,185,129,0.2); }
+  .cc-node-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .cc-node-name { font-size: 13px; font-weight: 600; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cc-node-id { font-size: 10px; color: #1e3a5f; font-family: 'JetBrains Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cc-runtime-pill { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
+  .cc-runtime-pill.django { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.2); }
+  .cc-runtime-pill.node { background: rgba(234,179,8,0.1); color: #eab308; border: 1px solid rgba(234,179,8,0.2); }
+  .cc-runtime-pill.other { background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.2); }
+  .cc-node-tty { background: #020810; border: 1px solid #0a1628; border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+  .cc-tty-row { display: flex; justify-content: space-between; align-items: center; }
+  .cc-tty-key { font-size: 10px; font-weight: 500; color: #1e3a5f; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
+  .cc-tty-val { font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: #94a3b8; }
+  .cc-tty-val.port { color: #10b981; }
+  .cc-tty-val.err { color: #ef4444; }
+  .cc-tty-sep { height: 1px; background: #0a1628; margin: 2px 0; }
+  .cc-tty-path-key { font-size: 9px; color: #1e3a5f; font-family: 'JetBrains Mono', monospace; margin-bottom: 3px; }
+  .cc-tty-path { font-size: 9px; color: #334155; font-family: 'JetBrains Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cc-node-action { display: block; text-align: center; padding: 8px; border-radius: 6px; font-size: 11px; font-weight: 600; background: #0a1628; border: 1px solid #1e3a5f; color: #64748b; text-decoration: none; transition: all 0.15s; }
+  .cc-node-action:hover { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+  .cc-node-empty { grid-column: 1/-1; padding: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: #070f1e; border: 1px dashed #0f1f3a; border-radius: 10px; }
+  .cc-node-empty-icon { color: #1e3a5f; }
+  .cc-node-empty p { font-size: 13px; color: #334155; margin: 0; font-weight: 500; }
+  .cc-node-empty span { font-size: 11px; color: #1e3a5f; }
+
+  /* Charts + Ledger row */
+  .cc-lower { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+  @media (max-width: 900px) { .cc-lower { grid-template-columns: 1fr; } }
+  .cc-panel { background: #070f1e; border: 1px solid #0f1f3a; border-radius: 10px; padding: 20px; }
+  .cc-panel-title { font-size: 12px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+
+  /* Ledger */
+  .cc-ledger { height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+  .cc-ledger::-webkit-scrollbar { width: 4px; }
+  .cc-ledger::-webkit-scrollbar-track { background: transparent; }
+  .cc-ledger::-webkit-scrollbar-thumb { background: #0f1f3a; border-radius: 4px; }
+  .cc-ledger-row { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 5px; transition: background 0.1s; font-size: 11px; }
+  .cc-ledger-row:hover { background: #0a1628; }
+  .cc-ledger-idx { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #1e3a5f; width: 22px; flex-shrink: 0; }
+  .cc-ledger-type { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; white-space: nowrap; padding: 2px 6px; border-radius: 3px; }
+  .cc-ledger-type.revenue { color: #10b981; background: rgba(16,185,129,0.08); }
+  .cc-ledger-type.api_call { color: #3b82f6; background: rgba(59,130,246,0.08); }
+  .cc-ledger-type.report { color: #8b5cf6; background: rgba(139,92,246,0.08); }
+  .cc-ledger-type.default { color: #475569; background: rgba(71,85,105,0.1); }
+  .cc-ledger-org { color: #334155; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+  .cc-ledger-time { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #1e3a5f; flex-shrink: 0; }
+  .cc-ledger-empty { flex: 1; display: flex; align-items: center; justify-content: center; color: #1e3a5f; font-size: 12px; font-style: italic; }
+  .cc-ledger-new { background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.1); animation: ledger-in 0.4s ease; }
+  @keyframes ledger-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Org table */
+  .cc-orgtable { width: 100%; border-collapse: collapse; }
+  .cc-orgtable th { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #1e3a5f; padding: 0 10px 10px; text-align: left; border-bottom: 1px solid #0f1f3a; }
+  .cc-orgtable td { font-size: 12px; color: #64748b; padding: 9px 10px; border-bottom: 1px solid #0a1628; transition: background 0.1s; }
+  .cc-orgtable tr:last-child td { border-bottom: none; }
+  .cc-orgtable tr:hover td { background: #0a1628; color: #94a3b8; }
+  .cc-orgtable td.name { color: #cbd5e1; font-weight: 500; }
+  .cc-orgtable td.rev { color: #10b981; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .cc-orgtable td.api { color: #3b82f6; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+  /* Responsive */
+  @media(max-width: 700px) {
+    .cc-sidebar { display: none; }
+    .cc-main { padding: 16px; }
+    .cc-stats { grid-template-columns: 1fr 1fr; }
+    .cc-lower { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="cc-root">
+
+  <!-- SIDEBAR -->
+  <nav class="cc-sidebar">
+    <div class="cc-brand">
+      <div class="cc-brand-name">Edge Control</div>
+      <div class="cc-brand-tag">PaaS · IaaS · SaaS</div>
+      {% if orgs.exists %}
+        {% with primary_org=orgs.first %}
+          <div style="font-size: 9px; color: #10b981; font-weight: 700; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(16,185,129,0.08); padding: 2px 8px; border-radius: 4px; display: inline-block;">
+            {% get_user_role request.user primary_org %}
+          </div>
+        {% endwith %}
+      {% endif %}
+    </div>
+
+    <div class="cc-nav-section">Monitoring</div>
+    <a href="{% url 'saas:dashboard' %}" class="cc-nav-item active"><span class="cc-nav-dot"></span> Overview</a>
+
+    <div class="cc-nav-section">Infrastructure</div>
+    {% if orgs.exists %}
+      {% with primary_org=orgs.first %}
+        {% if request.user|has_org_perm:primary_org|add:",buckets.view_apps" %}
+          <a href="{% url 'buckets:app_list' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Compute Fleet</a>
+        {% endif %}
+        {% if request.user|has_org_perm:primary_org|add:",buckets.view_storage" %}
+          <a href="{% url 'buckets:list' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Storage Hubs</a>
+        {% endif %}
+      {% endwith %}
+    {% endif %}
+
+    <div class="cc-nav-section">Organizations</div>
+    {% if orgs.exists %}
+      {% with primary_org=orgs.first %}
+        {% if request.user|has_org_perm:primary_org|add:",saas.view_billing" %}
+          <a href="{% url 'saas:pricing' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Subscriptions</a>
+        {% endif %}
+      {% endwith %}
+    {% endif %}
+
+    <div class="cc-nav-section">Governance</div>
+    {% if orgs.exists %}
+      {% with primary_org=orgs.first %}
+        {% if request.user|has_org_perm:primary_org|add:",saas.manage_members" %}
+          <a href="{% url 'saas:role_manage' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Roles & Security</a>
+          <a href="{% url 'saas:member_manage' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Team Management</a>
+        {% endif %}
+      {% endwith %}
+    {% endif %}
+
+    <div class="cc-sidebar-footer">
+      <div class="cc-hub-path">Hub Root</div>
+      <a href="{% url 'buckets:org_config_update' %}" class="cc-hub-val text-decoration-none" title="{{ deployment_root }}">{{ deployment_root }}</a>
+    </div>
+  </nav>
+
+  <!-- MAIN CANVAS -->
+  <main class="cc-main">
 
     <!-- Header -->
-    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-            <h1 class="text-3xl font-extrabold text-white mb-1">Dashboard</h1>
-            <p class="text-slate-500">Monitor your Cloud SaaS metrics and performance</p>
+    <div class="cc-header">
+      <div>
+        <h1 class="cc-page-title">
+          Infrastructure Overview
+          <div class="ping-dot"><span></span><span></span></div>
+        </h1>
+        <div style="font-size:12px;color:#334155;margin-top:4px;">
+          Last {{ days }} days &nbsp;·&nbsp; {{ active_orgs }} active org{{ active_orgs|pluralize }}
         </div>
-        
-        <!-- Date Filter -->
-        <div class="bg-slate-900/70 border border-white/5 rounded-2xl p-2 px-4 shadow-lg backdrop-blur-md">
-            <form method="get" class="flex items-center gap-4">
-                <label class="text-xs font-semibold text-slate-500 uppercase tracking-tighter">Period:</label>
-                <select name="days"
-                    class="bg-transparent text-slate-200 border-none px-2 py-1 rounded-xl text-sm focus:ring-0 focus:outline-none transition cursor-pointer font-bold">
-                    <option value="7" {% if days == 7 %}selected{% endif %}>Last 7 days</option>
-                    <option value="30" {% if days == 30 %}selected{% endif %}>Last 30 days</option>
-                    <option value="90" {% if days == 90 %}selected{% endif %}>Last 90 days</option>
-                    <option value="365" {% if days == 365 %}selected{% endif %}>Last year</option>
-                </select>
-                <button
-                    class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-indigo-600/20 active:scale-95">
-                    Apply
-                </button>
-            </form>
-        </div>
+      </div>
+      <div class="cc-status-badge">
+        <span style="width:6px;height:6px;background:#10b981;border-radius:50%;flex-shrink:0;"></span>
+        All systems nominal
+      </div>
     </div>
 
-    <!-- KPI Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-
-        <!-- Active Orgs -->
-        <div
-            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-blue-500/20 transition-all duration-300 group shadow-xl">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Active Organizations
-                    </p>
-                    <p class="text-3xl font-extrabold text-white group-hover:text-blue-400 transition-colors">{{ active_orgs }}</p>
-                    <p class="text-xs text-slate-600 mt-1.5">of {{ total_orgs }} total</p>
-                </div>
-                <div class="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-blue-500/20 transition-all">
-                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                </div>
-            </div>
+    <!-- KPI Stats -->
+    <div class="cc-stats">
+      <div class="cc-stat saas">
+        <div class="cc-stat-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Revenue (SaaS)
         </div>
-
-        <!-- Revenue -->
-        <div
-            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-emerald-500/20 transition-all duration-300 group shadow-xl">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Total Revenue</p>
-                    <p class="text-3xl font-extrabold text-white group-hover:text-emerald-400 transition-colors">₹{{ total_revenue|floatformat:0 }}</p>
-                    {% if revenue_growth %}
-                    <p
-                        class="text-xs mt-1.5 {% if revenue_growth >= 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
-                        {% if revenue_growth >= 0 %}↑{% else %}↓{% endif %} {{ revenue_growth|floatformat:1 }}% vs
-                        previous period
-                    </p>
-                    {% endif %}
-                </div>
-                <div class="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-500/20 transition-all">
-                    <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-            </div>
+        <div class="cc-stat-val">₹{{ total_revenue|floatformat:0 }}</div>
+        <div class="cc-stat-sub {% if revenue_growth >= 0 %}up{% else %}{% endif %}">
+          {% if revenue_growth >= 0 %}↑{% else %}↓{% endif %} {{ revenue_growth }}% vs prior period
         </div>
+        <div class="cc-stat-glow"></div>
+      </div>
 
-        <!-- API Calls -->
-        <div
-            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-purple-500/20 transition-all duration-300 group shadow-xl">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">API Calls</p>
-                    <p class="text-3xl font-extrabold text-white group-hover:text-purple-400 transition-colors">{{ total_api|floatformat:0 }}</p>
-                    {% if api_growth %}
-                    <p class="text-xs mt-1.5 {% if api_growth >= 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
-                        {% if api_growth >= 0 %}↑{% else %}↓{% endif %} {{ api_growth|floatformat:1 }}% vs previous
-                        period
-                    </p>
-                    {% endif %}
-                </div>
-                <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-purple-500/20 transition-all">
-                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                </div>
-            </div>
+      <div class="cc-stat iaas">
+        <div class="cc-stat-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          Storage (IaaS)
         </div>
-
-        <!-- Storage -->
-        <div
-            class="bg-slate-900/70 border border-white/5 rounded-2xl p-6 hover:border-indigo-500/20 transition-all duration-300 group shadow-xl">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Reserved Store</p>
-                    <p class="text-3xl font-extrabold text-white group-hover:text-indigo-400 transition-colors">
-                        {% if total_reserved_storage >= 1024 %}{{ total_reserved_storage_gb }} GB{% else %}{{ total_reserved_storage }} MB{% endif %}
-                    </p>
-                    <p class="text-xs text-slate-600 mt-1.5 flex items-center gap-2">
-                        <span id="total-active-storage" class="text-indigo-400">{{ total_active_storage|floatformat:1 }} MB</span> active files
-                        <span class="w-1 h-1 bg-slate-700 rounded-full"></span>
-                        <span class="{% if total_live_deployments > 0 %}text-emerald-400{% else %}text-slate-500{% endif %} font-bold">{{ total_live_deployments }} Live</span>
-                    </p>
-                </div>
-                <div class="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-500/20 transition-all">
-                    <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                </div>
-            </div>
+        <div class="cc-stat-val">
+          {% if total_reserved_storage >= 1024 %}{{ total_reserved_storage_gb }}<span style="font-size:14px;font-weight:500;color:#334155;margin-left:3px;">GB</span>
+          {% else %}{{ total_reserved_storage }}<span style="font-size:14px;font-weight:500;color:#334155;margin-left:3px;">MB</span>{% endif %}
         </div>
+        <div class="cc-stat-sub dim">{{ total_active_storage|floatformat:1 }} MB active</div>
+        <div class="cc-stat-glow"></div>
+      </div>
 
+      <div class="cc-stat paas">
+        <div class="cc-stat-label" style="color:#3b82f6;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          Compute (PaaS)
+        </div>
+        <div class="cc-stat-val">{{ total_live_deployments }}</div>
+        <div class="cc-stat-sub" style="color:#3b82f6;">live edge processes</div>
+        <div class="cc-stat-glow" style="background:rgba(59,130,246,0.15);"></div>
+      </div>
+
+      <div class="cc-stat">
+        <div class="cc-stat-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          API Traffic
+        </div>
+        <div class="cc-stat-val">{{ total_api }}</div>
+        <div class="cc-stat-sub {% if api_growth >= 0 %}up{% endif %}">
+          {% if api_growth >= 0 %}↑{% else %}↓{% endif %} {{ api_growth }}% vs prior period
+        </div>
+      </div>
     </div>
 
-    <!-- Charts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <!-- Revenue Trend Chart -->
-        <div class="lg:col-span-2 bg-slate-900/70 border border-white/5 rounded-3xl p-8 shadow-2xl backdrop-blur-sm relative overflow-hidden">
-            <div class="relative z-10">
-                <div class="flex items-center justify-between mb-8">
-                    <div>
-                        <h3 class="text-xl font-bold text-white tracking-tight">Revenue Trend</h3>
-                        <p class="text-xs text-slate-500 font-medium">Daily income performance across all organizations</p>
-                    </div>
-                </div>
-                <div class="h-72">
-                    <canvas id="revenueChart"></canvas>
-                </div>
-            </div>
-            <!-- Background Decoration -->
-            <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl"></div>
+    <!-- Active Fleet -->
+    <div class="cc-section-head">
+      <span class="cc-section-title">Active Compute Fleet</span>
+      <span class="cc-badge live">Live Sync</span>
+    </div>
+    <div class="cc-fleet">
+      {% for app in active_apps %}
+      {% with rt=app.runtime|lower %}
+      <div class="cc-node {% if app.is_live %}live{% endif %}">
+        <div class="cc-node-head">
+          <div style="min-width:0;">
+            <div class="cc-node-name" title="{{ app.name }}">{{ app.name }}</div>
+            <div class="cc-node-id">{{ app.distribution_id }}</div>
+          </div>
+          <span class="cc-runtime-pill {% if 'django' in rt %}django{% elif 'node' in rt %}node{% else %}other{% endif %}">{{ app.runtime }}</span>
         </div>
 
-        <!-- API Distribution -->
-        <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-8 shadow-2xl backdrop-blur-sm relative overflow-hidden">
-            <div class="relative z-10">
-                <h3 class="text-xl font-bold text-white mb-2 tracking-tight">Service Distribution</h3>
-                <p class="text-xs text-slate-500 mb-8 font-medium">Activity breakdown by service type</p>
-                <div class="h-64 flex items-center justify-center">
-                    <canvas id="apiChart"></canvas>
-                </div>
-            </div>
-            <div class="absolute -left-20 -top-20 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl"></div>
+        <div class="cc-node-tty">
+          <div class="cc-tty-row">
+            <span class="cc-tty-key">pid</span>
+            <span class="cc-tty-val {% if not app.process_pid %}err{% endif %}">{{ app.process_pid|default:"—" }}</span>
+          </div>
+          <div class="cc-tty-row">
+            <span class="cc-tty-key">port</span>
+            <span class="cc-tty-val port">{{ app.active_port|default:"—" }}</span>
+          </div>
+          <div class="cc-tty-sep"></div>
+          <div class="cc-tty-path-key">provision_path</div>
+          <div class="cc-tty-path" title="{{ app.provisioning_path }}">{{ app.provisioning_path|default:"hub/default" }}</div>
         </div>
+
+        <a href="{% url 'buckets:app_detail' app.id %}" class="cc-node-action">Open Console →</a>
+      </div>
+      {% endwith %}
+      {% empty %}
+      <div class="cc-node-empty">
+        <svg class="cc-node-empty-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <p>No active deployments</p>
+        <span>Deploy an app to see it appear here</span>
+      </div>
+      {% endfor %}
     </div>
 
-    <!-- Tables & Feed -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Charts + Ledger -->
+    <div class="cc-lower">
 
-        <!-- Top Organizations -->
-        <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-8 shadow-2xl backdrop-blur-sm">
-            <h2 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
-                <span
-                    class="w-10 h-10 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                </span>
-                Leading Organizations
-            </h2>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b border-white/5 text-left text-slate-500 text-[10px] uppercase tracking-widest font-bold">
-                            <th class="pb-4">Organization</th>
-                            <th class="pb-4 text-right">Revenue</th>
-                            <th class="pb-4 text-right">API Traffic</th>
-                            <th class="pb-4 text-right">Team</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-sm">
-                        {% for org in top_orgs %}
-                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
-                            <td class="py-4 font-bold text-slate-200 group-hover:text-indigo-400 transition-colors">{{ org.name }}</td>
-                            <td class="py-4 text-right text-emerald-400 font-mono font-bold">₹{{ org.revenue|default:"0"|floatformat:0 }}</td>
-                            <td class="py-4 text-right text-slate-400 font-mono">{{ org.api_calls|default:"0" }}</td>
-                            <td class="py-4 text-right text-slate-500">
-                                <div class="flex items-center justify-end gap-1">
-                                    <span class="w-5 h-5 bg-slate-800 rounded-full flex items-center justify-center text-[10px]">{{ org.team_size }}</span>
-                                </div>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4" class="py-10 text-center text-slate-600 text-sm italic">No data records found</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+      <!-- Revenue Chart -->
+      <div class="cc-panel">
+        <div class="cc-panel-title">Revenue Throughput · Hourly</div>
+        <div style="height:260px;position:relative;">
+          <canvas id="revenueChart"></canvas>
         </div>
+      </div>
 
-        <!-- Live Activity -->
-        <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-8 shadow-2xl backdrop-blur-sm">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-lg font-bold text-white flex items-center gap-3">
-                    <span class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-600/20">
-                        <span class="w-2.5 h-2.5 bg-white rounded-full animate-pulse shadow-white/50 shadow-lg"></span>
-                    </span>
-                    Live Network Feed
-                </h2>
-                <div class="flex items-center gap-2">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                    </span>
-                    <span class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Live</span>
-                </div>
-            </div>
-            <div id="live-feed" class="space-y-3 max-h-[400px] overflow-y-auto pr-3 custom-scrollbar">
-                {% for e in events %}
-                <div class="flex items-center justify-between px-5 py-4 bg-slate-800/20 border border-white/5 rounded-2xl hover:bg-slate-800/40 transition-all group border-l-4 {% if e.type == 'revenue' %}border-l-emerald-500{% elif e.type == 'api_call' %}border-l-blue-500{% else %}border-l-slate-700{% endif %}">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-slate-900/50 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
-                            {% if e.type == 'revenue' %}
-                                <span class="text-emerald-400 text-xs font-bold">₹</span>
-                            {% elif e.type == 'api_call' %}
-                                <span class="text-blue-400 text-xs">⚡</span>
-                            {% elif e.type == 'file_uploaded' %}
-                                <span class="text-indigo-400 text-xs">☁️</span>
-                            {% elif e.type == 'file_deleted' %}
-                                <span class="text-red-400 text-xs">🗑️</span>
-                            {% elif e.type == 'bucket_created' %}
-                                <span class="text-purple-400 text-xs">📦</span>
-                            {% elif e.type == 'bucket_deployed' %}
-                                <span class="text-emerald-400 text-xs shadow-emerald-500/50">🚀</span>
-                            {% elif e.type == 'bucket_deactivated' %}
-                                <span class="text-orange-400 text-xs">⏸️</span>
-                            {% else %}
-                                <span class="text-slate-500 text-xs">⚙️</span>
-                            {% endif %}
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="font-bold text-slate-100 text-sm">{{ e.type|capfirst|truncatechars:20 }}</span>
-                            <span class="text-[10px] text-slate-500 font-medium group-hover:text-slate-400 transition-colors italic">{{ e.org.name }}</span>
-                        </div>
-                    </div>
-                    <span class="text-[10px] text-slate-600 font-mono font-bold">{{ e.created_at|date:"H:i:s" }}</span>
-                </div>
-                {% empty %}
-                <div id="no-events" class="flex flex-col items-center justify-center py-20 text-slate-600 gap-4">
-                    <svg class="w-12 h-12 text-slate-800 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p class="text-sm font-medium tracking-tight">Listening for real-time events...</p>
-                </div>
-                {% endfor %}
-            </div>
+      <!-- Event Ledger -->
+      <div class="cc-panel" style="display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div class="cc-panel-title" style="margin-bottom:0;">Infrastructure Event Ledger</div>
+          <div class="ping-dot"><span style="background:#3b82f6;"></span><span style="background:#3b82f6;"></span></div>
         </div>
-
+        <div id="live-feed" class="cc-ledger">
+          {% for e in events %}
+          <div class="cc-ledger-row">
+            <span class="cc-ledger-idx">{{ forloop.counter }}</span>
+            <span class="cc-ledger-type {% if e.type == 'revenue' %}revenue{% elif e.type == 'api_call' %}api_call{% elif e.type == 'report_generated' %}report{% else %}default{% endif %}">{{ e.type|upper }}</span>
+            <span class="cc-ledger-org">{{ e.org.name }}</span>
+            <span class="cc-ledger-time">{{ e.created_at|date:"H:i:s" }}</span>
+          </div>
+          {% empty %}
+          <div class="cc-ledger-empty" id="no-events">Awaiting system events…</div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
 
-    <!-- Bottom Metrics -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-24">
-
-        <!-- Automation Health -->
-        <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-8 shadow-xl">
-            <h2 class="text-lg font-bold text-white mb-8 flex items-center gap-3">
-                <span
-                    class="w-10 h-10 bg-gradient-to-br from-orange-600 to-red-600 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-600/20">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </span>
-                Automation Integrity
-            </h2>
-            <div class="space-y-6">
-                {% for a in automation_stats %}
-                <div class="group">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="font-bold text-slate-300 text-sm group-hover:text-white transition-colors">{{ a.org__name }}</span>
-                        <span class="text-[10px] font-bold text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">{{ a.enabled }}/{{ a.total }} Active</span>
-                    </div>
-                    <div class="w-full bg-slate-800/50 rounded-full h-2 overflow-hidden border border-white/5 p-[1px]">
-                        <div class="bg-gradient-to-r from-emerald-500 to-indigo-500 h-full rounded-full shadow-lg shadow-emerald-500/20 transition-all duration-1000"
-                            style="width: {% widthratio a.enabled a.total 100 %}%"></div>
-                    </div>
-                </div>
-                {% empty %}
-                <p class="text-center text-slate-600 py-10 text-sm">No automation metrics available</p>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Churn Risk -->
-        <div class="bg-red-950/20 border border-red-500/10 rounded-3xl p-8 shadow-xl backdrop-blur-sm">
-            <h2 class="text-lg font-bold text-red-400 mb-8 flex items-center gap-3">
-                <span class="w-10 h-10 bg-red-500/20 rounded-2xl flex items-center justify-center border border-red-500/20">
-                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                </span>
-                Churn Vigilance
-            </h2>
-            <div class="space-y-3">
-                {% for org in inactive_orgs %}
-                <div
-                    class="flex justify-between items-center px-5 py-4 bg-red-900/10 border border-red-500/20 rounded-2xl hover:bg-red-900/30 transition-all group">
-                    <div class="flex flex-col">
-                        <span class="font-bold text-slate-200 text-sm group-hover:text-red-400 transition-colors">{{ org.name }}</span>
-                        <span class="text-[10px] text-red-500/60 font-medium tracking-tight">Critical inactivity detected</span>
-                    </div>
-                    <span class="text-[10px] text-slate-500 font-mono font-bold bg-slate-900/50 px-2.5 py-1 rounded-lg">
-                        {% if org.last_event %}{{ org.last_event|date:"M d" }}{% else %}DEAD{% endif %}
-                    </span>
-                </div>
-                {% empty %}
-                <div class="flex flex-col items-center justify-center py-10 gap-3 text-emerald-400">
-                    <div class="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center text-xl">✓</div>
-                    <p class="font-bold text-sm tracking-tight text-center">Cloud Pulse Healthy<br><span class="text-[10px] font-medium text-slate-500">All nodes reporting activity within threshold</span></p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-
+    <!-- Org Performance Table -->
+    <div class="cc-panel" style="margin-bottom:28px;">
+      <div class="cc-section-head" style="margin-bottom:12px;">
+        <span class="cc-section-title">Top Organizations</span>
+        <span class="cc-badge ok">{{ days }}d window</span>
+      </div>
+      <table class="cc-orgtable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Organization</th>
+            <th>Revenue</th>
+            <th>API Calls</th>
+            <th>Team Size</th>
+            <th>Automations</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for org in top_orgs %}
+          <tr>
+            <td class="mono" style="color:#1e3a5f;font-size:10px;">{{ forloop.counter }}</td>
+            <td class="name">{{ org.name }}</td>
+            <td class="rev">₹{{ org.revenue|default:0|floatformat:0 }}</td>
+            <td class="api">{{ org.api_calls }}</td>
+            <td>{{ org.team_size }}</td>
+            <td>{{ org.automations }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" style="text-align:center;color:#1e3a5f;padding:24px;font-style:italic;">No organization data for this period.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
 
+  </main>
 </div>
 
 <script>
-    // --- Charts Logic ---
-    const ctxRevenue = document.getElementById('revenueChart');
-    const ctxApi = document.getElementById('apiChart');
+  Chart.defaults.color = '#334155';
+  Chart.defaults.font.family = "'Inter', sans-serif";
 
-    if (ctxRevenue) {
-        new Chart(ctxRevenue, {
-            type: 'line',
-            data: {
-                labels: [{% for t in revenue_trends %}'{{ t.date|date:"M d" }}',{% endfor %}],
-                datasets: [{
-                    label: 'Revenue (₹)',
-                    data: [{% for t in revenue_trends %}{{ t.amount }},{% endfor %}],
-                    borderColor: '#10b981',
-                    borderWidth: 3,
-                    pointRadius: 0,
-                    pointHoverRadius: 6,
-                    pointHoverBorderWidth: 4,
-                    pointHoverBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#10b981',
-                    backgroundColor: (context) => {
-                        const chart = context.chart;
-                        const {ctx, chartArea} = chart;
-                        if (!chartArea) return null;
-                        const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
-                        gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
-                        return gradient;
-                    },
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
-                interaction: { intersect: false, mode: 'index' },
-                scales: {
-                    y: { border: { display:false }, grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b', font: { size: 10, weight: '600' } } },
-                    x: { border: { display:false }, grid: { display: false }, ticks: { color: '#64748b', font: { size: 10, weight: '600' } } }
-                }
-            }
-        });
-    }
+  // Revenue chart
+  const ctx = document.getElementById('revenueChart');
+  if (ctx) {
+    const labels = [{% for t in revenue_trends %}'{{ t.date|date:"M d H:i" }}'{% if not forloop.last %}, {% endif %}{% endfor %}];
+    const values = [{% for t in revenue_trends %}{{ t.amount|floatformat:2 }}{% if not forloop.last %}, {% endif %}{% endfor %}];
 
-    if (ctxApi) {
-        const eventCounts = {};
-        {% for ec in event_counts %}
-            eventCounts['{{ ec.type }}'] = {{ ec.count }};
-        {% endfor %}
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          borderColor: '#3b82f6',
+          borderWidth: 2,
+          backgroundColor: (ctx) => {
+            const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+            g.addColorStop(0, 'rgba(59,130,246,0.12)');
+            g.addColorStop(1, 'rgba(59,130,246,0)');
+            return g;
+          },
+          fill: true,
+          tension: 0.35,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#3b82f6',
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#070f1e',
+            borderColor: '#1e3a5f',
+            borderWidth: 1,
+            titleColor: '#94a3b8',
+            bodyColor: '#e2e8f0',
+            padding: 10,
+            displayColors: false,
+            callbacks: { label: ctx => `₹${ctx.parsed.y.toFixed(2)}` }
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxTicksLimit: 6, font: { size: 10 } }, border: { display: false } },
+          y: { grid: { color: '#0a1628' }, ticks: { font: { size: 10 }, padding: 8, callback: v => `₹${v}` }, border: { display: false }, beginAtZero: true }
+        },
+        interaction: { intersect: false, mode: 'index' }
+      }
+    });
+  }
 
-        new Chart(ctxApi, {
-            type: 'doughnut',
-            data: {
-                labels: Object.keys(eventCounts).map(t => t.replace('_', ' ').toUpperCase()),
-                datasets: [{
-                    data: Object.values(eventCounts),
-                    backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'],
-                    borderWidth: 0,
-                    hoverOffset: 15,
-                    spacing: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '75%',
-                plugins: { 
-                    legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 10, font: { size: 10, weight: '700' }, padding: 20 } } 
-                }
-            }
-        });
-    }
+  // WebSocket Ledger
+  const feed = document.getElementById('live-feed');
+  const noEvt = document.getElementById('no-events');
+  let counter = {{ events|length }};
 
-    // --- WebSocket Real-time Feed ---
-    const feed = document.getElementById('live-feed');
-    const noEvents = document.getElementById('no-events');
-    const wsPrefix = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const socket = new WebSocket(`${wsPrefix}://${window.location.host}/ws/dashboard/`);
+  const TYPE_CLASS = { revenue: 'revenue', api_call: 'api_call', report_generated: 'report' };
 
-    socket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        if (noEvents) noEvents.remove();
+  try {
+    const wsProto = location.protocol === 'https:' ? 'wss' : 'ws';
+    const ws = new WebSocket(`${wsProto}://${location.host}/ws/dashboard/`);
 
-        const item = document.createElement('div');
-        const borderColor = data.type === 'revenue' ? 'border-l-emerald-500' : 
-                          (data.type === 'api_call' ? 'border-l-blue-500' : 
-                          (data.type === 'file_uploaded' ? 'border-l-indigo-500' : 
-                          (data.type === 'bucket_created' ? 'border-l-purple-500' : 'border-l-slate-700')));
-        
-        const iconColor = data.type === 'revenue' ? 'text-emerald-400' : 
-                        (data.type === 'api_call' ? 'text-blue-400' : 
-                        (data.type === 'file_uploaded' ? 'text-indigo-400' : 
-                        (data.type === 'file_deleted' ? 'text-red-400' : 
-                        (data.type === 'bucket_created' ? 'text-purple-400' : 
-                        (data.type === 'bucket_deployed' ? 'text-emerald-400' : 
-                        (data.type === 'bucket_deactivated' ? 'text-orange-400' : 'text-slate-500'))))));
-        
-        const iconText = data.type === 'revenue' ? '₹' : 
-                       (data.type === 'api_call' ? '⚡' : 
-                       (data.type === 'file_uploaded' ? '☁️' : 
-                       (data.type === 'file_deleted' ? '🗑️' : 
-                       (data.type === 'bucket_created' ? '📦' : 
-                       (data.type === 'bucket_deployed' ? '🚀' : 
-                       (data.type === 'bucket_deactivated' ? '⏸️' : '⚙️'))))));
-        
-        item.className = `flex items-center justify-between px-5 py-4 bg-slate-800/40 border border-white/10 rounded-2xl shadow-xl animate-in fade-in slide-in-from-right-8 duration-700 group border-l-4 ${borderColor}`;
-        
-        item.innerHTML = `
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-slate-900/80 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <span class="${iconColor} text-xs font-bold">${iconText}</span>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-bold text-slate-100 text-sm">${data.type.replace('_', ' ').toUpperCase()}</span>
-                    <span class="text-[10px] text-slate-500 font-medium italic">${data.org_name || 'System'}</span>
-                </div>
-            </div>
-            <span class="text-[10px] text-slate-400 font-mono font-bold">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}</span>
-        `;
-        
-        if (data.storage_update) {
-            const s = data.storage_update;
-            const activeStorageEl = document.getElementById('total-active-storage');
-            if (activeStorageEl && s.total_org_usage_mb !== undefined) {
-                activeStorageEl.innerText = `${parseFloat(s.total_org_usage_mb).toFixed(1)} MB`;
-            }
-        }
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (noEvt) { noEvt.remove(); }
 
-        feed.prepend(item);
-        if (feed.children.length > 30) feed.lastElementChild.remove();
+      counter++;
+      const tClass = TYPE_CLASS[data.type] || 'default';
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      const row = document.createElement('div');
+      row.className = 'cc-ledger-row cc-ledger-new';
+      row.innerHTML = `
+        <span class="cc-ledger-idx">${counter}</span>
+        <span class="cc-ledger-type ${tClass}">${(data.type || 'event').toUpperCase()}</span>
+        <span class="cc-ledger-org">${data.org_name || 'System'}</span>
+        <span class="cc-ledger-time">${timeStr}</span>
+      `;
+      feed.prepend(row);
+      if (feed.children.length > 60) feed.lastElementChild.remove();
     };
 
-    socket.onclose = function() {
-        console.warn('Dashboard WebSocket connection interrupted');
-    };
+    ws.onerror = err => console.warn('[ws] error', err);
+  } catch (ex) {
+    console.warn('[ws] init failed', ex);
+  }
 </script>
 
-<style>
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #334155; }
-    
-    .animate-spin-slow { animation: spin 8s linear infinite; }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-</style>
 {% endblock %}

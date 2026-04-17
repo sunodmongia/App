@@ -3,6 +3,10 @@ import time
 import os
 import hashlib
 import zipfile
+import subprocess
+import signal
+import sys
+
 from PIL import Image
 from pypdf import PdfReader
 from django.utils.timezone import now
@@ -84,8 +88,8 @@ def start_app_deployment_pipeline(deployment_id):
 
 def run_app_build_async(deployment_id):
     """
-    Simulates an industrial build pipeline for Compute Apps.
-    Handles specialized builds for Django/Node and generic builds for other runtimes.
+    Industrial automated build pipeline for Compute Apps.
+    Handles extraction, secret injection, and real-time process execution.
     """
     try:
         deployment = AppDeployment.objects.get(id=deployment_id)
@@ -95,165 +99,187 @@ def run_app_build_async(deployment_id):
         logs = []
         def add_log(msg):
             logs.append(msg)
-            # Update DB with current progress
             deployment.logs = "\n".join(logs)
             deployment.save(update_fields=['logs'])
-            
-            # Real-time Telemetry
             broadcast(org, {
                 'type': 'build_log',
                 'app_id': app.id,
                 'deployment_id': deployment.deployment_id,
                 'message': msg
             })
-            time.sleep(0.6) # Slightly longer delay for industrial feel
+            time.sleep(0.4)
 
-        add_log(f"--- Initialization of build {deployment.deployment_id} ---")
-        add_log(f"[INFO] Runtime detected: {app.runtime}")
-        add_log("[RUNNING] Provisioning isolated build container...")
-        time.sleep(1)
+        add_log(f"--- Initialization of Automated Build {deployment.deployment_id} ---")
+        add_log(f"[INFO] Stack Detected: {app.runtime}")
 
-        # 1.1 Infrastructure Validation & Hub Orchestration
+        # 1. Infrastructure Preparation
         target_dir = app.provisioning_path
-        
-        # Priority: Org Global Hub > App Local Path > Workspace Default
         if org.deployment_root:
             target_dir = os.path.join(org.deployment_root, app.name.replace(' ', '_'))
-            
         if not target_dir:
             base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             target_dir = os.path.join(base_dir, 'deployments', app.name.replace(' ', '_'))
             
-        try:
-            # Ensure parent hub exists
-            parent_dir = os.path.dirname(target_dir)
-            if parent_dir and not os.path.exists(parent_dir):
-                os.makedirs(parent_dir, exist_ok=True)
-            add_log(f"[INFO] Infrastructure Target (Hub): {target_dir}")
-        except Exception as e:
-            add_log(f"[CRITICAL ERROR] Infrastructure unreachable: {str(e)}")
-            deployment.status = 'failed'
-            deployment.save()
-            return
-
-        # 2. Structural Inspection & Physical Provisioning
-        if deployment.artifact:
-            # Set target directory
-            target_dir = app.provisioning_path
-            if not target_dir:
-                # Default to a subfolder in the workspace if not specified
-                base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-                target_dir = os.path.join(base_dir, 'deployments', app.name.replace(' ', '_'))
+        add_log(f"[INFO] Infrastructure Target: {target_dir}")
+        
+        # 2. Physical Provisioning
+        if not deployment.artifact:
+            raise Exception("No deployment artifact provided.")
             
-            add_log(f"[INFO] Provisioning target: {target_dir}")
+        parent_dir = os.path.dirname(target_dir)
+        if parent_dir and not os.path.exists(parent_dir):
+            os.makedirs(parent_dir, exist_ok=True)
             
-            try:
-                # 2.1 File Extraction
-                with zipfile.ZipFile(deployment.artifact.path, 'r') as zip_ref:
-                    file_list = zip_ref.namelist()
-                    add_log(f"[RUNNING] Extracting {len(file_list)} files to local disk...")
-                    
-                    # Ensure directory exists and is clean
-                    if os.path.exists(target_dir):
-                        add_log(" > Clearing existing artifacts at target location...")
-                        import shutil
-                        shutil.rmtree(target_dir)
-                    os.makedirs(target_dir, exist_ok=True)
-                    
-                    # Physical Extraction
-                    zip_ref.extractall(path=target_dir)
-                    add_log(f"[SUCCESS] Multi-file project provisioned at: {target_dir}")
-                    
-                    # Filter for top-level files to verify structure
-                    top_level = sorted(list(set([f.split('/')[0] for f in file_list])))[:5]
-                    add_log(f" > Project Head: {', '.join(top_level)}")
-                    
-                    if 'manage.py' in file_list:
-                        add_log(" > [Django] Detected: manage.py")
-                    if 'package.json' in file_list:
-                        add_log(" > [Node.js] Detected: package.json")
-                    
-                    # 2.2 Configuration Fulfillment (Secret Injection)
-                    add_log("[INFO] Physically injecting secrets into edge environment...")
-                    env_vars = app.env_vars.all()
-                    if env_vars.exists():
-                        env_content = ""
-                        for var in env_vars:
-                            env_content += f"{var.key}={var.value}\n"
-                        
-                        env_path = os.path.join(target_dir, '.env')
-                        with open(env_path, 'w') as f:
-                            f.write(env_content)
-                        add_log(f" > Successfully provisioned .env with {env_vars.count()} variables.")
-                    else:
-                        add_log(" > No environment variables defined. Skipping .env generation.")
-            except Exception as e:
-                add_log(f"[CRITICAL ERROR] Provisioning failed: {str(e)}")
-                deployment.status = 'failed'
-                deployment.save()
-                return
-        else:
-            add_log("[INFO] No artifact provided for physical provisioning.")
-        
-        time.sleep(1)
-        runtime_lower = app.runtime.lower()
-        
-        if 'django' in runtime_lower:
-            add_log("[RUNNING] Installing dependencies from requirements.txt...")
-            add_log(" > Successfully installed django-5.1.x, psycopg2-binary, gunicorn")
-            add_log("[RUNNING] Running system checks and migrations...")
-            add_log(" > Operations to perform: 0 migrations to apply.")
-            add_log("[RUNNING] Compiling static assets via collectstatic...")
-            add_log(" > 142 static files copied to /var/www/static")
-        elif any(r in runtime_lower for r in ['node', 'react', 'next', 'js']):
-            add_log("[RUNNING] npm install --production...")
-            add_log(" > added 452 packages from 213 contributors")
-            add_log("[RUNNING] npm run build...")
-            add_log(" > [next-build] Optimization complete.")
-        else:
-            # Generic Industrial Build Sequence
-            add_log(f"[RUNNING] Detecting build configuration for {app.runtime}...")
-            time.sleep(1)
-            add_log(f"[RUNNING] Executing native fetch for {app.runtime} packages...")
-            add_log(" > Fetching core components from global repositories... DONE")
-            add_log("[RUNNING] Optimizing build artifacts and entrypoints...")
-            time.sleep(1)
-            add_log(" > Universal build artifacts generated successfully.")
+        if os.path.exists(target_dir):
+            add_log(" > Clearing existing artifacts at target location...")
+            import shutil
+            shutil.rmtree(target_dir, ignore_errors=True)
+        os.makedirs(target_dir, exist_ok=True)
 
-        add_log("[INFO] Build successful. Optimizing edge propagation...")
-        time.sleep(1.2)
-        add_log("[SUCCESS] App distribution published to Wire Global Edge Network.")
-        
-        # Finalize
-        app.is_live = True
-        app.status = 'live'
-        app.last_deployed_at = timezone.now()
-        app.save(update_fields=['is_live', 'status', 'last_deployed_at'])
-        
-        deployment.status = 'success'
-        deployment.logs = "\n".join(logs)
-        deployment.completed_at = timezone.now()
-        deployment.save(update_fields=['status', 'logs', 'completed_at'])
-        
-        broadcast(org, {
-            'type': 'app_live',
-            'app_id': app.id,
-            'url': app.get_deployment_url()
-        })
+        with zipfile.ZipFile(deployment.artifact.path, 'r') as zip_ref:
+            add_log(f"[RUNNING] Physically extracting {len(zip_ref.namelist())} artifacts...")
+            zip_ref.extractall(path=target_dir)
+            add_log("[SUCCESS] Physical infrastructure provisioned successfully.")
 
-    except AppDeployment.DoesNotExist:
-        pass
+        # 3. Configuration Fulfillment (Secret Projection)
+        env_vars = app.env_vars.all()
+        if env_vars.exists():
+            add_log(f"[INFO] Projecting {env_vars.count()} secrets into local environment...")
+            env_content = "\n".join([f"{v.key}={v.value}" for v in env_vars])
+            with open(os.path.join(target_dir, '.env'), 'w') as f:
+                f.write(env_content)
+            add_log(" > Successfully provisioned .env file.")
+
+        # 4. AWS-Grade Automated Execution
+        add_log("[INFO] Orchestrating automated project launch...")
+        success, msg = launch_edge_node(app, add_log)
+        
+        if success:
+            add_log(f"[SUCCESS] {msg}")
+            app.status = 'live'
+            app.is_live = True
+            app.last_deployed_at = timezone.now()
+            app.save(update_fields=['status', 'is_live', 'last_deployed_at'])
+            
+            deployment.status = 'live'
+            deployment.save(update_fields=['status'])
+            
+            # Final Success Broadcast
+            broadcast(org, {
+                'type': 'app_live',
+                'app_id': app.id,
+                'port': app.active_port,
+                'url': f"http://127.0.0.1:{app.active_port}"
+            })
+            add_log("--- Deployment Lifecycle Finalized ---")
+        else:
+            raise Exception(f"Orchestration Engine failed: {msg}")
+
     except Exception as e:
-        print(f"Deployment error for {deployment_id}: {e}")
+        msg = f"[CRITICAL SYSTEM FAILURE] {str(e)}"
         try:
             deployment = AppDeployment.objects.get(id=deployment_id)
-            deployment.status = 'error'
-            deployment.logs += f"\n[FATAL ERROR] {str(e)}"
-            deployment.save(update_fields=['status', 'logs'])
+            deployment.status = 'failed'
+            deployment.logs += f"\n{msg}"
+            deployment.save()
             
             app = deployment.app
-            app.status = 'error'
-            app.save(update_fields=['status'])
-        except Exception:
-            pass
+            app.status = 'failed'
+            app.save()
+            
+            broadcast(app.organization, {
+                'type': 'build_log',
+                'app_id': app.id,
+                'message': f"<span class='text-red-500 font-bold'>{msg}</span>"
+            })
+        except Exception as e:
+            print(f"Orchestrator Error: {msg}")
 
+def map_local_files(path):
+    """Recursively map the directory structure for the UI explorer."""
+    if not os.path.exists(path): 
+        return []
+    try:
+        structure = []
+        for item in os.listdir(path):
+            ipath = os.path.join(path, item)
+            is_dir = os.path.isdir(ipath)
+            entry = {'name': item, 'type': 'directory' if is_dir else 'file'}
+            if is_dir: 
+                entry['children'] = map_local_files(ipath)
+            structure.append(entry)
+        return sorted(structure, key=lambda x: (x['type'] != 'directory', x['name']))
+    except Exception as e:
+        print(f"Error mapping files: {e}")
+        return []
+
+def launch_edge_node(app, logger=None):
+    """AWS-Grade Execution: Detects stack and launches background process with log streaming."""
+    target_path = app.provisioning_path
+    if not target_path or not os.path.exists(target_path):
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        target_path = os.path.join(base_dir, 'deployments', app.name.replace(' ', '_'))
+    
+    if not os.path.exists(target_path):
+        return False, "Infrastructure not found."
+
+    def log(m):
+        if logger: 
+            logger(m)
+
+    # Port Strategy: Industrial Dynamic Assignment
+    import socket
+    def find_port():
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind(('', 0))
+            return s.getsockname()[1]
+    
+    port = find_port()
+    files = os.listdir(target_path)
+    cmd = None
+
+    if 'manage.py' in files:
+        cmd = [sys.executable, 'manage.py', 'runserver', f'127.0.0.1:{port}', '--noreload']
+    elif 'package.json' in files:
+        cmd = ['npm', 'start']
+    
+    if not cmd:
+        return False, "Runtime entrypoint (manage.py/package.json) not detected."
+
+    try:
+        process = subprocess.Popen(
+            cmd, cwd=target_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            text=True, shell=True if os.name == 'nt' else False, bufsize=1, universal_newlines=True
+        )
+        app.process_pid = process.pid
+        app.active_port = port
+        app.save()
+
+        # Telemetry Stream Thread
+        def stream():
+            log(f"[SYSTEM] Connection established to process {process.pid}")
+            for line in iter(process.stdout.readline, ''):
+                if line: 
+                    log(f"[APP-LOG] {line.strip()}")
+            process.stdout.close()
+        
+        threading.Thread(target=stream, daemon=True).start()
+        return True, f"Edge Instance provisioned at http://127.0.0.1:{port}"
+    except Exception as e:
+        return False, str(e)
+
+def terminate_edge_node(app):
+    """Safely terminates the local infrastructure process."""
+    if not app.process_pid: 
+        return True, "No active process."
+    try:
+        if os.name == 'nt':
+            subprocess.run(['taskkill', '/F', '/T', '/PID', str(app.process_pid)], capture_output=True)
+        else:
+            os.kill(app.process_pid, signal.SIGTERM)
+        app.process_pid = None
+        app.status = 'stopped'
+        app.save()
+        return True, "Infrastructure node successfully decommissioned."
+    except Exception as e:
+        return False, str(e)

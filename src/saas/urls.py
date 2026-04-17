@@ -7,8 +7,11 @@ from .views import (
     PrivacyPolicyView, TermsAndConditionsView, SaasAPIView,
     UserDemoView, StartTrialView, ScheduleDemoView, ContactUsView,
     PricingView, DashboardView, some_api_view,
-    CustomerAPI,
+    CustomerAPI, RoleManagementView, RolePermissionUpdateView,
+    MemberManagementView,
 )
+
+app_name = "saas"
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
@@ -25,6 +28,13 @@ urlpatterns = [
     path("signup-trial/", StartTrialView.as_view(), name="signup-trial"),
     path("schedule-demo/", ScheduleDemoView.as_view(), name="schedule_demo"),
     path("dashboard/", DashboardView.as_view(), name="dashboard"),
+    
+    # Internal RBAC Governance
+    path("dashboard/roles/", RoleManagementView.as_view(), name="role_manage"),
+    path("dashboard/roles/<int:role_id>/update/", RolePermissionUpdateView.as_view(), name="role_permission_update"),
+    path("dashboard/members/", MemberManagementView.as_view(), name="member_manage"),
+    path("dashboard/members/<int:member_id>/update/", MemberManagementView.as_view(), name="member_update"),
+
     path("track-api/", some_api_view, name="track-api"),
     path("api/v1/customer/", CustomerAPI.as_view(), name="customer-api"),
 ]

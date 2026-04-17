@@ -37,7 +37,7 @@
 
       {% if request.user.is_authenticated %}
       <div class="flex gap-4">
-        <a href="{% url 'dashboard' %}"
+        <a href="{% url 'saas:dashboard' %}"
           class="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-base font-bold shadow-2xl shadow-indigo-600/30 transition-all duration-200 hover:-translate-y-0.5">
           Go to Dashboard
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,14 +47,14 @@
       </div>
       {% else %}
       <div class="flex flex-col sm:flex-row gap-4">
-        <a href="{% url 'pricing' %}"
+        <a href="{% url 'saas:pricing' %}"
           class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-base font-bold shadow-2xl shadow-indigo-600/30 transition-all duration-200 hover:-translate-y-0.5">
           Start Free Trial
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         </a>
-        <a href="{% url 'demo' %}"
+        <a href="{% url 'saas:demo' %}"
           class="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/15 rounded-xl text-base hover:bg-white/5 hover:border-white/30 transition-all duration-200">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -109,11 +109,11 @@
     </div>
 
     <div class="mt-16 flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="{% url 'signup-trial' %}"
+      <a href="{% url 'saas:signup-trial' %}"
         class="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-base rounded-xl transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-indigo-600/20">
         🚀 Book Free Trial
       </a>
-      <a href="{% url 'schedule_demo' %}"
+      <a href="{% url 'saas:schedule_demo' %}"
         class="px-8 py-4 border border-white/10 text-slate-300 font-bold text-base rounded-xl hover:bg-white/5 hover:border-white/20 transition-all duration-200">
         💬 Schedule Demo Call
       </a>
@@ -192,28 +192,27 @@
     <div>
       <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Product</h4>
       <ul class="space-y-3 text-sm">
-        <li><a href="{% url 'pricing' %}" class="hover:text-white transition-colors">Pricing</a></li>
-        <li><a href="{% url 'api-view' %}" class="hover:text-white transition-colors">API</a></li>
-        <li><a href="{% url 'demo' %}" class="hover:text-white transition-colors">Live Demo</a></li>
+        <li><a href="{% url 'saas:pricing' %}" class="hover:text-white transition-colors">Pricing</a></li>
+        <li><a href="{% url 'saas:api-view' %}" class="hover:text-white transition-colors">API</a></li>
+        <li><a href="{% url 'saas:demo' %}" class="hover:text-white transition-colors">Live Demo</a></li>
       </ul>
     </div>
     <!-- Resources -->
     <div>
       <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Resources</h4>
       <ul class="space-y-3 text-sm">
-        <li><a href="{% url 'help-center' %}" class="hover:text-white transition-colors">Help Center</a></li>
-        <li><a href="{% url 'case-studies' %}" class="hover:text-white transition-colors">Case Studies</a></li>
-        <li><a href="{% url 'blog' %}" class="hover:text-white transition-colors">Blog</a></li>
+        <li><a href="{% url 'helpcenter:help-center' %}" class="hover:text-white transition-colors">Help Center</a></li>
+        <li><a href="{% url 'saas:case-studies' %}" class="hover:text-white transition-colors">Case Studies</a></li>
+        <li><a href="{% url 'saas:blog' %}" class="hover:text-white transition-colors">Blog</a></li>
       </ul>
     </div>
     <!-- Company -->
     <div>
       <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Company</h4>
       <ul class="space-y-3 text-sm">
-        <li><a href="{% url 'contact-us' %}" class="hover:text-white transition-colors">Contact</a></li>
-        <li><a href="{% url 'terms-and-condtion' %}" class="hover:text-white transition-colors">Terms & Conditions</a>
-        </li>
-        <li><a href="{% url 'privacy-policy' %}" class="hover:text-white transition-colors">Privacy Policy</a></li>
+        <li><a href="{% url 'saas:contact-us' %}" class="hover:text-white transition-colors">Contact</a></li>
+        <li><a href="{% url 'saas:terms-and-condtion' %}" class="hover:text-white transition-colors">Terms & Conditions</a></li>
+        <li><a href="{% url 'saas:privacy-policy' %}" class="hover:text-white transition-colors">Privacy Policy</a></li>
       </ul>
     </div>
   </div>

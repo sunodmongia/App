@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, View
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -10,16 +10,19 @@ from django.conf import settings
 from django.utils.timezone import now
 from datetime import timedelta
 from django.db.models import Sum, Count, Q, Max, FloatField
-from django.db.models.functions import Cast, TruncDate
+from django.db.models.functions import Cast, TruncDate, TruncHour
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from .mixins import TenantPermissionMixin
 
 from .models import (
     Organization, Event, Usage, Automation, Feature,
 )
-from buckets.models import Bucket  # Added for storage syncing
+from buckets.models import Bucket, App  # Added for infrastructure tracking
 from .forms import TrialSignupForm, DemoScheduleCallForm, ContactForm
 from saas.events import log_event
 from subscriptions.services import (
+    get_active_subscriptions,
     ensure_default_subscriptions,
     get_default_subscription,
     get_user_organization,
@@ -170,14 +173,15 @@ class ContactUsView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
-class PricingView(TemplateView):
+class PricingView(TenantPermissionMixin, TemplateView):
+    permission_required = 'saas.view_billing'
     template_name = "pricing.html"
 
     def get_context_data(self, **kwargs):
         from subscriptions.models import StripeSubscription
         context = super().get_context_data(**kwargs)
         context["title"] = "Pricing"
-        context["plans"] = ensure_default_subscriptions()
+        context["plans"] = get_active_subscriptions()
         context["organization"] = get_user_organization(self.request.user)
         context["current_subscription"] = None
         context["has_stripe_subscription"] = False
@@ -195,9 +199,87 @@ class PricingView(TemplateView):
         context["can_manage_subscription"] = user_can_manage_subscription(
             self.request.user, context["organization"]
         )
+# --- RBAC Management Views ---
+
+def seed_default_roles(org):
+    """Auto-provisions standard roles for an organization."""
+    from saas.permissions import ROLE_PERMISSION_MAP
+    from saas.models import OrganizationRole, RolePermission
+
+    for role_name, perms in ROLE_PERMISSION_MAP.items():
+        role_obj, created = OrganizationRole.objects.get_or_create(
+            org=org, 
+            name=role_name.capitalize(),
+            defaults={'is_preset': True}
+        )
+        if created:
+            for p_code in perms:
+                RolePermission.objects.get_or_create(role=role_obj, permission_codename=p_code)
+
+class RoleManagementView(TenantPermissionMixin, TemplateView):
+    permission_required = 'saas.manage_members'
+    template_name = "saas/roles_manage.html"
+
+    def get_context_data(self, **kwargs):
+        from saas.models import OrganizationRole
+        from saas.permissions import MANAGEMENT_PERMISSIONS
+        context = super().get_context_data(**kwargs)
+        
+        # Ensure default roles exist
+        if not OrganizationRole.objects.filter(org=self.org).exists():
+            seed_default_roles(self.org)
+            
+        context['roles'] = OrganizationRole.objects.filter(org=self.org).order_by('is_preset', 'created_at')
+        context['available_permissions'] = MANAGEMENT_PERMISSIONS
         return context
 
+    def post(self, request, *args, **kwargs):
+        from saas.models import OrganizationRole
+        name = request.POST.get('name', '').strip()
+        if name:
+            OrganizationRole.objects.create(org=self.org, name=name)
+            messages.success(request, f"Custom role '{name}' created.")
+        return redirect('saas:role_manage')
 
+class RolePermissionUpdateView(TenantPermissionMixin, View):
+    permission_required = 'saas.manage_members'
+
+    def post(self, request, role_id):
+        from saas.models import OrganizationRole, RolePermission
+        role_obj = get_object_or_404(OrganizationRole, id=role_id, org=self.org)
+        permission_codename = request.POST.get('permission')
+        action = request.POST.get('action') # 'add' or 'remove'
+
+        if action == 'add':
+            RolePermission.objects.get_or_create(role=role_obj, permission_codename=permission_codename)
+        else:
+            RolePermission.objects.filter(role=role_obj, permission_codename=permission_codename).delete()
+
+        return JsonResponse({'status': 'success'})
+
+class MemberManagementView(TenantPermissionMixin, TemplateView):
+    permission_required = 'saas.manage_members'
+    template_name = "saas/member_manage.html"
+
+    def get_context_data(self, **kwargs):
+        from saas.models import TeamMember, OrganizationRole
+        context = super().get_context_data(**kwargs)
+        context['members'] = TeamMember.objects.filter(org=self.org).select_related('user', 'role_obj')
+        context['roles'] = OrganizationRole.objects.filter(org=self.org)
+        return context
+
+    def post(self, request, member_id):
+        from saas.models import TeamMember, OrganizationRole
+        member = get_object_or_404(TeamMember, id=member_id, org=self.org)
+        role_id = request.POST.get('role_id')
+        
+        if role_id:
+            role_obj = get_object_or_404(OrganizationRole, id=role_id, org=self.org)
+            member.role_obj = role_obj
+            member.save()
+            messages.success(request, f"Role for {member.user.username} updated to {role_obj.name}.")
+        
+        return redirect('saas:member_manage')
 class CustomerAPI(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -207,7 +289,8 @@ class CustomerAPI(APIView):
         return Response({"result": result})
 
 
-class DashboardView(TemplateView):
+class DashboardView(TenantPermissionMixin, TemplateView):
+    permission_required = 'buckets.view_apps'
     template_name = "dashboard.html"
 
     def _get_days(self):
@@ -220,7 +303,11 @@ class DashboardView(TemplateView):
         user = self.request.user
         if user.is_staff or user.is_superuser:
             return Organization.objects.all()
-        return Organization.objects.filter(owner=user)
+        # Return orgs where user is owner OR a team member
+        from saas.models import TeamMember
+        return Organization.objects.filter(
+            Q(owner=user) | Q(teammember__user=user)
+        ).distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -255,9 +342,18 @@ class DashboardView(TemplateView):
         
         context["total_reserved_storage_gb"] = round(context["total_reserved_storage"] / 1024, 1)
         
-        context["total_live_deployments"] = Bucket.objects.filter(
+        context["total_live_deployments"] = App.objects.filter(
             organization__in=orgs, is_live=True
         ).count()
+
+        context["active_apps"] = App.objects.filter(organization__in=orgs, is_live=True).order_by('-last_deployed_at')
+        context["deployment_root"] = orgs.first().deployment_root if orgs.exists() else "NOT_CONFIGURED"
+
+        context["compute_fleet"] = list(
+            App.objects.filter(organization__in=orgs, is_live=True)
+            .values("runtime")
+            .annotate(count=Count("id"))
+        )
 
         # Latest events for the live feed
         context["events"] = (
@@ -314,14 +410,14 @@ class DashboardView(TemplateView):
 
         context["revenue_trends"] = list(
             Event.objects.filter(org__in=orgs, type="revenue", created_at__gte=start_date)
-            .annotate(date=TruncDate("created_at"))
+            .annotate(date=TruncHour("created_at"))
             .values("date")
             .annotate(amount=Sum(Cast("data__amount", FloatField())))
             .order_by("date")
         )
         context["api_trends"] = list(
             Event.objects.filter(org__in=orgs, type="api_call", created_at__gte=start_date)
-            .annotate(date=TruncDate("created_at"))
+            .annotate(date=TruncHour("created_at"))
             .values("date")
             .annotate(count=Count("id"))
             .order_by("date")

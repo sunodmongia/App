@@ -34,7 +34,7 @@ class ProfileListView(UserPassesTestMixin, ListView):
         return self.request.user.is_staff or self.request.user.is_superuser
 
     def handle_no_permission(self):
-        return redirect("profile-home")
+        return redirect("profiles:profile-home")
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -101,7 +101,7 @@ class ProfileEditView(LoginRequiredMixin, View):
                 os.remove(profile.profile_image.path)
                 profile.profile_image = None
                 profile.save()
-            return redirect("profile-edit", pk=pk)
+            return redirect("profiles:profile-edit", pk=pk)
 
         user_form = UserForm(request.POST, instance=user)
         profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
@@ -109,7 +109,7 @@ class ProfileEditView(LoginRequiredMixin, View):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return redirect("profile-list")
+            return redirect("profiles:profile-list")
 
         return render(
             request,
@@ -158,7 +158,7 @@ class UserProfileView(DetailView):
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     model = UserProfile
     template_name = "profiles/profile_confirm_delete.html"
-    success_url = reverse_lazy("profile-list")
+    success_url = reverse_lazy("profiles:profile-list")
 
     def delete(self, request, *args, **kwargs):
         profile = self.get_object()

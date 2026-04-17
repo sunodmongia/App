@@ -16,7 +16,10 @@ urlpatterns = [
     path('compute/a/<int:app_id>/', views.AppDetailView.as_view(), name='app_detail'),
     path('compute/a/<int:app_id>/deploy/', views.AppDeployView.as_view(), name='app_deploy'),
     path('compute/a/<int:app_id>/config/', views.AppUpdateConfigView.as_view(), name='app_config_update'),
+    path('compute/a/<int:app_id>/files/', views.AppFilesView.as_view(), name='app_files'),
+    path('compute/a/<int:app_id>/process/', views.AppProcessControlView.as_view(), name='app_process_control'),
     path('compute/a/<int:app_id>/upload-source/', views.AppSourceUploadView.as_view(), name='app_source_upload'),
+    path('compute/a/<int:app_id>/env/add/', views.AppAddEnvVarView.as_view(), name='app_env_add'),
 
     # Object Storage & Buckets
     path('<slug:bucket_name>/', views.BucketDetailView.as_view(), name='detail'),

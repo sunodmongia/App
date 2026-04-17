@@ -7,6 +7,8 @@ from subscriptions.views import (
     StripeWebhookView,
 )
 
+app_name = "subscriptions"
+
 urlpatterns = [
     path("checkout/", CheckoutView.as_view(), name="subscription-checkout"),
     path("checkout/success/", CheckoutSuccessView.as_view(), name="subscription-checkout-success"),

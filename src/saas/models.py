@@ -27,6 +27,23 @@ TIME_SLOT_CHOICES = [
 ]
 
 
+# ---------------------------------------------------------------------------
+# Role Definitions (RBAC)
+# ---------------------------------------------------------------------------
+
+ROLE_OWNER = "owner"     # Full control, including deletion and billing management.
+ROLE_ADMIN = "admin"     # Management access (members, apps, buckets).
+ROLE_DEVELOPER = "devel" # Technical access (deploy apps, create buckets).
+ROLE_VIEWER = "viewer"   # Read-only access.
+
+ROLE_CHOICES = [
+    (ROLE_OWNER, "Owner"),
+    (ROLE_ADMIN, "Administrator"),
+    (ROLE_DEVELOPER, "Developer"),
+    (ROLE_VIEWER, "Viewer"),
+]
+
+
 class TrialSignup(models.Model):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
@@ -114,10 +131,14 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        permissions = [
+            ("manage_members", "Can manage organization team members"),
+            ("manage_billing", "Can manage organization subscription and billing"),
+            ("destroy_organization", "Can delete the organization (Owner Only)"),
+        ]
+
     def get_total_usage_mb(self):
-        """Unified storage calculation: Buckets + App Artifacts."""
-        from django.db.models import Sum
-        
         # 1. Bucket Object Storage
         bucket_usage = 0
         for bucket in self.buckets.all():
@@ -160,10 +181,41 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
+class OrganizationRole(models.Model):
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='roles')
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    is_preset = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('org', 'name')
+
+    def __str__(self):
+        return f"{self.name} ({self.org.name})"
+
+class RolePermission(models.Model):
+    role = models.ForeignKey(OrganizationRole, on_delete=models.CASCADE, related_name='permissions')
+    permission_codename = models.CharField(max_length=255) # e.g. 'buckets.add_app'
+
+    class Meta:
+        unique_together = ('role', 'permission_codename')
+
+    def __str__(self):
+        return f"{self.role.name} -> {self.permission_codename}"
+
 class TeamMember(models.Model):
     org = models.ForeignKey(Organization, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=50)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default=ROLE_DEVELOPER)
+    # New Dynamic Role link
+    role_obj = models.ForeignKey(OrganizationRole, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        unique_together = ("org", "user")
+
+    def __str__(self):
+        return f"{self.user.username} — {self.get_role_display()} in {self.org.name}"
 
 
 class Automation(models.Model):

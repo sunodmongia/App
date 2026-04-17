@@ -182,10 +182,19 @@ class App(models.Model):
 
     # Physical Infrastructure Configuration
     provisioning_path = models.CharField(max_length=500, blank=True, null=True)
+    
+    # Live Hosting & Process Management
+    active_port = models.IntegerField(null=True, blank=True)
+    process_pid = models.IntegerField(null=True, blank=True)
 
     class Meta:
         unique_together = ('name', 'organization')
         ordering = ['-created_at']
+        permissions = [
+            ("manage_apps", "Can create, edit or delete apps"),
+            ("deploy_apps", "Can deploy code to apps"),
+            ("control_apps", "Can start, stop or restart app processes"),
+        ]
 
     def __str__(self):
         return f"{self.organization.name} - {self.name} ({self.runtime})"

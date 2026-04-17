@@ -1,4 +1,5 @@
 import mimetypes
+import os
 from django.db import models
 from django.utils.text import slugify
 from django.shortcuts import get_object_or_404, redirect
@@ -11,9 +12,10 @@ from django.utils.timezone import now
 from saas.models import Usage
 from saas.events import log_event
 from saas.consumers import broadcast
+from saas.mixins import TenantPermissionMixin
 from subscriptions.services import get_user_organization
-from .models import Bucket, FileObject, StorageKey, App, AppDeployment
-from .pipelines import start_processing_pipeline, start_app_deployment_pipeline
+from .models import Bucket, FileObject, StorageKey, App, AppDeployment, EnvironmentVariable
+from .pipelines import start_processing_pipeline, start_app_deployment_pipeline, terminate_edge_node, launch_edge_node
 
 def get_org_storage_limit(org):
     """Returns the effective storage limit in MB for an organization."""
@@ -23,18 +25,10 @@ def get_org_storage_limit(org):
     # Fallback to absolute default (1GB) if no plan limit found
     return 1024
 
-class BucketMixin(LoginRequiredMixin):
-    def get_organization(self):
-        return get_user_organization(self.request.user)
+# (BucketMixin removed in favor of TenantPermissionMixin from saas.mixins)
 
-    def dispatch(self, request, *args, **kwargs):
-        self.org = self.get_organization()
-        if not self.org:
-            messages.error(request, "You must be part of an organization to access storage.")
-            return redirect('dashboard')
-        return super().dispatch(request, *args, **kwargs)
-
-class BucketListView(BucketMixin, ListView):
+class BucketListView(TenantPermissionMixin, ListView):
+    permission_required = 'buckets.view_storage'
     model = Bucket
     template_name = 'buckets/list.html'
     context_object_name = 'buckets'
@@ -79,7 +73,8 @@ class BucketListView(BucketMixin, ListView):
             
         return context
 
-class BucketCreateView(BucketMixin, View):
+class BucketCreateView(TenantPermissionMixin, View):
+    permission_required = 'buckets.manage_buckets'
     def post(self, request, *args, **kwargs):
         name = slugify(request.POST.get('name', ''))
         quota_mb = int(request.POST.get('quota_mb', 1024))
@@ -121,7 +116,8 @@ class BucketCreateView(BucketMixin, View):
             
         return redirect('buckets:detail', bucket_name=bucket.name)
 
-class BucketDetailView(BucketMixin, DetailView):
+class BucketDetailView(TenantPermissionMixin, DetailView):
+    permission_required = 'buckets.view_storage'
     model = Bucket
     template_name = 'buckets/detail.html'
     context_object_name = 'bucket'
@@ -140,7 +136,8 @@ class BucketDetailView(BucketMixin, DetailView):
         context['remaining_mb'] = max(0, context['plan_limit_mb'] - context['total_used_mb'])
         return context
 
-class FileUploadView(BucketMixin, View):
+class FileUploadView(TenantPermissionMixin, View):
+    permission_required = 'buckets.upload_files'
     def post(self, request, bucket_name):
         bucket = get_object_or_404(Bucket, name=bucket_name, organization=self.org)
         files = request.FILES.getlist('files')
@@ -209,12 +206,14 @@ class FileUploadView(BucketMixin, View):
 
         return JsonResponse({'status': 'ok', 'files': uploaded_files})
 
-class FileDownloadView(BucketMixin, View):
+class FileDownloadView(TenantPermissionMixin, View):
+    permission_required = 'buckets.upload_files'
     def get(self, request, file_id):
         file_obj = get_object_or_404(FileObject, id=file_id, bucket__organization=self.org)
         return FileResponse(file_obj.file, as_attachment=True, filename=file_obj.name)
 
-class FileDeleteView(BucketMixin, View):
+class FileDeleteView(TenantPermissionMixin, View):
+    permission_required = 'buckets.upload_files'
     def post(self, request, file_id):
         file_obj = get_object_or_404(FileObject, id=file_id, bucket__organization=self.org)
         bucket = file_obj.bucket
@@ -248,7 +247,8 @@ class FileDeleteView(BucketMixin, View):
         })
         
 
-class APIKeyCreateView(BucketMixin, View):
+class APIKeyCreateView(TenantPermissionMixin, View):
+    permission_required = 'buckets.manage_buckets'
     def post(self, request, bucket_name):
         bucket = get_object_or_404(Bucket, name=bucket_name, organization=self.org)
         name = request.POST.get('name', 'New Service Key')
@@ -333,7 +333,8 @@ class APIFileUploadView(StorageAPIAuthenticationMixin, View):
             
         return JsonResponse({'status': 'uploaded', 'objects': results})
 
-class BucketDeployView(BucketMixin, View):
+class BucketDeployView(TenantPermissionMixin, View):
+    permission_required = 'buckets.manage_buckets'
     def post(self, request, bucket_name):
         bucket = get_object_or_404(Bucket, name=bucket_name, organization=self.org)
         bucket.is_live = not bucket.is_live
@@ -386,7 +387,8 @@ class PublicServeView(View):
 
 # --- Compute / PaaS Views ---
 
-class AppListView(BucketMixin, ListView):
+class AppListView(TenantPermissionMixin, ListView):
+    permission_required = 'buckets.view_apps'
     model = App
     template_name = 'apps/list.html'
     context_object_name = 'apps'
@@ -401,7 +403,8 @@ class AppListView(BucketMixin, ListView):
         context['live_apps'] = self.org.apps.filter(is_live=True).count()
         return context
 
-class AppCreateView(BucketMixin, View):
+class AppCreateView(TenantPermissionMixin, View):
+    permission_required = 'buckets.manage_apps'
     def post(self, request):
         name = request.POST.get('name')
         runtime = request.POST.get('runtime', 'django')
@@ -430,7 +433,8 @@ class AppCreateView(BucketMixin, View):
         
         return redirect('buckets:app_detail', app_id=app.id)
 
-class AppSourceUploadView(BucketMixin, View):
+class AppSourceUploadView(TenantPermissionMixin, View):
+    permission_required = 'buckets.deploy_apps'
     def post(self, request, app_id):
         app = get_object_or_404(App, id=app_id, organization=self.org)
         artifact = request.FILES.get('file')
@@ -476,7 +480,8 @@ class AppSourceUploadView(BucketMixin, View):
             'message': 'Project artifact ingested successfully'
         })
 
-class AppDetailView(BucketMixin, DetailView):
+class AppDetailView(TenantPermissionMixin, DetailView):
+    permission_required = 'buckets.view_apps'
     model = App
     template_name = 'apps/detail.html'
     context_object_name = 'app'
@@ -495,7 +500,8 @@ class AppDetailView(BucketMixin, DetailView):
         context['remaining_mb'] = max(0, context['plan_limit_mb'] - context['total_used_mb'])
         return context
 
-class AppDeployView(BucketMixin, View):
+class AppDeployView(TenantPermissionMixin, View):
+    permission_required = 'buckets.deploy_apps'
     def post(self, request, app_id):
         app = get_object_or_404(App, id=app_id, organization=self.org)
         
@@ -525,7 +531,8 @@ class AppDeployView(BucketMixin, View):
             'deployment_id': deployment.deployment_id
         })
 
-class AppUpdateConfigView(BucketMixin, View):
+class AppUpdateConfigView(TenantPermissionMixin, View):
+    permission_required = 'buckets.manage_apps'
     def post(self, request, app_id):
         app = get_object_or_404(App, id=app_id, organization=self.org)
         path = request.POST.get('provisioning_path')
@@ -542,12 +549,65 @@ class AppUpdateConfigView(BucketMixin, View):
         
         return JsonResponse({'error': 'No path provided'}, status=400)
 
-class OrgUpdateConfigView(BucketMixin, View):
+class AppFilesView(TenantPermissionMixin, View):
+    permission_required = 'buckets.view_apps'
+    def get(self, request, app_id):
+        app = get_object_or_404(App, id=app_id, organization=self.org)
+        if not app.provisioning_path:
+            # Try to resolve hub path
+            if self.org.deployment_root:
+                path = os.path.join(self.org.deployment_root, app.name.replace(' ', '_'))
+            else:
+                base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                path = os.path.join(base_dir, 'deployments', app.name.replace(' ', '_'))
+        else:
+            path = app.provisioning_path
+            
+        from .pipelines import map_local_files
+        structure = map_local_files(path)
+        return JsonResponse({'files': structure, 'base_path': path})
+
+class AppProcessControlView(TenantPermissionMixin, View):
+    permission_required = 'buckets.control_apps'
+    def post(self, request, app_id):
+        app = get_object_or_404(App, id=app_id, organization=self.org)
+        action = request.POST.get('action')
+        
+        if action == 'start':
+            success, msg = launch_edge_node(app)
+        elif action == 'stop':
+            success, msg = terminate_edge_node(app)
+        else:
+            return JsonResponse({'error': 'Invalid action'}, status=400)
+            
+        if success:
+            log_event(self.org, f"app_process_{action}", name=app.name, message=msg)
+            return JsonResponse({'status': 'success', 'message': msg, 'pid': app.process_pid})
+        return JsonResponse({'error': msg}, status=400)
+
+class OrgUpdateConfigView(TenantPermissionMixin, View):
+    permission_required = 'saas.manage_billing'
     def post(self, request):
         path = request.POST.get('deployment_root')
         if path:
-            self.org.deployment_root = path
-            self.org.save()
-            log_event(self.org, "org_hub_updated", path=path)
+            org = self.get_organization()
+            org.deployment_root = path
+            org.save()
+            log_event(org, "org_hub_updated", path=path)
             return JsonResponse({'status': 'success', 'path': path})
         return JsonResponse({'error': 'No path provided'}, status=400)
+
+class AppAddEnvVarView(TenantPermissionMixin, View):
+    permission_required = 'buckets.manage_apps'
+    def post(self, request, app_id):
+        app = get_object_or_404(App, id=app_id, organization=self.get_organization())
+        key = request.POST.get('key')
+        val = request.POST.get('value')
+        
+        if key and val:
+            EnvironmentVariable.objects.update_or_create(
+                app=app, key=key, defaults={'value': val}
+            )
+            broadcast(app.organization, {'type': 'app_source_updated', 'app_id': app.id})
+            return JsonResponse({'status': 'success'})
+        return JsonResponse({'error': 'Missing key or value'}, status=400)

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load saas_tags %}
+{% block content %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #050c1a; color: #e2e8f0; margin: 0; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Layout */
+  .cc-root { display: flex; min-height: 100vh; }
+  .cc-sidebar { width: 240px; flex-shrink: 0; background: #070f1e; border-right: 1px solid #0f1f3a; padding: 28px 0; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  .cc-main { flex: 1; overflow-x: hidden; padding: 28px 32px 60px; min-width: 0; }
+
+  /* Sidebar (Reused) */
+  .cc-brand { padding: 0 20px 24px; border-bottom: 1px solid #0f1f3a; margin-bottom: 16px; }
+  .cc-brand-name { font-weight: 800; font-size: 14px; color: #f8fafc; letter-spacing: -0.3px; }
+  .cc-brand-tag { font-size: 10px; color: #3b82f6; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+  .cc-nav-section { font-size: 9px; font-weight: 700; color: #1e3a5f; text-transform: uppercase; letter-spacing: 0.15em; padding: 12px 20px 6px; }
+  .cc-nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 12px; font-weight: 500; color: #64748b; text-decoration: none; transition: all 0.15s; border-left: 2px solid transparent; }
+  .cc-nav-item:hover { color: #94a3b8; background: #0a1628; }
+  .cc-nav-item.active { color: #3b82f6; background: #0a1628; border-left-color: #3b82f6; }
+  .cc-nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; flex-shrink: 0; }
+
+  /* Header */
+  .cc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .cc-title { font-size: 22px; font-weight: 700; color: #f8fafc; }
+  
+  /* Table */
+  .cc-panel { background: #070f1e; border: 1px solid #0f1f3a; border-radius: 10px; padding: 20px; }
+  .cc-table { width: 100%; border-collapse: collapse; }
+  .cc-table th { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #1e3a5f; padding: 12px 15px; text-align: left; border-bottom: 1px solid #0f1f3a; }
+  .cc-table td { padding: 15px; font-size: 13px; color: #94a3b8; border-bottom: 1px solid #0a1628; }
+  .cc-table tr:hover td { background: #0a1628; }
+  
+  .cc-user-info { display: flex; flex-direction: column; gap: 2px; }
+  .cc-user-name { font-weight: 600; color: #e2e8f0; }
+  .cc-user-email { font-size: 11px; color: #334155; font-family: 'JetBrains Mono', monospace; }
+  
+  .cc-badge { font-size: 9px; font-weight: 700; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; display: inline-block; }
+  .cc-badge.owner { background: rgba(16,185,129,0.1); color: #10b981; }
+  .cc-badge.custom { background: rgba(59,130,246,0.1); color: #3b82f6; }
+  
+  /* Select */
+  .cc-select { background: #0a1628; border: 1px solid #1e3a5f; border-radius: 6px; color: #e2e8f0; padding: 6px 12px; font-size: 12px; outline: none; cursor: pointer; transition: border-color 0.2s; }
+  .cc-select:focus { border-color: #3b82f6; }
+  .cc-btn-sm { background: #3b82f6; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+  .cc-btn-sm.show { opacity: 1; pointer-events: auto; }
+</style>
+
+<div class="cc-root">
+  <!-- SIDEBAR -->
+  <nav class="cc-sidebar">
+    <div class="cc-brand">
+      <div class="cc-brand-name">Edge Control</div>
+      <div class="cc-brand-tag">PaaS · IaaS · SaaS</div>
+      {% get_user_role request.user organization as current_role %}
+      <div style="font-size: 9px; color: #10b981; font-weight: 700; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(16,185,129,0.08); padding: 2px 8px; border-radius: 4px; display: inline-block;">
+        {{ current_role }}
+      </div>
+    </div>
+
+    <div class="cc-nav-section">Monitoring</div>
+    <a href="{% url 'dashboard' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Overview</a>
+
+    <div class="cc-nav-section">Infrastructure</div>
+    <a href="{% url 'buckets:app_list' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Compute Fleet</a>
+    <a href="{% url 'buckets:list' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Storage Hubs</a>
+
+    <div class="cc-nav-section">Governance</div>
+    <a href="{% url 'saas:role_manage' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Roles & Security</a>
+    <a href="{% url 'saas:member_manage' %}" class="cc-nav-item active"><span class="cc-nav-dot"></span> Team Management</a>
+  </nav>
+
+  <main class="cc-main">
+    <div class="cc-header">
+      <h1 class="cc-title">Team Management</h1>
+      <div style="font-size: 11px; color: #475569;">Govern organizational access and assign dynamic security roles</div>
+    </div>
+
+    <div class="cc-panel">
+      <table class="cc-table">
+        <thead>
+          <tr>
+            <th>User Identity</th>
+            <th>Platform Authority</th>
+            <th>Assignment Control</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for member in members %}
+          <tr>
+            <td>
+              <div class="cc-user-info">
+                <span class="cc-user-name">{{ member.user.username }}</span>
+                <span class="cc-user-email">{{ member.user.email }}</span>
+              </div>
+            </td>
+            <td>
+              {% if member.org.owner_id == member.user.id %}
+                <span class="cc-badge owner">Platform Owner</span>
+              {% elif member.role_obj %}
+                <span class="cc-badge custom">{{ member.role_obj.name }}</span>
+              {% else %}
+                <span class="cc-badge" style="color:#475569;">Migrated ({{ member.role }})</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if member.org.owner_id != member.user.id %}
+              <form method="POST" action="{% url 'saas:member_update' member.id %}" style="display:flex;gap:10px;align-items:center;">
+                {% csrf_token %}
+                <select name="role_id" class="cc-select" onchange="this.nextElementSibling.classList.add('show')">
+                  <option value="">Select a Role...</option>
+                  {% for role in roles %}
+                    <option value="{{ role.id }}" {% if member.role_obj_id == role.id %}selected{% endif %}>{{ role.name }}</option>
+                  {% endfor %}
+                </select>
+                <button type="submit" class="cc-btn-sm">Apply Change</button>
+              </form>
+              {% else %}
+                <span style="font-size:10px;color:#1e3a5f;font-style:italic;">Immutable Root Access</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}

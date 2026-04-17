@@ -107,10 +107,54 @@
                          </div>
                     </div>
                 </div>
+
+                <!-- Local Artifact Explorer (Physical Disk Transparency) -->
+                <div class="bg-slate-900 border border-white/10 rounded-[2.5rem] p-10 mt-8 relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-xl font-black text-white">Local Artifact Explorer</h3>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Physical Disk Governance — Hub Visualization</p>
+                        </div>
+                        <button onclick="loadFiles()" class="text-slate-500 hover:text-white transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        </button>
+                    </div>
+
+                    <div id="file-explorer" class="bg-black/40 rounded-3xl p-8 min-h-[200px] border border-white/5 font-mono text-xs">
+                        <div id="explorer-content" class="space-y-2 text-slate-400">
+                             <div class="animate-pulse flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-slate-800"></div>
+                                <span>Synchronizing with physical storage...</span>
+                             </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Stats & Environment -->
             <div class="space-y-8">
+                <!-- Live Edge Infrastructure (Process Controller & URL) -->
+                <div class="bg-emerald-600/10 border border-emerald-500/20 rounded-[2.5rem] p-8 shadow-[0_0_40px_rgba(16,185,129,0.05)]">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-black text-emerald-400 uppercase tracking-widest">Live Infrastructure</h3>
+                        <div id="live-indicator" class="flex items-center gap-2 {% if not app.process_pid %}opacity-30{% endif %}">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                            <span class="text-[9px] font-black text-emerald-400 uppercase">Edge Active</span>
+                        </div>
+                    </div>
+
+                    <div id="active-link-container" class="{% if not app.process_pid %}hidden{% endif %}">
+                        <a id="live-visit-link" href="http://127.0.0.1:{{ app.active_port|default:8001 }}" target="_blank" 
+                           class="group block p-6 bg-slate-950/50 rounded-2xl border border-white/5 hover:border-emerald-500/30 transition-all text-center">
+                            <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-2">Access Deployment</span>
+                            <span id="live-visit-text" class="text-xl font-black text-white group-hover:text-emerald-400 transition-colors">http://127.0.0.1:{{ app.active_port|default:8001 }}</span>
+                        </a>
+                        <p class="text-[9px] text-slate-600 font-bold uppercase tracking-tight text-center mt-4">
+                            Infrastructure provisioned & active on local edge node
+                        </p>
+                    </div>
+                </div>
+
                 <!-- Infrastructure Governance (Real-time Plan Sync) -->
                 <div class="bg-indigo-600/10 border border-indigo-500/20 rounded-[2.5rem] p-8">
                     <h3 class="text-lg font-black text-indigo-400 mb-6 uppercase tracking-widest">Resource Governance</h3>
@@ -202,21 +246,44 @@
     socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         
-        // Build Logs
+        // Build & App Logs (Streaming)
         if (data.type === 'build_log' && data.app_id == '{{ app.id }}') {
             const line = document.createElement('div');
-            line.innerHTML = `<span class="text-slate-800 pr-4">${new Date().toLocaleTimeString()}</span> ${data.message}`;
+            let message = data.message;
+            
+            // Industrial Log Styling
+            if (message.includes('[APP-LOG]')) {
+                message = message.replace('[APP-LOG]', '<span class="text-emerald-500 font-bold pr-2">[APP]</span>');
+                line.className = "pl-4 text-emerald-400/80";
+            } else if (message.includes('[SYSTEM]')) {
+                message = `<span class="text-indigo-400 font-bold pr-2">[INFRA]</span> ${message.replace('[SYSTEM]', '')}`;
+                line.className = "text-indigo-300";
+            }
+            
+            line.innerHTML = `<span class="text-slate-800 pr-4 text-[9px]">${new Date().toLocaleTimeString()}</span> ${message}`;
             term.appendChild(line);
             termFrame.scrollTop = termFrame.scrollHeight;
             updateAppStatus('building');
         }
 
-        // Deployment Live
+        // Deployment Live (Auto-Reveal Link)
         if (data.type === 'app_live' && data.app_id == '{{ app.id }}') {
              updateAppStatus('live');
+             document.getElementById('live-indicator').classList.remove('opacity-30');
+             document.getElementById('active-link-container').classList.remove('hidden');
+             
+             const link = document.getElementById('live-visit-link');
+             const text = document.getElementById('live-visit-text');
+             const url = `http://127.0.0.1:${data.port}`;
+             
+             link.href = url;
+             text.innerText = url;
+             
              deployBtn.disabled = false;
-             deployBtn.innerHTML = 'Deploy Successful';
-             setTimeout(() => window.location.reload(), 3000); 
+             deployBtn.innerHTML = 'Deployment Active';
+             
+             // Auto-refresh the file explorer to show provisioned artifacts
+             loadFiles();
         }
 
         // Source Update
@@ -367,6 +434,92 @@
             btn.disabled = false;
         }
     }
+
+    async function loadFiles() {
+        const explorer = document.getElementById('explorer-content');
+        try {
+            const response = await fetch("{% url 'buckets:app_files' app.id %}");
+            const data = await response.json();
+            renderFiles(data.files, explorer);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    function renderFiles(files, container, indent = 0) {
+        if (indent === 0) container.innerHTML = '';
+        files.forEach((file, index) => {
+            const rowId = `file-${indent}-${index}-${Math.random().toString(36).substr(2, 9)}`;
+            const div = document.createElement('div');
+            div.className = `flex items-center gap-3 py-1.5 px-3 hover:bg-white/5 rounded-lg transition-all cursor-pointer group`;
+            div.style.paddingLeft = `${indent * 1.5 + 0.75}rem`;
+            
+            const isDir = file.type === 'directory';
+            const chevron = isDir 
+                ? `<svg class="w-3 h-3 text-slate-500 transform transition-transform duration-200 group-[.expanded]:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>`
+                : '<div class="w-3"></div>';
+
+            const icon = isDir 
+                ? '<svg class="w-4 h-4 text-indigo-500" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2h-8l-2-2z"/></svg>'
+                : '<svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>';
+            
+            div.innerHTML = `
+                <div class="flex items-center gap-2">
+                    ${chevron}
+                    ${icon}
+                    <span class="text-[11px] font-bold text-slate-400 group-hover:text-indigo-400 transition-colors">${file.name}</span>
+                </div>
+            `;
+
+            container.appendChild(div);
+
+            if (isDir && file.children) {
+                const childContainer = document.createElement('div');
+                childContainer.className = 'hidden'; // Collapsed by default
+                container.appendChild(childContainer);
+                
+                div.onclick = (e) => {
+                    e.stopPropagation();
+                    const isExpanded = !childContainer.classList.contains('hidden');
+                    if (isExpanded) {
+                        childContainer.classList.add('hidden');
+                        div.classList.remove('expanded');
+                    } else {
+                        childContainer.classList.remove('hidden');
+                        div.classList.add('expanded');
+                    }
+                };
+                
+                renderFiles(file.children, childContainer, indent + 1);
+            }
+        });
+    }
+
+    async function addEnvVar() {
+        const key = document.getElementById('env-key').value;
+        const val = document.getElementById('env-val').value;
+        if (!key || !val) { alert("Key and Value are required."); return; }
+        
+        const formData = new FormData();
+        formData.append('key', key);
+        formData.append('value', val);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        try {
+            const response = await fetch("{% url 'buckets:app_env_add' app.id %}", {
+                method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            const data = await response.json();
+            if (data.status === 'success') {
+                window.location.reload(); // Refresh to show synced status
+            } else {
+                alert(data.error);
+            }
+        } catch (err) { console.error(err); }
+    }
+
+    // Auto-load files on mount
+    document.addEventListener('DOMContentLoaded', loadFiles);
 </script>
 
 <style>

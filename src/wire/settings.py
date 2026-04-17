@@ -117,6 +117,7 @@ DATABASES = {
         ssl_require=True,  # Neon requires SSL
     )
 }
+DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
 
 
 # ---------------------------------------------------------------------
