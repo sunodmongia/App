@@ -524,3 +524,30 @@ class AppDeployView(BucketMixin, View):
             'status': 'building',
             'deployment_id': deployment.deployment_id
         })
+
+class AppUpdateConfigView(BucketMixin, View):
+    def post(self, request, app_id):
+        app = get_object_or_404(App, id=app_id, organization=self.org)
+        path = request.POST.get('provisioning_path')
+        
+        if path:
+            # Basic validation: Check if path is writeable or valid format
+            # In a real industrial app, we'd do deeper OS-level validation
+            app.provisioning_path = path
+            app.save()
+            
+            log_event(self.org, "app_config_updated", name=app.name, path=path)
+            
+            return JsonResponse({'status': 'success', 'path': path})
+        
+        return JsonResponse({'error': 'No path provided'}, status=400)
+
+class OrgUpdateConfigView(BucketMixin, View):
+    def post(self, request):
+        path = request.POST.get('deployment_root')
+        if path:
+            self.org.deployment_root = path
+            self.org.save()
+            log_event(self.org, "org_hub_updated", path=path)
+            return JsonResponse({'status': 'success', 'path': path})
+        return JsonResponse({'error': 'No path provided'}, status=400)

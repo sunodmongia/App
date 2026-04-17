@@ -180,6 +180,9 @@ class App(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_deployed_at = models.DateTimeField(null=True, blank=True)
 
+    # Physical Infrastructure Configuration
+    provisioning_path = models.CharField(max_length=500, blank=True, null=True)
+
     class Meta:
         unique_together = ('name', 'organization')
         ordering = ['-created_at']

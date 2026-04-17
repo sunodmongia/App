@@ -26,6 +26,34 @@
             </button>
         </div>
 
+        <!-- Global Infrastructure Hub (Master Provisioning Root) -->
+        <div class="bg-indigo-600/5 border border-indigo-500/20 rounded-[2.5rem] p-10 mb-12 animate-in fade-in duration-1000">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <div class="flex items-center gap-6">
+                    <div class="w-14 h-14 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 shadow-[0_0_30px_rgba(79,70,229,0.1)]">
+                        <svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-white tracking-tight">Global Infrastructure Hub</h2>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Master Provisioning Root — Unified PC Storage</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 max-w-2xl">
+                    <div class="flex gap-3">
+                        <input type="text" id="global-hub-input" 
+                            value="{{ org.deployment_root|default:'' }}" 
+                            placeholder="e.g. E:\WireDeployments"
+                            class="flex-1 bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:border-indigo-500 outline-none transition-all placeholder:text-slate-700">
+                        <button id="save-hub-btn" onclick="saveHubConfig()" class="px-8 bg-white text-black font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-slate-200 transition-all shadow-xl">Sync Hub</button>
+                    </div>
+                    <p class="text-[10px] text-slate-500 font-medium px-1 mt-3 italic opacity-60">
+                        * All project deployments will be isolated into clean sub-folders within this root.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- App Grid (Dynamic Grid) -->
         <div id="app-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for app in apps %}
@@ -221,6 +249,40 @@
             loadingState.classList.add('hidden');
         }
     };
+    async function saveHubConfig() {
+        const path = document.getElementById('global-hub-input').value;
+        const btn = document.getElementById('save-hub-btn');
+        const originalText = btn.innerHTML;
+        
+        btn.innerHTML = 'Syncing...';
+        btn.disabled = true;
+
+        const formData = new FormData();
+        formData.append('deployment_root', path);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        try {
+            const response = await fetch("{% url 'buckets:org_config_update' %}", {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            const data = await response.json();
+            if (data.status === 'success') {
+                btn.innerHTML = 'Hub Active';
+                btn.className = "px-8 bg-emerald-500/20 text-emerald-400 font-black text-[10px] uppercase tracking-widest rounded-2xl border border-emerald-500/20";
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.className = "px-8 bg-white text-black font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-slate-200 shadow-xl";
+                    btn.disabled = false;
+                }, 2000);
+            }
+        } catch (err) {
+            console.error(err);
+            btn.innerHTML = 'Error';
+            btn.disabled = false;
+        }
+    }
 </script>
 
 <style>

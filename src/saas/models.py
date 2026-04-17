@@ -107,6 +107,10 @@ class Organization(models.Model):
     stripe_customer_id = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # Infrastructure Governance
+    storage_limit_mb = models.IntegerField(default=1024) # 1GB Default
+    deployment_root = models.CharField(max_length=500, blank=True, null=True)
+
     def __str__(self):
         return self.name
 

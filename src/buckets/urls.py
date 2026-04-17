@@ -11,9 +11,11 @@ urlpatterns = [
     
     # Compute & PaaS (Real Project Deployment) - High Priority
     path('compute/', views.AppListView.as_view(), name='app_list'),
+    path('compute/config/', views.OrgUpdateConfigView.as_view(), name='org_config_update'),
     path('compute/new/', views.AppCreateView.as_view(), name='app_create'),
     path('compute/a/<int:app_id>/', views.AppDetailView.as_view(), name='app_detail'),
     path('compute/a/<int:app_id>/deploy/', views.AppDeployView.as_view(), name='app_deploy'),
+    path('compute/a/<int:app_id>/config/', views.AppUpdateConfigView.as_view(), name='app_config_update'),
     path('compute/a/<int:app_id>/upload-source/', views.AppSourceUploadView.as_view(), name='app_source_upload'),
 
     # Object Storage & Buckets

@@ -48,9 +48,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Drag & Drop -->
                         <div id="drop-zone" class="group relative border-2 border-dashed border-white/5 rounded-3xl p-8 flex flex-col items-center justify-center transition-all hover:border-indigo-500/50 hover:bg-white/[0.02] cursor-pointer" 
-                             onmouseover="this.classList.add('border-indigo-500')" onmouseout="this.classList.remove('border-indigo-500')">
+                             onmouseover="this.classList.add('border-indigo-500')" onmouseout="this.classList.remove('border-indigo-500')"
+                             onclick="document.getElementById('file-input').click()">
                             <input type="file" id="file-input" class="hidden" webkitdirectory directory multiple onchange="handleFolderUpload(this.files)">
-                            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" onclick="document.getElementById('file-input').click()">
+                            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                                 <svg class="w-6 h-6 text-slate-500 group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                             </div>
                             <span class="text-sm font-bold text-slate-300">Drop Project Folder or Files</span>
@@ -135,14 +136,46 @@
                     </div>
                 </div>
 
+                <!-- Infrastructure Settings (Real-time Provisioning Root) -->
+                <div class="bg-slate-900/50 border border-white/5 rounded-[2.5rem] p-10">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-xl font-black text-white">Infrastructure Settings</h3>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Local PC Orchestration</p>
+                        </div>
+                        <div class="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20">
+                            <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-[9px] font-black text-slate-500 uppercase tracking-widest px-1">Desired Deployment Location (Local PC Path)</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="provisioning-path-input" 
+                                    value="{{ app.provisioning_path|default:'' }}" 
+                                    placeholder="e.g. E:\WireProjects\deployments\my-app"
+                                    class="flex-1 bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:border-indigo-500 outline-none transition-all">
+                                <button id="save-config-btn" onclick="saveConfig()" class="px-6 bg-white text-black font-bold text-[10px] uppercase tracking-widest rounded-2xl hover:bg-slate-200 transition-all">Save</button>
+                            </div>
+                            <p class="text-[10px] text-slate-600 font-medium px-1 italic">
+                                * The edge orchestrator will physically extract project files to this location.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Environment (AJAX) -->
                 <div class="bg-slate-900/50 border border-white/5 rounded-[2.5rem] p-10">
-                    <h3 class="text-xl font-black text-white mb-2">Secrets</h3>
+                    <h3 class="text-xl font-black text-white mb-2">Environment Variables</h3>
                     <div id="env-vars-container" class="space-y-3 mt-6 mb-8">
                         {% for var in env_vars %}
                         <div class="bg-black/20 border border-white/5 rounded-xl p-3 flex items-center justify-between px-4">
-                            <span class="font-mono text-indigo-400 text-[10px] font-bold">{{ var.key }}</span>
-                            <code class="text-slate-700 text-[8px]">MASKED</code>
+                            <div class="flex flex-col">
+                                <span class="font-mono text-indigo-400 text-[10px] font-bold">{{ var.key }}</span>
+                                <span class="text-[8px] font-mono text-slate-700 mt-0.5">MASKED</span>
+                            </div>
+                            <span class="text-[8px] font-black text-emerald-500/80 bg-emerald-500/5 px-2 py-1 rounded-md border border-emerald-500/10 uppercase tracking-widest">Synced to Edge</span>
                         </div>
                         {% endfor %}
                     </div>
@@ -300,6 +333,40 @@
         }
     }
 
+    async function saveConfig() {
+        const path = document.getElementById('provisioning-path-input').value;
+        const btn = document.getElementById('save-config-btn');
+        const originalText = btn.innerHTML;
+        
+        btn.innerHTML = 'Saving...';
+        btn.disabled = true;
+
+        const formData = new FormData();
+        formData.append('provisioning_path', path);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        try {
+            const response = await fetch("{% url 'buckets:app_config_update' app.id %}", {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            const data = await response.json();
+            if (data.status === 'success') {
+                btn.innerHTML = 'Synced';
+                btn.className = "px-6 bg-emerald-500/20 text-emerald-400 font-bold text-[10px] uppercase tracking-widest rounded-2xl";
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.className = "px-6 bg-white text-black font-bold text-[10px] uppercase tracking-widest rounded-2xl hover:bg-slate-200";
+                    btn.disabled = false;
+                }, 2000);
+            }
+        } catch (err) {
+            console.error(err);
+            btn.innerHTML = 'Error';
+            btn.disabled = false;
+        }
+    }
 </script>
 
 <style>

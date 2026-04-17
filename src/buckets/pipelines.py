@@ -1,5 +1,6 @@
 import threading
 import time
+import os
 import hashlib
 import zipfile
 from PIL import Image
@@ -112,28 +113,87 @@ def run_app_build_async(deployment_id):
         add_log("[RUNNING] Provisioning isolated build container...")
         time.sleep(1)
 
-        # 2. Structural Inspection
+        # 1.1 Infrastructure Validation & Hub Orchestration
+        target_dir = app.provisioning_path
+        
+        # Priority: Org Global Hub > App Local Path > Workspace Default
+        if org.deployment_root:
+            target_dir = os.path.join(org.deployment_root, app.name.replace(' ', '_'))
+            
+        if not target_dir:
+            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            target_dir = os.path.join(base_dir, 'deployments', app.name.replace(' ', '_'))
+            
+        try:
+            # Ensure parent hub exists
+            parent_dir = os.path.dirname(target_dir)
+            if parent_dir and not os.path.exists(parent_dir):
+                os.makedirs(parent_dir, exist_ok=True)
+            add_log(f"[INFO] Infrastructure Target (Hub): {target_dir}")
+        except Exception as e:
+            add_log(f"[CRITICAL ERROR] Infrastructure unreachable: {str(e)}")
+            deployment.status = 'failed'
+            deployment.save()
+            return
+
+        # 2. Structural Inspection & Physical Provisioning
         if deployment.artifact:
-            add_log("[INFO] Analyzing multi-file project structure...")
+            # Set target directory
+            target_dir = app.provisioning_path
+            if not target_dir:
+                # Default to a subfolder in the workspace if not specified
+                base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                target_dir = os.path.join(base_dir, 'deployments', app.name.replace(' ', '_'))
+            
+            add_log(f"[INFO] Provisioning target: {target_dir}")
+            
             try:
+                # 2.1 File Extraction
                 with zipfile.ZipFile(deployment.artifact.path, 'r') as zip_ref:
                     file_list = zip_ref.namelist()
-                    # Filter for top-level files and directories to keep logs clean
-                    top_level = sorted(list(set([f.split('/')[0] for f in file_list])))[:10]
-                    add_log(f" > Detected {len(file_list)} files across project tree.")
-                    add_log(f" > Key components: {', '.join(top_level)}")
+                    add_log(f"[RUNNING] Extracting {len(file_list)} files to local disk...")
                     
-                    # Look for config files
+                    # Ensure directory exists and is clean
+                    if os.path.exists(target_dir):
+                        add_log(" > Clearing existing artifacts at target location...")
+                        import shutil
+                        shutil.rmtree(target_dir)
+                    os.makedirs(target_dir, exist_ok=True)
+                    
+                    # Physical Extraction
+                    zip_ref.extractall(path=target_dir)
+                    add_log(f"[SUCCESS] Multi-file project provisioned at: {target_dir}")
+                    
+                    # Filter for top-level files to verify structure
+                    top_level = sorted(list(set([f.split('/')[0] for f in file_list])))[:5]
+                    add_log(f" > Project Head: {', '.join(top_level)}")
+                    
                     if 'manage.py' in file_list:
-                        add_log(" > Found [Django] configuration: manage.py")
+                        add_log(" > [Django] Detected: manage.py")
                     if 'package.json' in file_list:
-                        add_log(" > Found [Node.js] configuration: package.json")
-                    if 'requirements.txt' in file_list:
-                        add_log(" > Found [Python] requirements found.")
+                        add_log(" > [Node.js] Detected: package.json")
+                    
+                    # 2.2 Configuration Fulfillment (Secret Injection)
+                    add_log("[INFO] Physically injecting secrets into edge environment...")
+                    env_vars = app.env_vars.all()
+                    if env_vars.exists():
+                        env_content = ""
+                        for var in env_vars:
+                            env_content += f"{var.key}={var.value}\n"
+                        
+                        env_path = os.path.join(target_dir, '.env')
+                        with open(env_path, 'w') as f:
+                            f.write(env_content)
+                        add_log(f" > Successfully provisioned .env with {env_vars.count()} variables.")
+                    else:
+                        add_log(" > No environment variables defined. Skipping .env generation.")
             except Exception as e:
-                add_log(f"[WARNING] Structural inspection incomplete: {str(e)}")
+                add_log(f"[CRITICAL ERROR] Provisioning failed: {str(e)}")
+                deployment.status = 'failed'
+                deployment.save()
+                return
         else:
-            add_log("[INFO] No artifact provided. Deploying from remote source...")
+            add_log("[INFO] No artifact provided for physical provisioning.")
         
         time.sleep(1)
         runtime_lower = app.runtime.lower()
