@@ -23,7 +23,8 @@ class Command(BaseCommand):
                     'storage_mb': 10000,
                     'automations': 5,
                     'team_members': 1
-                }
+                },
+                'active': True
             },
             {
                 'name': 'Starter',
@@ -38,7 +39,8 @@ class Command(BaseCommand):
                     'storage_mb': 51200, # 50 GB
                     'automations': 25,
                     'team_members': 5
-                }
+                },
+                'active': True
             },
             {
                 'name': 'Professional',
@@ -52,7 +54,8 @@ class Command(BaseCommand):
                     'storage_mb': 51200, # 500 GB
                     'automations': 100,
                     'team_members': 25
-                }
+                },
+                'active': True
             },
             {
                 'name': 'Enterprise',
@@ -66,7 +69,8 @@ class Command(BaseCommand):
                     'storage_mb': 10485760, # 10 TB
                     'automations': 1000,
                     'team_members': 1000
-                }
+                },
+                'active': True
             }
         ]
 

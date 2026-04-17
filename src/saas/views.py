@@ -182,6 +182,11 @@ class PricingView(TenantPermissionMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Pricing"
         context["plans"] = get_active_subscriptions()
+        
+        # Fallback: if no plans exist, attempt one-time bootstrap
+        if not context["plans"].exists():
+            context["plans"] = ensure_default_subscriptions()
+
         context["organization"] = get_user_organization(self.request.user)
         context["current_subscription"] = None
         context["has_stripe_subscription"] = False

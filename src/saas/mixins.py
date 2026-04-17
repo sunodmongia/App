@@ -12,7 +12,8 @@ class TenantPermissionMixin(LoginRequiredMixin):
             permission_required = 'buckets.manage_apps'
     """
     permission_required = None
-    redirect_url = 'dashboard'
+    redirect_url = 'saas:dashboard'
+
 
     def get_organization(self):
         """Standard hook to resolve the current organization."""

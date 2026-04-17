@@ -44,21 +44,14 @@ def get_active_subscriptions():
     )
 
 
-def ensure_default_subscriptions(force=False):
-    """
-    One-time bootstrap or forced sync for canonical plans.
-    If 'force' is False, it will NOT touch existing plans if any exist.
-    """
-    if not force and Subscription.objects.filter(active=True).exists():
-        return get_active_subscriptions()
-
-def ensure_default_subscriptions(force=False):
+def ensure_default_subscriptions():
     """
     Returns active plans. 
     Bootstrapping is now managed via management commands or manual admin entries
     to prevent hardcoded overrides.
     """
     return get_active_subscriptions()
+
 
 
 def get_default_subscription():
