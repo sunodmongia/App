@@ -273,18 +273,41 @@ class MemberManagementView(TenantPermissionMixin, TemplateView):
         context['roles'] = OrganizationRole.objects.filter(org=self.org)
         return context
 
-    def post(self, request, member_id):
+    def post(self, request, member_id=None):
         from saas.models import TeamMember, OrganizationRole
-        member = get_object_or_404(TeamMember, id=member_id, org=self.org)
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+
         role_id = request.POST.get('role_id')
         
-        if role_id:
-            role_obj = get_object_or_404(OrganizationRole, id=role_id, org=self.org)
-            member.role_obj = role_obj
-            member.save()
-            messages.success(request, f"Role for {member.user.username} updated to {role_obj.name}.")
+        # 1. Update Existing Member
+        if member_id:
+            member = get_object_or_404(TeamMember, id=member_id, org=self.org)
+            if role_id:
+                role_obj = get_object_or_404(OrganizationRole, id=role_id, org=self.org)
+                member.role_obj = role_obj
+                member.save()
+                messages.success(request, f"Authority for {member.user.username} synced to {role_obj.name}.")
+            return redirect('saas:member_manage')
+
+        # 2. Add New Member by Username
+        username = request.POST.get('username')
+        if username and role_id:
+            try:
+                user_to_add = User.objects.get(username=username)
+                role_to_assign = get_object_or_404(OrganizationRole, id=role_id, org=self.org)
+                
+                # Check for existing membership
+                if TeamMember.objects.filter(org=self.org, user=user_to_add).exists():
+                    messages.warning(request, f"{username} is already an active member of this organization.")
+                else:
+                    TeamMember.objects.create(org=self.org, user=user_to_add, role_obj=role_to_assign)
+                    messages.success(request, f"Access provisioned: {username} added as {role_to_assign.name}.")
+            except User.DoesNotExist:
+                messages.error(request, f"Identity verification failed: User '{username}' not found on the platform.")
         
         return redirect('saas:member_manage')
+
 class CustomerAPI(APIView):
     permission_classes = [IsAuthenticated]
 

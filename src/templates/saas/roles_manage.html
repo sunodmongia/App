@@ -6,127 +6,273 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-  * { box-sizing: border-box; }
-  body { font-family: 'Inter', sans-serif; background: #050c1a; color: #e2e8f0; margin: 0; }
-  .mono { font-family: 'JetBrains Mono', monospace; }
+  :root {
+    --bg-deep: #020617;
+    --bg-card: rgba(15, 23, 42, 0.6);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --accent-blue: #38bdf8;
+    --accent-indigo: #6366f1;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+  }
 
-  /* Layout */
-  .cc-root { display: flex; min-height: 100vh; }
-  .cc-sidebar { width: 240px; flex-shrink: 0; background: #070f1e; border-right: 1px solid #0f1f3a; padding: 28px 0; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-  .cc-main { flex: 1; overflow-x: hidden; padding: 28px 32px 60px; min-width: 0; }
+  body { 
+    font-family: 'Inter', sans-serif; 
+    background: var(--bg-deep); 
+    color: var(--text-primary); 
+    margin: 0; 
+    -webkit-font-smoothing: antialiased;
+  }
 
-  /* Sidebar (Reused from dashboard) */
-  .cc-brand { padding: 0 20px 24px; border-bottom: 1px solid #0f1f3a; margin-bottom: 16px; }
-  .cc-brand-name { font-weight: 800; font-size: 14px; color: #f8fafc; letter-spacing: -0.3px; }
-  .cc-brand-tag { font-size: 10px; color: #3b82f6; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
-  .cc-nav-section { font-size: 9px; font-weight: 700; color: #1e3a5f; text-transform: uppercase; letter-spacing: 0.15em; padding: 12px 20px 6px; }
-  .cc-nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 12px; font-weight: 500; color: #64748b; text-decoration: none; transition: all 0.15s; border-left: 2px solid transparent; }
-  .cc-nav-item:hover { color: #94a3b8; background: #0a1628; }
-  .cc-nav-item.active { color: #3b82f6; background: #0a1628; border-left-color: #3b82f6; }
-  .cc-nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; flex-shrink: 0; }
-
-  /* Header */
-  .cc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
-  .cc-title { font-size: 22px; font-weight: 700; color: #f8fafc; }
+  /* Root Layout */
+  .cc-root { display: flex; min-height: 100vh; background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 40%); }
   
-  /* Role Grid */
-  .cc-role-card { background: #070f1e; border: 1px solid #0f1f3a; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-  .cc-role-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #0f1f3a; }
-  .cc-role-name { font-size: 16px; font-weight: 600; color: #3b82f6; }
-  .cc-role-badge { font-size: 9px; font-weight: 700; text-transform: uppercase; background: rgba(59,130,246,0.1); color: #3b82f6; padding: 3px 8px; border-radius: 4px; }
-  
-  /* Permission Matrix */
-  .cc-perm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
-  .cc-perm-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #0a1628; border: 1px solid #0f1f3a; border-radius: 6px; font-size: 11px; cursor: pointer; transition: all 0.2s; }
-  .cc-perm-item:hover { border-color: #3b82f6; }
-  .cc-perm-checkbox { width: 14px; height: 14px; border: 1px solid #1e3a5f; border-radius: 3px; background: #050c1a; appearance: none; cursor: pointer; position: relative; }
-  .cc-perm-checkbox:checked { background: #3b82f6; border-color: #3b82f6; }
-  .cc-perm-checkbox:checked::after { content: '✓'; position: absolute; color: #fff; font-size: 10px; left: 2px; top: -1px; }
-  .cc-perm-label { flex: 1; color: #94a3b8; }
+  /* Sidebar Redesign */
+  .cc-sidebar { 
+    width: 260px; 
+    flex-shrink: 0; 
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid var(--border-subtle); 
+    padding: 32px 0; 
+    display: flex; 
+    flex-direction: column; 
+    position: sticky; 
+    top: 0; 
+    height: 100vh; 
+    z-index: 50;
+  }
 
-  /* Form */
-  .cc-add-role { display: flex; gap: 10px; margin-bottom: 30px; }
-  .cc-input { flex: 1; background: #0a1628; border: 1px solid #1e3a5f; border-radius: 6px; color: #e2e8f0; padding: 10px 15px; font-size: 13px; outline: none; transition: border-color 0.2s; }
-  .cc-input:focus { border-color: #3b82f6; }
-  .cc-btn { background: #3b82f6; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .cc-brand { padding: 0 24px 32px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px; }
+  .cc-brand-name { font-weight: 900; font-size: 16px; color: #fff; letter-spacing: -0.5px; }
+  .cc-brand-tag { font-size: 10px; color: var(--accent-blue); font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; margin-top: 4px; opacity: 0.8; }
   
-  .cc-status-msg { font-size: 11px; color: #10b981; margin-top: 5px; opacity: 0; transition: opacity 0.3s; }
-  .cc-status-msg.show { opacity: 1; }
+  .cc-role-indicator { 
+    margin-top: 16px; 
+    font-size: 10px; 
+    font-weight: 800; 
+    color: #10b981; 
+    text-transform: uppercase; 
+    letter-spacing: 0.1em; 
+    background: rgba(16, 185, 129, 0.1); 
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 4px 12px; 
+    border-radius: 99px; 
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cc-role-indicator::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #10b981; }
+
+  .cc-nav-section { font-size: 10px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.2em; padding: 24px 24px 12px; }
+  .cc-nav-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    padding: 10px 24px; 
+    font-size: 13px; 
+    font-weight: 600; 
+    color: var(--text-secondary); 
+    text-decoration: none; 
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+  }
+  .cc-nav-item:hover { color: #fff; background: rgba(255,255,255,0.03); }
+  .cc-nav-item.active { color: var(--accent-blue); background: rgba(56, 189, 248, 0.05); border-right: 3px solid var(--accent-blue); }
+  .cc-nav-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: 0.5; }
+
+  /* Main Content Area */
+  .cc-main { flex: 1; padding: 48px 60px; max-width: 1400px; }
+  .cc-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 40px; }
+  .cc-title { font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -1px; margin: 0; }
+  .cc-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
+
+  /* Create Role Section */
+  .cc-action-bar { 
+    background: var(--bg-card); 
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 48px;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+  }
+  .cc-input { 
+    flex: 1; 
+    background: rgba(0,0,0,0.2); 
+    border: 1px solid var(--border-subtle); 
+    border-radius: 12px; 
+    color: #fff; 
+    padding: 0 20px; 
+    font-size: 14px; 
+    outline: none; 
+    transition: all 0.2s; 
+  }
+  .cc-input:focus { border-color: var(--accent-blue); background: rgba(0,0,0,0.3); }
+  .cc-btn-primary { 
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo)); 
+    color: #fff; 
+    border: none; 
+    padding: 0 32px; 
+    height: 48px;
+    border-radius: 12px; 
+    font-size: 14px; 
+    font-weight: 700; 
+    cursor: pointer; 
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cc-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 15px -3px rgba(56, 189, 248, 0.3); }
+
+  /* Role Cards Grid */
+  .cc-roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 32px; }
+  
+  .cc-role-card { 
+    background: var(--bg-card); 
+    border: 1px solid var(--border-subtle); 
+    border-radius: 24px; 
+    padding: 32px; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .cc-role-card:hover { border-color: rgba(56, 189, 248, 0.3); transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5); }
+
+  .cc-role-header { display: flex; align-items: center; justify-content: space-between; }
+  .cc-role-name { font-size: 20px; font-weight: 700; color: var(--accent-blue); }
+  .cc-role-tag { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 6px; letter-spacing: 0.05em; }
+  
+  /* Matrix Items */
+  .cc-perm-list { display: flex; flex-direction: column; gap: 12px; }
+  .cc-perm-row { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 12px 16px; 
+    background: rgba(255,255,255,0.02); 
+    border-radius: 12px; 
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .cc-perm-row:hover { background: rgba(255,255,255,0.04); border-color: var(--border-subtle); }
+  
+  .cc-perm-info { display: flex; flex-direction: column; gap: 2px; }
+  .cc-perm-label { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .cc-perm-desc { font-size: 10px; color: var(--text-secondary); opacity: 0.6; }
+
+  /* Custom Switch Component */
+  .cc-switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+  .cc-switch input { opacity: 0; width: 0; height: 0; }
+  .cc-slider { 
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; 
+    background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 34px; 
+  }
+  .cc-slider:before { 
+    position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; 
+    background-color: #fff; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  input:checked + .cc-slider { background-color: var(--accent-blue); }
+  input:checked + .cc-slider:before { transform: translateX(18px); }
+
+  .cc-status-toast { 
+    position: fixed; bottom: 32px; right: 32px; 
+    background: #10b981; color: #fff; padding: 12px 24px; border-radius: 12px; 
+    font-size: 13px; font-weight: 600; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.4);
+    transform: translateY(100px); opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+  }
+  .cc-status-toast.active { transform: translateY(0); opacity: 1; }
 </style>
 
 <div class="cc-root">
-  <!-- SIDEBAR (Dynamic Roles Integrated) -->
+  <!-- SIDEBAR (Modern Glassmorphic) -->
   <nav class="cc-sidebar">
     <div class="cc-brand">
-      <div class="cc-brand-name">Edge Control</div>
-      <div class="cc-brand-tag">PaaS · IaaS · SaaS</div>
+      <div class="cc-brand-name">WireTech Edge</div>
+      <div class="cc-brand-tag">Governance Hub</div>
       {% get_user_role request.user organization as current_role %}
-      <div style="font-size: 9px; color: #10b981; font-weight: 700; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(16,185,129,0.08); padding: 2px 8px; border-radius: 4px; display: inline-block;">
-        {{ current_role }}
-      </div>
+      <div class="cc-role-indicator">{{ current_role }} Authority</div>
     </div>
 
-    <div class="cc-nav-section">Monitoring</div>
-    <a href="{% url 'saas:dashboard' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Overview</a>
-
+    <div class="cc-nav-section">Dashboard</div>
+    <a href="{% url 'saas:dashboard' %}" class="cc-nav-item">
+      <span class="cc-nav-dot"></span> Overview
+    </a>
 
     <div class="cc-nav-section">Infrastructure</div>
-    <a href="{% url 'buckets:app_list' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Compute Fleet</a>
-    <a href="{% url 'buckets:list' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Storage Hubs</a>
+    <a href="{% url 'buckets:app_list' %}" class="cc-nav-item">
+      <span class="cc-nav-dot"></span> Compute Fleet
+    </a>
+    <a href="{% url 'buckets:list' %}" class="cc-nav-item">
+      <span class="cc-nav-dot"></span> Storage Hubs
+    </a>
 
-    <div class="cc-nav-section">Governance</div>
-    <a href="{% url 'saas:role_manage' %}" class="cc-nav-item active"><span class="cc-nav-dot"></span> Roles & Security</a>
-    <a href="{% url 'saas:member_manage' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Team Management</a>
+    <div class="cc-nav-section">Settings</div>
+    <a href="{% url 'saas:role_manage' %}" class="cc-nav-item active">
+      <span class="cc-nav-dot"></span> Roles & Security
+    </a>
+    <a href="{% url 'saas:member_manage' %}" class="cc-nav-item">
+      <span class="cc-nav-dot"></span> Team Management
+    </a>
   </nav>
 
   <main class="cc-main">
-    <div class="cc-header">
-      <h1 class="cc-title">Roles & Security Matrix</h1>
-      <div style="font-size: 11px; color: #475569;">Define technical capabilities for your organization roles</div>
-    </div>
+    <header class="cc-header">
+      <div>
+        <h1 class="cc-title">Roles & Security</h1>
+        <p class="cc-subtitle">Define technical access and operational boundaries across your organization.</p>
+      </div>
+    </header>
 
-    <!-- Create Role -->
-    <form class="cc-add-role" method="POST">
+    <!-- Create Role Action Bar -->
+    <form class="cc-action-bar" method="POST">
       {% csrf_token %}
-      <input type="text" name="name" class="cc-input" placeholder="New Role Name (e.g. Senior DevOps, Junior Developer)..." required>
-      <button type="submit" class="cc-btn">Create Role</button>
+      <input type="text" name="name" class="cc-input" placeholder="Define new custom role (e.g. SRE Leader, Junior Dev)..." required>
+      <button type="submit" class="cc-btn-primary">Provision Role</button>
     </form>
 
-    <!-- Role List -->
-    {% for role in roles %}
-    <div class="cc-role-card">
-      <div class="cc-role-header">
-        <div>
+    <!-- Role Matrix Grid -->
+    <div class="cc-roles-grid">
+      {% for role in roles %}
+      <section class="cc-role-card">
+        <header class="cc-role-header">
           <span class="cc-role-name">{{ role.name }}</span>
-          {% if role.is_preset %}<span class="cc-role-badge">System Default</span>{% endif %}
+          <span class="cc-role-tag">{% if role.is_preset %}System Preset{% else %}Custom Role{% endif %}</span>
+        </header>
+        
+        <div class="cc-perm-list">
+          {% for perm_code, perm_label in available_permissions %}
+          <div class="cc-perm-row">
+            <div class="cc-perm-info">
+              <span class="cc-perm-label">{{ perm_label }}</span>
+              <span class="cc-perm-desc">Authorization for {{ perm_code }}</span>
+            </div>
+            <label class="cc-switch">
+              <input type="checkbox" 
+                     data-role="{{ role.id }}" 
+                     data-perm="{{ perm_code }}"
+                     {% for rp in role.permissions.all %}{% if rp.permission_codename == perm_code %}checked{% endif %}{% endfor %}
+                     onchange="updateBackend(this)">
+              <span class="cc-slider"></span>
+            </label>
+          </div>
+          {% endfor %}
         </div>
-        <div id="status-{{ role.id }}" class="cc-status-msg">Changes saved locally</div>
-      </div>
-      
-      <div class="cc-perm-grid">
-        {% for perm_code, perm_label in available_permissions %}
-        <label class="cc-perm-item">
-          <input type="checkbox" 
-                 class="cc-perm-checkbox" 
-                 data-role="{{ role.id }}" 
-                 data-perm="{{ perm_code }}"
-                 {% for rp in role.permissions.all %}{% if rp.permission_codename == perm_code %}checked{% endif %}{% endfor %}
-                 onchange="updatePermission(this)">
-          <span class="cc-perm-label">{{ perm_label }}</span>
-        </label>
-        {% endfor %}
-      </div>
+      </section>
+      {% endfor %}
     </div>
-    {% endfor %}
   </main>
 </div>
 
+<div id="toast" class="cc-status-toast">Deployment successful: Permissions updated.</div>
+
 <script>
-function updatePermission(checkbox) {
-    const roleId = checkbox.dataset.role;
-    const permCode = checkbox.dataset.perm;
-    const action = checkbox.checked ? 'add' : 'remove';
-    const statusDiv = document.getElementById(`status-${roleId}`);
+function updateBackend(element) {
+    const roleId = element.dataset.role;
+    const permCode = element.dataset.perm;
+    const action = element.checked ? 'add' : 'remove';
+    const toast = document.getElementById('toast');
 
     const formData = new FormData();
     formData.append('permission', permCode);
@@ -136,18 +282,17 @@ function updatePermission(checkbox) {
     fetch(`/dashboard/roles/${roleId}/update/`, {
         method: 'POST',
         body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            statusDiv.classList.add('show');
-            setTimeout(() => statusDiv.classList.remove('show'), 2000);
+            toast.classList.add('active');
+            setTimeout(() => toast.classList.remove('active'), 3000);
         }
     })
-    .catch(err => console.error('Error updating permission:', err));
+    .catch(err => console.error('Governance sync error:', err));
 }
 </script>
+ipt>
 {% endblock %}

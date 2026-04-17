@@ -6,130 +6,269 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-  * { box-sizing: border-box; }
-  body { font-family: 'Inter', sans-serif; background: #050c1a; color: #e2e8f0; margin: 0; }
-  .mono { font-family: 'JetBrains Mono', monospace; }
+  :root {
+    --bg-deep: #020617;
+    --bg-card: rgba(15, 23, 42, 0.6);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --accent-blue: #38bdf8;
+    --accent-indigo: #6366f1;
+    --accent-emerald: #10b981;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+  }
 
-  /* Layout */
-  .cc-root { display: flex; min-height: 100vh; }
-  .cc-sidebar { width: 240px; flex-shrink: 0; background: #070f1e; border-right: 1px solid #0f1f3a; padding: 28px 0; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-  .cc-main { flex: 1; overflow-x: hidden; padding: 28px 32px 60px; min-width: 0; }
+  body { 
+    font-family: 'Inter', sans-serif; 
+    background: var(--bg-deep); 
+    color: var(--text-primary); 
+    margin: 0; 
+    -webkit-font-smoothing: antialiased;
+  }
 
-  /* Sidebar (Reused) */
-  .cc-brand { padding: 0 20px 24px; border-bottom: 1px solid #0f1f3a; margin-bottom: 16px; }
-  .cc-brand-name { font-weight: 800; font-size: 14px; color: #f8fafc; letter-spacing: -0.3px; }
-  .cc-brand-tag { font-size: 10px; color: #3b82f6; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
-  .cc-nav-section { font-size: 9px; font-weight: 700; color: #1e3a5f; text-transform: uppercase; letter-spacing: 0.15em; padding: 12px 20px 6px; }
-  .cc-nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 12px; font-weight: 500; color: #64748b; text-decoration: none; transition: all 0.15s; border-left: 2px solid transparent; }
-  .cc-nav-item:hover { color: #94a3b8; background: #0a1628; }
-  .cc-nav-item.active { color: #3b82f6; background: #0a1628; border-left-color: #3b82f6; }
-  .cc-nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; flex-shrink: 0; }
+  /* Root Layout */
+  .cc-root { display: flex; min-height: 100vh; background: radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 40%); }
+  
+  /* Sidebar Redesign (Consistent with Roles) */
+  .cc-sidebar { 
+    width: 260px; 
+    flex-shrink: 0; 
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid var(--border-subtle); 
+    padding: 32px 0; 
+    display: flex; 
+    flex-direction: column; 
+    position: sticky; 
+    top: 0; 
+    height: 100vh; 
+    z-index: 50;
+  }
 
-  /* Header */
-  .cc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
-  .cc-title { font-size: 22px; font-weight: 700; color: #f8fafc; }
+  .cc-brand { padding: 0 24px 32px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px; }
+  .cc-brand-name { font-weight: 900; font-size: 16px; color: #fff; letter-spacing: -0.5px; }
+  .cc-brand-tag { font-size: 10px; color: var(--accent-emerald); font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; margin-top: 4px; opacity: 0.8; }
   
-  /* Table */
-  .cc-panel { background: #070f1e; border: 1px solid #0f1f3a; border-radius: 10px; padding: 20px; }
-  .cc-table { width: 100%; border-collapse: collapse; }
-  .cc-table th { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #1e3a5f; padding: 12px 15px; text-align: left; border-bottom: 1px solid #0f1f3a; }
-  .cc-table td { padding: 15px; font-size: 13px; color: #94a3b8; border-bottom: 1px solid #0a1628; }
-  .cc-table tr:hover td { background: #0a1628; }
+  .cc-role-indicator { 
+    margin-top: 16px; 
+    font-size: 10px; 
+    font-weight: 800; 
+    color: var(--accent-emerald); 
+    text-transform: uppercase; 
+    letter-spacing: 0.1em; 
+    background: rgba(16, 185, 129, 0.1); 
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 4px 12px; 
+    border-radius: 99px; 
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cc-role-indicator::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--accent-emerald); }
+
+  .cc-nav-section { font-size: 10px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.2em; padding: 24px 24px 12px; }
+  .cc-nav-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    padding: 10px 24px; 
+    font-size: 13px; 
+    font-weight: 600; 
+    color: var(--text-secondary); 
+    text-decoration: none; 
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+  }
+  .cc-nav-item:hover { color: #fff; background: rgba(255,255,255,0.03); }
+  .cc-nav-item.active { color: var(--accent-emerald); background: rgba(16, 185, 129, 0.05); border-right: 3px solid var(--accent-emerald); }
+  .cc-nav-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: 0.5; }
+
+  /* Main Content Area */
+  .cc-main { flex: 1; padding: 48px 60px; max-width: 1400px; }
+  .cc-header { margin-bottom: 40px; }
+  .cc-title { font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -1px; margin: 0; }
+  .cc-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
+
+  /* Team Card List */
+  .cc-team-container { display: flex; flex-direction: column; gap: 16px; }
   
-  .cc-user-info { display: flex; flex-direction: column; gap: 2px; }
-  .cc-user-name { font-weight: 600; color: #e2e8f0; }
-  .cc-user-email { font-size: 11px; color: #334155; font-family: 'JetBrains Mono', monospace; }
+  .cc-member-card { 
+    background: var(--bg-card); 
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-subtle); 
+    border-radius: 20px; 
+    padding: 24px 32px; 
+    display: grid;
+    grid-template-columns: 1fr 200px 300px;
+    align-items: center;
+    gap: 40px;
+    transition: all 0.2s ease;
+  }
+  .cc-member-card:hover { border-color: rgba(16, 185, 129, 0.2); background: rgba(15, 23, 42, 0.8); }
+
+  .cc-user-identity { display: flex; align-items: center; gap: 16px; }
+  .cc-avatar { 
+    width: 44px; height: 44px; border-radius: 12px; 
+    background: linear-gradient(135deg, var(--accent-indigo), var(--accent-blue));
+    color: #fff; display: flex; align-items: center; justify-content: center; 
+    font-weight: 800; font-size: 18px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+  .cc-name-group { display: flex; flex-direction: column; }
+  .cc-username { font-size: 15px; font-weight: 700; color: #fff; }
+  .cc-email { font-size: 12px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; opacity: 0.6; }
+
+  .cc-role-status { display: flex; flex-direction: column; gap: 4px; }
+  .cc-role-label { font-size: 9px; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.1em; }
+  .cc-badge { 
+    font-size: 11px; font-weight: 700; 
+    padding: 4px 12px; border-radius: 6px; 
+    display: inline-flex; width: fit-content;
+  }
+  .cc-badge.owner { background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.2); }
+  .cc-badge.custom { background: rgba(56, 189, 248, 0.1); color: var(--accent-blue); border: 1px solid rgba(56, 189, 248, 0.2); }
+
+  /* Action Controls */
+  .cc-member-actions { display: flex; align-items: center; gap: 12px; }
+  .cc-select { 
+    flex: 1;
+    background: rgba(0,0,0,0.3); 
+    border: 1px solid var(--border-subtle); 
+    border-radius: 10px; 
+    color: #fff; 
+    padding: 8px 16px; 
+    font-size: 13px; 
+    outline: none; 
+    transition: all 0.2s; 
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+  }
+  .cc-select:focus { border-color: var(--accent-emerald); }
   
-  .cc-badge { font-size: 9px; font-weight: 700; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; display: inline-block; }
-  .cc-badge.owner { background: rgba(16,185,129,0.1); color: #10b981; }
-  .cc-badge.custom { background: rgba(59,130,246,0.1); color: #3b82f6; }
-  
-  /* Select */
-  .cc-select { background: #0a1628; border: 1px solid #1e3a5f; border-radius: 6px; color: #e2e8f0; padding: 6px 12px; font-size: 12px; outline: none; cursor: pointer; transition: border-color 0.2s; }
-  .cc-select:focus { border-color: #3b82f6; }
-  .cc-btn-sm { background: #3b82f6; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
-  .cc-btn-sm.show { opacity: 1; pointer-events: auto; }
+  .cc-btn-save { 
+    background: var(--accent-emerald); 
+    color: #fff; border: none; 
+    padding: 8px 16px; border-radius: 10px; 
+    font-size: 13px; font-weight: 700; 
+    cursor: pointer; opacity: 0; 
+    transform: translateX(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+  .cc-btn-save.visible { opacity: 1; transform: translateX(0); pointer-events: auto; }
 </style>
 
 <div class="cc-root">
   <!-- SIDEBAR -->
   <nav class="cc-sidebar">
     <div class="cc-brand">
-      <div class="cc-brand-name">Edge Control</div>
-      <div class="cc-brand-tag">PaaS · IaaS · SaaS</div>
+      <div class="cc-brand-name">WireTech Edge</div>
+      <div class="cc-brand-tag">Governance Hub</div>
       {% get_user_role request.user organization as current_role %}
-      <div style="font-size: 9px; color: #10b981; font-weight: 700; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(16,185,129,0.08); padding: 2px 8px; border-radius: 4px; display: inline-block;">
-        {{ current_role }}
-      </div>
+      <div class="cc-role-indicator">{{ current_role }} Authority</div>
     </div>
 
-    <div class="cc-nav-section">Monitoring</div>
-    <a href="{% url 'saas:dashboard' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Overview</a>
-
+    <div class="cc-nav-section">Dashboard</div>
+    <a href="{% url 'saas:dashboard' %}" class="cc-nav-item">
+      <span class="cc-nav-dot"></span> Overview
+    </a>
 
     <div class="cc-nav-section">Infrastructure</div>
-    <a href="{% url 'buckets:app_list' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Compute Fleet</a>
-    <a href="{% url 'buckets:list' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Storage Hubs</a>
+    <a href="{% url 'buckets:app_list' %}" class="cc-nav-item">
+      <span class="cc-nav-dot"></span> Compute Fleet
+    </a>
+    <a href="{% url 'buckets:list' %}" class="cc-nav-item">
+      <span class="cc-nav-dot"></span> Storage Hubs
+    </a>
 
-    <div class="cc-nav-section">Governance</div>
-    <a href="{% url 'saas:role_manage' %}" class="cc-nav-item"><span class="cc-nav-dot"></span> Roles & Security</a>
-    <a href="{% url 'saas:member_manage' %}" class="cc-nav-item active"><span class="cc-nav-dot"></span> Team Management</a>
+    <div class="cc-nav-section">Settings</div>
+    <a href="{% url 'saas:role_manage' %}" class="cc-nav-item">
+      <span class="cc-nav-dot"></span> Roles & Security
+    </a>
+    <a href="{% url 'saas:member_manage' %}" class="cc-nav-item active">
+      <span class="cc-nav-dot"></span> Team Management
+    </a>
   </nav>
 
   <main class="cc-main">
-    <div class="cc-header">
+    <header class="cc-header">
       <h1 class="cc-title">Team Management</h1>
-      <div style="font-size: 11px; color: #475569;">Govern organizational access and assign dynamic security roles</div>
-    </div>
+      <p class="cc-subtitle">Govern organizational access and assign dynamic security roles to your fleet operators.</p>
+    </header>
 
-    <div class="cc-panel">
-      <table class="cc-table">
-        <thead>
-          <tr>
-            <th>User Identity</th>
-            <th>Platform Authority</th>
-            <th>Assignment Control</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for member in members %}
-          <tr>
-            <td>
-              <div class="cc-user-info">
-                <span class="cc-user-name">{{ member.user.username }}</span>
-                <span class="cc-user-email">{{ member.user.email }}</span>
-              </div>
-            </td>
-            <td>
-              {% if member.org.owner_id == member.user.id %}
-                <span class="cc-badge owner">Platform Owner</span>
-              {% elif member.role_obj %}
-                <span class="cc-badge custom">{{ member.role_obj.name }}</span>
-              {% else %}
-                <span class="cc-badge" style="color:#475569;">Migrated ({{ member.role }})</span>
-              {% endif %}
-            </td>
-            <td>
-              {% if member.org.owner_id != member.user.id %}
-              <form method="POST" action="{% url 'saas:member_update' member.id %}" style="display:flex;gap:10px;align-items:center;">
-                {% csrf_token %}
-                <select name="role_id" class="cc-select" onchange="this.nextElementSibling.classList.add('show')">
-                  <option value="">Select a Role...</option>
-                  {% for role in roles %}
-                    <option value="{{ role.id }}" {% if member.role_obj_id == role.id %}selected{% endif %}>{{ role.name }}</option>
-                  {% endfor %}
-                </select>
-                <button type="submit" class="cc-btn-sm">Apply Change</button>
-              </form>
-              {% else %}
-                <span style="font-size:10px;color:#1e3a5f;font-style:italic;">Immutable Root Access</span>
-              {% endif %}
-            </td>
-          </tr>
+    <!-- Provision New Member Section -->
+    <div class="cc-header" style="margin-bottom: 24px;">
+        <h2 style="font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent-emerald);">Provision Member Access</h2>
+    </div>
+    <form class="cc-member-card" method="POST" action="{% url 'saas:member_manage' %}" style="margin-bottom: 48px; border-style: dashed; background: rgba(16, 185, 129, 0.03);">
+      {% csrf_token %}
+      <div class="cc-user-identity">
+        <div class="cc-avatar" style="background: var(--accent-emerald);">+</div>
+        <input type="text" name="username" class="cc-select" placeholder="Enter Platform Username..." required style="flex:1; background: rgba(0,0,0,0.2); background-image: none;">
+      </div>
+      <div class="cc-role-status">
+        <span class="cc-role-label">Initial Authority</span>
+        <select name="role_id" class="cc-select" required>
+          <option value="">Choose Role...</option>
+          {% for role in roles %}
+            <option value="{{ role.id }}">{{ role.name }}</option>
           {% endfor %}
-        </tbody>
-      </table>
+        </select>
+      </div>
+      <div class="cc-member-actions">
+        <button type="submit" class="cc-btn-save visible" style="width: 100%; height: 44px; font-size: 14px;">Invite & Assign Role</button>
+      </div>
+    </form>
+
+    <div class="cc-team-container">
+      {% for member in members %}
+      <div class="cc-member-card">
+        <div class="cc-user-identity">
+          <div class="cc-avatar">{{ member.user.username|slice:":1"|upper }}</div>
+          <div class="cc-name-group">
+            <span class="cc-username">{{ member.user.username }}</span>
+            <span class="cc-email">{{ member.user.email }}</span>
+          </div>
+        </div>
+
+        <div class="cc-role-status">
+          <span class="cc-role-label">System Role</span>
+          {% if member.org.owner_id == member.user.id %}
+            <span class="cc-badge owner">Platform Owner</span>
+          {% elif member.role_obj %}
+            <span class="cc-badge custom">{{ member.role_obj.name }}</span>
+          {% else %}
+            <span class="cc-badge" style="color:#64748b; background: rgba(100,116,139,0.1); border: 1px solid rgba(100,116,139,0.2);">{{ member.role }}</span>
+          {% endif %}
+        </div>
+
+        <div class="cc-member-actions">
+          {% if member.org.owner_id != member.user.id %}
+          <form method="POST" action="{% url 'saas:member_update' member.id %}" style="display:contents;">
+            {% csrf_token %}
+            <select name="role_id" class="cc-select" onchange="showSave(this)">
+              <option value="">Select Target Role...</option>
+              {% for role in roles %}
+                <option value="{{ role.id }}" {% if member.role_obj_id == role.id %}selected{% endif %}>{{ role.name }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="cc-btn-save">Apply Sync</button>
+          </form>
+          {% else %}
+            <span style="font-size:11px; color:#475569; font-style:italic; font-weight:600;">Immutable Membership</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
     </div>
   </main>
 </div>
+
+<script>
+function showSave(select) {
+    const btn = select.nextElementSibling;
+    btn.classList.add('visible');
+}
+</script>
 {% endblock %}
